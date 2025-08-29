@@ -24,24 +24,25 @@ const Button = ({
     },
   };
   const t = tones[tone] || tones.dark;
+
   return (
     <Tag
-      {...(href
-        ? { href: href }
-        : { onClick: onClick, type: type, disabled: disabled })}
+      {...(href ? { href } : { onClick, type, disabled })}
       {...props}
       className={cn(
-        "overflow-hidden relative w-32 p-2 h-12 border-none rounded-md text-xl font-bold cursor-pointer z-10 group btn",
+        "overflow-hidden inline-block relative min-w-32 px-6 p-2 h-12 border-none rounded-md text-xl text-center font-bold cursor-pointer z-10 group btn",
         t.bg,
-        t.text
+        t.text,
+        className
       )}
     >
       {children}
+
       {[...Array(3)].map((_, i) => (
         <span
           key={i}
           className={cn(
-            "absolute w-36 h-32 -top-8 -left-2 rotate-12 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left",
+            "absolute w-[115%] h-40 top-1/2 -translate-y-1/2 -left-4 rotate-12 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left",
             i === 0
               ? "bg-primary-200 group-hover:duration-500 duration-1000"
               : i === 1
@@ -50,9 +51,10 @@ const Button = ({
           )}
         />
       ))}
+
       <span
         className={cn(
-          "group-hover:opacity-100 group-hover:duration-1000 duration-100 opacity-0 absolute top-2.5 left-6 z-10"
+          "group-hover:opacity-100 group-hover:duration-1000 duration-100 opacity-0 text-center absolute top-2.5 left-0 w-full z-10"
         )}
       >
         {children}

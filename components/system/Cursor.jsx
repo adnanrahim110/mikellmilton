@@ -57,7 +57,7 @@ const Cursor = () => {
         const el = document.elementFromPoint(x, y);
         const link =
           el?.closest?.(
-            "a[href], [role='link'], [role='button'], button:not(.btn)"
+            "a[href]:not(.btn), [role='link'], [role='button'], button:not(.btn)"
           ) || null;
         const btn = el?.closest?.(".btn") || null;
         const heading = el?.closest?.("h1, h2") || null;

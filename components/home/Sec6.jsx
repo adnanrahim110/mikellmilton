@@ -15,34 +15,73 @@ const Sec6 = () => {
               Formats
             </Title>
           </div>
-          <div className="w-full md:max-w-[66%]">
-            <div className="grid md:grid-cols-2 gap-[30px] w-full">
+          <div className="w-full">
+            <div className="grid md:grid-cols-2 gap-[30px] w-full mb-20">
               {BOOKS.map((book, idx) => (
                 <CardContainer key={idx} className="inter-var">
-                  <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-auto rounded-xl p-6 border">
+                  <CardBody className="bg-gray-50 relative group/card border-black/[0.1] w-full h-auto p-6 border flex flex-wrap items-center gap-10">
                     <CardItem
-                      translateZ="50"
-                      className="text-xl font-bold text-neutral-600 dark:text-white"
+                      translateZ="100"
+                      className="w-full md:w-2/5 grow-0 shrink basis-auto pointer-events-none"
                     >
-                      {book.title}
-                    </CardItem>
-                    <CardItem translateZ="100" className="w-full mt-4">
                       <img
                         src={book.img}
                         height="1000"
                         width="1000"
-                        className="w-full max-h-[420px] object-contain group-hover/card:shadow-xl"
+                        className="w-full object-contain group-hover/card:shadow-xl"
                         alt="thumbnail"
                       />
                     </CardItem>
-                    <div className="flex justify-between items-center mt-10">
-                      <div className="flex flex-col">
-                        <span>{book.type}</span>
-                        <span>
-                          Price: <strong>${book.price}</strong>
-                        </span>
+                    <div className="flex flex-col w-full md:w-[calc(60%_-_40px)] grow-0 shrink basis-auto">
+                      <CardItem
+                        translateZ="50"
+                        className="text-3xl font-bold text-black dark:text-white"
+                      >
+                        {book.title}
+                      </CardItem>
+                      <CardItem
+                        as="p"
+                        translateZ="60"
+                        className="text-neutral-500 text-[15px] max-w-sm mt-2 dark:text-neutral-300"
+                      >
+                        Lorem ipsum dolor sit amet conse ctetur adipisicing
+                        elit. Quisquam placeat iusto id necessitatibus est
+                        distinctio!
+                      </CardItem>
+                      <div className="flex flex-col mt-5 gap-3">
+                        <CardItem
+                          as="div"
+                          translateZ="70"
+                          className="flex flex-wrap w-full text-base"
+                        >
+                          <CardItem
+                            as="span"
+                            translateZ="70"
+                            className="inline-block w-full md:w-auto py-1 px-3 bg-primary-100"
+                          >
+                            {book.type}
+                          </CardItem>
+                          <CardItem
+                            as="span"
+                            translateZ="70"
+                            className="inline-block w-full md:w-auto grow py-1 px-3 bg-primary-200 text-primary-800"
+                          >
+                            Price: <strong>${book.price.toFixed(2)}</strong>
+                          </CardItem>
+                        </CardItem>
+                        <CardItem
+                          translateZ="40"
+                          className="pointer-events-auto relative z-10 w-full"
+                        >
+                          <Button
+                            className="w-full rounded-none"
+                            tone="dark"
+                            href="/"
+                          >
+                            Add to Cart
+                          </Button>
+                        </CardItem>
                       </div>
-                      <Button tone="dark">Buy now</Button>
                     </div>
                   </CardBody>
                 </CardContainer>
