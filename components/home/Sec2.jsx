@@ -4,6 +4,7 @@ import { MotionInView, variants } from "@/utils/motion";
 import { motion } from "motion/react";
 import React from "react";
 import BookHover from "../ui/BookHover";
+import P from "../ui/P";
 import Subtitle from "../ui/Subtitle";
 import Title from "../ui/Title";
 
@@ -30,12 +31,7 @@ const Sec2 = () => {
                 The Prophecy of Sovereignty For the Royal House of Judah (Modern
                 Day African-Americans)
               </MotionInView>
-              <MotionInView
-                as={motion.p}
-                v={variants.fadeRise}
-                duration={1.5}
-                viewport={{ once: true, amount: 0.5 }}
-              >
+              <P duration={1.5}>
                 During his ministry in 627 B.C., Jeremiah, the Hebrew-Israelite
                 prophet from the tribe of Levi, warned three of the twelve
                 tribes of a present and future danger. In the ancient world, 70
@@ -51,7 +47,7 @@ const Sec2 = () => {
                 would be sent to the most violent and dangerous battlefield in
                 the solar system to WIN the war that began in Heaven. General
                 K’el and his war-gamers have broken through!
-              </MotionInView>
+              </P>
             </div>
           </div>
           <div>

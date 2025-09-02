@@ -33,6 +33,14 @@ export const variants = {
     hidden: { width: 0 },
     visible: { width: "100%", transition: soft },
   },
+  wipeRight: {
+    hidden: { clipPath: "inset(0% 0% 0% 100%)" },
+    visible: { clipPath: "inset(0% 0% 0% 0%)", transition: soft },
+  },
+  wipeLeft: {
+    hidden: { clipPath: "inset(0% 100% 0% 0%)" },
+    visible: { clipPath: "inset(0% 0% 0% 0%)", transition: soft },
+  },
   stagger: (gap = 0.12, delay = 0.1) => ({
     hidden: { opacity: 1 },
     visible: {

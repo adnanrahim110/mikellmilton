@@ -1,15 +1,12 @@
 "use client";
-import React from "react";
-// If you're on Framer Motion v11+:
-import { motion, useInView, useReducedMotion } from "motion/react";
-// If that import fails in your setup, switch to:
-// import { motion, useInView, useReducedMotion } from "framer-motion";
 import { cn } from "@/utils/cn";
+import { motion, useInView, useReducedMotion } from "motion/react";
+import React from "react";
 
 const sizeByTag = {
   h1: "text-6xl",
   h2: "text-[52px]",
-  h3: "text-3xl",
+  h3: "text-5xl",
   h4: "text-2xl",
   h5: "text-xl",
   h6: "text-lg",
@@ -74,7 +71,6 @@ export default function Title({
   const transitionAt = (d) =>
     reduce ? { duration: 0 } : { delay: d, duration, ease: resolvedEase };
 
-  // Reset counters every render so delays are sane
   const globalCharRef = React.useRef(0);
   const wordIndexRef = React.useRef(0);
   globalCharRef.current = 0;

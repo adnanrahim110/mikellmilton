@@ -7,10 +7,10 @@ const AnimatedP = ({
   children,
   className = "",
   margin = "0px 0px -10% 0px",
-  amount = 0.2,
-  staggerWord = 0.05,
-  staggerChar = 0.015,
-  charDuration = 0.35,
+  amount = 0,
+  staggerWord = 0.02,
+  staggerChar = 0.001,
+  charDuration = 0.25,
 }) => {
   const splitTokens = (text) => text.match(/\S+|\s+/g) || [];
 
