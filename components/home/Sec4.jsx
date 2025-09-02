@@ -8,13 +8,22 @@ import Title from "../ui/Title";
 
 const Sec4 = () => {
   return (
-    <section className="bg-black relative z-[1] py-[70px_100px]">
+    <section className="relative z-[1] bg-secondary-950 pt-[70px] pb-[100px]">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-16 -left-20 h-[380px] w-[380px] rounded-full bg-primary/20 blur-3xl opacity-70" />
+        <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
+        <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+      </div>
+
       <div className="container">
         <Subtitle tone="light" icon={BookOpenText} stroke={false}>
           DBT
         </Subtitle>
+
         <div className="space-y-5">
           <Title tone="light">The DOPE Break through</Title>
+
           <P className="text-secondary-300">
             The Enemies of Mankind have controlled the West, from the school
             yard to the political and military halls of power, ever since

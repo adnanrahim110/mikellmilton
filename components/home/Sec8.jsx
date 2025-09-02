@@ -22,7 +22,8 @@ const Sec8 = () => {
         : Math.round(window.innerHeight);
 
     const cardH = Math.round(
-      cardRightRef.current?.getBoundingClientRect().height ?? vpH * 0.8
+      cardRightRef.current?.getBoundingClientRect().height ??
+        Math.round(vpH * 0.8)
     );
     const contentH = Math.round(contentWrapRef.current?.scrollHeight ?? 0);
 
@@ -62,18 +63,16 @@ const Sec8 = () => {
     <section className="relative pt-20">
       <div ref={scrollerRef} className="relative">
         <section className="sticky top-0 h-screen">
-          <div className="pointer-events-none absolute inset-x-0 -top-20 -z-10">
-            <div className="w-full h-[500px] bg-white bg-blend-multiply opacity-35 bg-top bg-no-repeat bg-[length:100%_100%] bg-[url('/imgs/texture2.png')]" />
+          <div className="pointer-events-none absolute inset-0 -z-10">
+            <div className="absolute -top-20 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
+            <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
+            <div className="absolute inset-0 opacity-35 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-top bg-no-repeat bg-[length:70%_80%]" />
           </div>
-          <div className="pointer-events-none absolute inset-x-0 -bottom-[150px] -z-10">
-            <div className="w-full h-[300px] opacity-10 bg-white bg-blend-multiply bg-center bg-no-repeat bg-[length:100%_100%] bg-[url('/imgs/texture3.jpg')]" />
-          </div>
-
           <div className="h-full w-full container">
             <div className="grid h-full md:grid-cols-5 gap-5 items-stretch">
               <div className="md:col-span-2">
                 <div className="sticky top-0 h-screen flex items-center">
-                  <div className="w-full h-[80vh] p-2 rounded-3xl border border-primary/50 bg-white/5 backdrop-blur-md shadow-xl ring-1 ring-white/10">
+                  <div className="w-full h-[80vh] p-2 rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl">
                     <div className="relative w-full h-full overflow-hidden rounded-2xl">
                       <img
                         src="/imgs/home-sec8.jpg"
@@ -81,18 +80,17 @@ const Sec8 = () => {
                         alt="About section visual"
                         onLoad={measure}
                       />
-                      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/20 to-transparent" />
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/30 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/10 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent" />
                     </div>
                   </div>
                 </div>
               </div>
-
               <div className="md:col-span-3">
                 <div className="sticky top-0 h-screen flex items-center">
                   <div
                     ref={cardRightRef}
-                    className="relative w-full h-[80vh] p-2 rounded-3xl border border-primary/50 bg-primary backdrop-blur-md shadow-2xl ring-1 ring-white/10 overflow-hidden"
+                    className="relative w-full h-[80vh] p-2 rounded-3xl border border-white/40 bg-secondary-900/90 text-white backdrop-blur-md ring-1 ring-white/10 shadow-2xl overflow-hidden"
                   >
                     <motion.div style={{ y }} className="absolute inset-0">
                       <div
@@ -101,13 +99,14 @@ const Sec8 = () => {
                       >
                         <div className="space-y-4">
                           <Title tone="light">About Us</Title>
-                          <strong className="block text-primary-900/90">
+                          <strong className="block text-white/90">
                             After Nearly Two Millennia, the Iconic Assembly of
                             ‘Messianic Israelites and Christian Gentiles’ can
                             finally join forces.
                           </strong>
                         </div>
-                        <div className="prose prose-invert max-w-none leading-relaxed text-primary-900/80">
+
+                        <div className="prose prose-invert max-w-none leading-relaxed *:text-white/80">
                           <p>
                             What makes a team great? Is it the franchise, the
                             coaching staff, the players? Truth be told, it’s all
@@ -161,18 +160,19 @@ const Sec8 = () => {
                             of each other.
                           </p>
                         </div>
+
                         <div className="h-10" />
                       </div>
                     </motion.div>
-
                     <div
                       style={{ height: TOP_FADE_PX }}
-                      className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-primary via-primary/60 to-transparent"
+                      className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-secondary-900 via-secondary-900/70 to-transparent"
                     />
                     <div
                       style={{ height: BOTTOM_FADE_PX }}
-                      className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary via-primary/60 to-transparent"
+                      className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-secondary-900 via-secondary-900/70 to-transparent"
                     />
+
                     <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/10" />
                   </div>
                 </div>

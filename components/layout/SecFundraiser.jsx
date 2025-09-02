@@ -1,10 +1,11 @@
 "use client";
 
 import { ArrowRight, CircleDollarSign, ShieldCheck } from "lucide-react";
-import { motion, useInView } from "motion/react";
-import React, { useRef } from "react";
+import { motion, useAnimationControls, useInView } from "motion/react";
+import React, { useEffect, useRef } from "react";
 import Title from "../ui/Title";
 
+/* animated 80% donut that replays on every re-enter */
 const DonutAllocation = ({
   allocation = 80,
   size = 128,
@@ -13,12 +14,22 @@ const DonutAllocation = ({
   track = "rgba(0,0,0,0.08)",
 }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, {
-    once: false,
-    amount: 0.6,
-    margin: "0px 0px -10% 0px",
-  });
+  const controls = useAnimationControls();
+  const inView = useInView(ref, { amount: 0.6, margin: "0px 0px -10% 0px" });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        ["--p"]: allocation,
+        transition: { duration: 2.2, ease: [0.22, 1, 0.36, 1] },
+      });
+    } else {
+      controls.set({ ["--p"]: 0 });
+    }
+  }, [inView, allocation, controls]);
+
   const inner = size - thickness * 2;
+
   return (
     <div ref={ref} className="relative" style={{ width: size, height: size }}>
       <motion.div
@@ -33,8 +44,7 @@ const DonutAllocation = ({
             "conic-gradient(var(--donut-color) calc(var(--p) * 1%), var(--donut-track) 0)",
           willChange: "transform",
         }}
-        animate={{ ["--p"]: inView ? allocation : 0 }}
-        transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
+        animate={controls}
       />
       <div
         className="absolute rounded-full bg-white/90 ring-1 ring-black/5"
@@ -69,7 +79,7 @@ const SecFundraiser = ({
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-28 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-40 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+        <div className="absolute inset-0 opacity-35 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
@@ -91,11 +101,9 @@ const SecFundraiser = ({
           >
             <div className="space-y-6">
               <Title className="flex items-center gap-2">
-                <div className="grow-0 shrink-0 basis-auto flex items-center justify-center">
-                  <span className="inline-flex items-center justify-center mr-1 size-12 rounded-full bg-primary/15 text-primary">
-                    <ShieldCheck className="text-3xl" />
-                  </span>
-                </div>
+                <span className="inline-flex items-center justify-center mr-1 size-12 rounded-full bg-primary/15 text-primary">
+                  <ShieldCheck className="text-3xl" />
+                </span>
                 The DBT Fundraiser
               </Title>
 
@@ -135,7 +143,7 @@ const SecFundraiser = ({
             <div className="relative mx-auto w-full max-w-md">
               <div className="relative rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md shadow-2xl ring-1 ring-black/5 p-5">
                 <div className="flex items-center gap-5">
-                  <DonutAllocation />
+                  <DonutAllocation allocation={80} />
                   <div className="min-w-0">
                     <h4 className="text-base font-semibold text-neutral-900">
                       Sovereign Wealth Fund
@@ -162,6 +170,7 @@ const SecFundraiser = ({
                     </div>
                   </div>
                 </div>
+
                 <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
               </div>
             </div>

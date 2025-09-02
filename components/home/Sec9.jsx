@@ -30,30 +30,31 @@ const sec9cards = [
 const Sec9 = () => {
   return (
     <section className="relative py-[120px]">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-20 -left-10 size-[420px] rounded-full bg-primary/20 blur-3xl opacity-60" />
-        <div className="absolute bottom-0 right-0 size-[420px] rounded-full bg-amber-500/10 blur-3xl opacity-70" />
+      {/* themed backdrop */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-20 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
+        <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
+        <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
       </div>
 
       <div className="container relative">
         <div className="grid items-start gap-10 md:grid-cols-5">
+          {/* left content */}
           <div className="md:col-span-3">
             <div className="space-y-8">
               <div className="space-y-3">
-                <Title className="flex items-center gap-2">
-                  <div className="grow-0 shrink-0 basis-auto flex items-center justify-center">
-                    <span className="inline-flex items-center justify-center mr-1 size-12 rounded-full bg-primary/15 text-primary">
-                      <FaBookOpen className="text-[28px]" />
-                    </span>
-                  </div>
+                <Title className="flex items-center gap-3">
+                  <span className="inline-flex items-center justify-center size-12 rounded-full bg-primary/15 text-primary">
+                    <FaBookOpen className="text-[28px]" />
+                  </span>
                   The D.O.P.E. Breakthrough
                 </Title>
-                <h3 className="text-black/90 text-xl tracking-tight pl-[70px]">
+                <h3 className="text-black text-xl tracking-tight pl-[60px]">
                   Mikell M. Milton and L.A. Doyle
                 </h3>
               </div>
 
-              <div className="space-y-4 text-neutral-800 leading-relaxed">
+              <div className="space-y-4 text-secondary leading-relaxed">
                 <P>
                   The D.O.P.E. Breakthrough is a supernatural action adventure
                   that takes place in the Kingdom of Amen-Amensa. But the fact
@@ -61,57 +62,54 @@ const Sec9 = () => {
                   is a mirroring connection between the heavenly Kingdom of
                   Amen-Amensa and planet Earth’s 21st century Global Community.
                 </P>
-                <P delay={0.1}>
+                <P>
                   Was the 2020 global lockdown just a random moment in time? Or
                   was it a supernatural event, a souped up breakthrough from
                   “Above” that goes beyond politics, religion, and the world
                   wide web of entertainment?
                 </P>
-                <P delay={0.2}>
+                <P>
                   With this debut novel, The DBT Franchise Ministry offers
                   hidden pieces of humanity’s origin story and together, with
                   YOU, the interactive reader, we will witness how sleepwalkers
                   implode the real world system as the New Earth reality BREAKS
                   THROUGH!
                 </P>
-                <P className="italic text-neutral-900">It Was Written.</P>
+                <P className="italic text-secondary-800">It Was Written.</P>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2 mb-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 {sec9cards.map((c, i) => (
                   <MotionInView
+                    key={i}
                     as={motion.div}
                     v={variants.fadeRise}
                     viewport={{ once: true, amount: 0.5 }}
                     delay={i * 0.1}
-                    key={i}
                     className={cn(
-                      "group relative overflow-hidden rounded-2xl border border-white/40 bg-white/70 backdrop-blur-md shadow-xl ring-1 ring-black/5 transition hover:shadow-2xl",
+                      "group relative overflow-hidden rounded-2xl",
+                      "border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-xl",
                       i === 2 && "md:col-span-2"
                     )}
                   >
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="absolute -right-10 -top-10 size-40 rounded-full bg-primary/10 blur-2xl" />
-                    </div>
-
+                    <div className="absolute -right-10 -top-10 size-40 rounded-full bg-primary/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="p-5">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="inline-flex items-center justify-center size-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-md">
+                        <span className="inline-flex items-center justify-center size-12 rounded-full bg-gradient-to-br from-primary-300 to-primary-500 shadow-md">
                           <img
                             src={c.icon}
                             alt={c.title}
                             className="w-6 h-6 object-contain invert"
                           />
                         </span>
-                        <h4 className="text-xl font-semibold text-neutral-900">
+                        <h4 className="text-base font-semibold text-secondary-900">
                           {c.title}
                         </h4>
                       </div>
-                      <p className="text-sm text-neutral-700 leading-relaxed">
+                      <p className="text-sm text-secondary-700 leading-relaxed">
                         {c.text}
                       </p>
                     </div>
-
                     <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
                   </MotionInView>
                 ))}
@@ -119,9 +117,14 @@ const Sec9 = () => {
             </div>
           </div>
 
+          {/* right sticky book */}
           <div className="md:col-span-2 md:sticky md:top-12">
             <div className="relative mx-auto w-full max-w-xs">
-              <BookHover img="/imgs/book_cover.png" />
+              <div className="absolute -inset-3 rounded-3xl bg-white/40 blur-xl opacity-50 pointer-events-none" />
+              <div className="relative rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl p-4">
+                <BookHover img="/imgs/book_cover.png" />
+                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
+              </div>
             </div>
           </div>
         </div>

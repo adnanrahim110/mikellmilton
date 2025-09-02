@@ -1,26 +1,18 @@
 "use client";
+
 import { cn } from "@/utils/cn";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { SplitText } from "gsap/SplitText";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 gsap.registerPlugin(Observer, SplitText);
 
 const defaultSections = [
-  {
-    text: "Whispers of Radiance",
-    img: "/imgs/banners/hero-1.jpeg",
-  },
-  {
-    text: "Ethereal Moments",
-    img: "/imgs/banners/hero-2.jpeg",
-  },
-  {
-    text: "Silent Beauty",
-    img: "/imgs/banners/hero-3.jpeg",
-  },
+  { text: "Whispers of Radiance", img: "/imgs/banners/hero-1.jpeg" },
+  { text: "Ethereal Moments", img: "/imgs/banners/hero-2.jpeg" },
+  { text: "Silent Beauty", img: "/imgs/banners/hero-3.jpeg" },
 ];
 
 const Hero = ({ sections = defaultSections, className = "" }) => {
@@ -30,47 +22,39 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
   const splitHeadingsRef = useRef([]);
   const currentIndexRef = useRef(-1);
   const animatingRef = useRef(false);
+
   const sectionsRefs = useRef([]);
   const imagesRefs = useRef([]);
   const outerRefs = useRef([]);
   const innerRefs = useRef([]);
   const headingRefs = useRef([]);
+
   const counterCurrentRef = useRef(null);
   const counterNextRef = useRef(null);
   const counterCurrentSplitRef = useRef(null);
   const counterNextSplitRef = useRef(null);
+
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     let loaded = 0;
-    sections.forEach((section) => {
+    sections.forEach((s) => {
       const img = new Image();
-      img.src = section.img;
-      img.onload = () => {
-        loaded++;
-        if (loaded === sections.length) {
-          setImagesLoaded(true);
-        }
+      img.src = s.img;
+      const done = () => {
+        loaded += 1;
+        if (loaded === sections.length) setImagesLoaded(true);
       };
-      img.onerror = () => {
-        loaded++;
-        if (loaded === sections.length) {
-          setImagesLoaded(true);
-        }
-      };
+      img.onload = done;
+      img.onerror = done;
     });
   }, [sections]);
 
   const gotoSection = useCallback((index, direction) => {
     if (!containerRef.current || animatingRef.current) return;
 
-    const sectionsElements = sectionsRefs.current;
-    const images = imagesRefs.current;
-    const outerWrappers = outerRefs.current;
-    const innerWrappers = innerRefs.current;
-
-    const wrap = gsap.utils.wrap(0, sectionsElements.length);
+    const wrap = gsap.utils.wrap(0, sectionsRefs.current.length);
     index = wrap(index);
     animatingRef.current = true;
 
@@ -83,39 +67,32 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
         animatingRef.current = false;
       },
     });
-
     timelineRef.current = tl;
 
     if (currentIndexRef.current >= 0) {
-      gsap.set(sectionsElements[currentIndexRef.current], { zIndex: 0 });
-      tl.to(images[currentIndexRef.current], { xPercent: -15 * dFactor }).set(
-        sectionsElements[currentIndexRef.current],
-        { autoAlpha: 0 }
-      );
+      gsap.set(sectionsRefs.current[currentIndexRef.current], { zIndex: 0 });
+      tl.to(imagesRefs.current[currentIndexRef.current], {
+        xPercent: -15 * dFactor,
+      }).set(sectionsRefs.current[currentIndexRef.current], { autoAlpha: 0 });
     }
 
-    gsap.set(sectionsElements[index], { autoAlpha: 1, zIndex: 1 });
+    gsap.set(sectionsRefs.current[index], { autoAlpha: 1, zIndex: 1 });
 
     tl.fromTo(
-      [outerWrappers[index], innerWrappers[index]],
-      {
-        xPercent: (i) => (i ? -100 * dFactor : 100 * dFactor),
-      },
+      [outerRefs.current[index], innerRefs.current[index]],
+      { xPercent: (i) => (i ? -100 * dFactor : 100 * dFactor) },
       { xPercent: 0 },
       0
-    ).fromTo(images[index], { xPercent: 15 * dFactor }, { xPercent: 0 }, 0);
+    ).fromTo(
+      imagesRefs.current[index],
+      { xPercent: 15 * dFactor },
+      { xPercent: 0 },
+      0
+    );
 
-    if (
-      splitHeadingsRef.current[index] &&
-      splitHeadingsRef.current[index].lines
-    ) {
+    if (splitHeadingsRef.current[index]?.lines) {
       const lines = splitHeadingsRef.current[index].lines;
-
-      gsap.set(lines, {
-        opacity: 0,
-        yPercent: 100,
-      });
-
+      gsap.set(lines, { opacity: 0, yPercent: 100 });
       tl.to(
         lines,
         {
@@ -123,10 +100,7 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
           yPercent: 0,
           duration: 0.8,
           ease: "power2.out",
-          stagger: {
-            each: 0.1,
-            from: "start",
-          },
+          stagger: { each: 0.1, from: "start" },
         },
         0.4
       );
@@ -185,14 +159,11 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
         },
         0.4
       ).add(() => {
-        if (counterCurrentSplitRef.current) {
-          counterCurrentSplitRef.current.revert();
-          counterCurrentSplitRef.current = null;
-        }
-        if (counterNextSplitRef.current) {
-          counterNextSplitRef.current.revert();
-          counterNextSplitRef.current = null;
-        }
+        counterCurrentSplitRef.current?.revert?.();
+        counterCurrentSplitRef.current = null;
+        counterNextSplitRef.current?.revert?.();
+        counterNextSplitRef.current = null;
+
         if (counterCurrentRef.current && counterNextRef.current) {
           counterCurrentRef.current.textContent =
             counterNextRef.current.textContent;
@@ -209,37 +180,25 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
     () => {
       if (!containerRef.current || !imagesLoaded) return;
 
-      gsap.registerPlugin(Observer, SplitText);
-
       const headings = headingRefs.current;
-      const outerWrappers = outerRefs.current;
-      const innerWrappers = innerRefs.current;
-
       splitHeadingsRef.current = headings.map(
-        (heading) =>
-          new SplitText(heading, {
+        (h) =>
+          new SplitText(h, {
             type: "lines",
             linesClass: "line",
             mask: "lines",
           })
       );
 
-      gsap.set(outerWrappers, { xPercent: 100 });
-      gsap.set(innerWrappers, { xPercent: -100 });
+      gsap.set(outerRefs.current, { xPercent: 100 });
+      gsap.set(innerRefs.current, { xPercent: -100 });
 
       observerRef.current = Observer.create({
         type: "touch,pointer",
-        wheelSpeed: -1,
-        onDown: () => {
-          if (!animatingRef.current) {
-            gotoSection(currentIndexRef.current - 1, -1);
-          }
-        },
-        onUp: () => {
-          if (!animatingRef.current) {
-            gotoSection(currentIndexRef.current + 1, 1);
-          }
-        },
+        onDown: () =>
+          !animatingRef.current && gotoSection(currentIndexRef.current - 1, -1),
+        onUp: () =>
+          !animatingRef.current && gotoSection(currentIndexRef.current + 1, 1),
         tolerance: 10,
         preventDefault: true,
       });
@@ -247,34 +206,16 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
       gotoSection(0, 1);
 
       return () => {
-        if (observerRef.current) {
-          observerRef.current.kill();
-          observerRef.current = null;
-        }
-        if (timelineRef.current) {
-          timelineRef.current.kill();
-          timelineRef.current = null;
-        }
-        splitHeadingsRef.current.forEach((split) => {
-          if (split && typeof split.revert === "function") {
-            split.revert();
-          }
-        });
+        observerRef.current?.kill?.();
+        observerRef.current = null;
+        timelineRef.current?.kill?.();
+        timelineRef.current = null;
+        splitHeadingsRef.current.forEach((s) => s?.revert?.());
         splitHeadingsRef.current = [];
-        if (
-          counterCurrentSplitRef.current &&
-          typeof counterCurrentSplitRef.current.revert === "function"
-        ) {
-          counterCurrentSplitRef.current.revert();
-          counterCurrentSplitRef.current = null;
-        }
-        if (
-          counterNextSplitRef.current &&
-          typeof counterNextSplitRef.current.revert === "function"
-        ) {
-          counterNextSplitRef.current.revert();
-          counterNextSplitRef.current = null;
-        }
+        counterCurrentSplitRef.current?.revert?.();
+        counterCurrentSplitRef.current = null;
+        counterNextSplitRef.current?.revert?.();
+        counterNextSplitRef.current = null;
       };
     },
     { scope: containerRef, dependencies: [sections.length, imagesLoaded] }
@@ -282,20 +223,30 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
 
   return (
     <section className="relative pt-20">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
+        <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
+        <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/[.06] to-transparent" />
+      </div>
+
       <div
         ref={containerRef}
-        className={`w-full h-[calc(100dvh_-_80px)] max-h-[680px] overflow-hidden bg-black text-white uppercase font-sans ${className} relative select-none`}
+        className={cn(
+          "relative w-full h-[calc(100dvh_-_80px)] max-h-[680px] overflow-hidden",
+          "text-white select-none"
+        )}
       >
-        <div className="absolute bottom-4 right-6 z-[2] flex items-center gap-2.5 bg-black/30 backdrop-blur-xs p-1 rounded-lg">
-          <div className="flex gap-2">
+        <div className="absolute bottom-4 right-6 z-[2] flex items-center gap-3">
+          <div className="flex gap-2 rounded-xl bg-black/40 backdrop-blur-md p-1.5 ring-1 ring-white/20 shadow-md">
             {sections.map((section, i) => (
               <button
                 key={`thumb-${i}`}
                 className={cn(
-                  "h-8 rounded overflow-hidden relative transition-all duration-300",
+                  "h-10 rounded-lg overflow-hidden relative transition-all duration-300",
                   currentIndex === i
-                    ? "w-16 scale-y-[130%] -translate-y-1.5"
-                    : "w-12"
+                    ? "w-20 scale-y-[115%] -translate-y-0.5"
+                    : "w-14"
                 )}
                 onClick={() => {
                   if (currentIndex !== i && !animatingRef.current) {
@@ -303,23 +254,25 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
                     gotoSection(i, direction);
                   }
                 }}
+                aria-label={`Go to slide ${i + 1}`}
               >
                 <img
                   src={section.img}
-                  alt={`Section ${i + 1}`}
+                  alt={`Slide ${i + 1}`}
                   className="w-full h-full object-cover"
                 />
                 <div
-                  className={`absolute inset-0 bg-black transition-opacity duration-1000 ease-in-out ${
-                    currentIndex !== i ? "opacity-50" : "opacity-0"
-                  }`}
+                  className={cn(
+                    "absolute inset-0 bg-black transition-opacity duration-700 ease-in-out",
+                    currentIndex !== i ? "opacity-40" : "opacity-0"
+                  )}
                 />
               </button>
             ))}
           </div>
 
-          <div className="text-xs md:text-sm tracking-wider flex items-center gap-1 bg-black/10 backdrop-blur-xs py-0.5 rounded-md px-2">
-            <div className="relative overflow-hidden h-[1em] leading-[1em] min-w-[0.8em]">
+          <div className="rounded-md bg-black/40 backdrop-blur-md px-2.5 py-1.5 text-xs md:text-sm tracking-wider ring-1 ring-white/20 shadow-md">
+            <div className="relative overflow-hidden h-[1em] leading-[1em] inline-block align-middle min-w-[0.9em] mr-1">
               <span ref={counterCurrentRef} className="block">
                 1
               </span>
@@ -330,46 +283,44 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
                 2
               </span>
             </div>
-            <span className="opacity-70">/ {sections.length}</span>
+            <span className="opacity-80">/ {sections.length}</span>
           </div>
         </div>
+
         {sections.map((section, i) => (
           <section
             key={`section-${i}`}
-            className="absolute top-0 h-full w-full invisible"
-            ref={(el) => {
-              if (el) sectionsRefs.current[i] = el;
-            }}
+            className="absolute top-0 left-0 h-full w-full invisible"
+            ref={(el) => el && (sectionsRefs.current[i] = el)}
           >
             <div
               className="outer w-full h-full overflow-hidden"
-              ref={(el) => {
-                if (el) outerRefs.current[i] = el;
-              }}
+              ref={(el) => el && (outerRefs.current[i] = el)}
             >
               <div
                 className="inner w-full h-full overflow-hidden"
-                ref={(el) => {
-                  if (el) innerRefs.current[i] = el;
-                }}
+                ref={(el) => el && (innerRefs.current[i] = el)}
               >
                 <div
-                  className="bg flex items-center justify-center absolute top-0 h-full w-full bg-cover bg-center"
-                  ref={(el) => {
-                    if (el) imagesRefs.current[i] = el;
-                  }}
+                  className="bg absolute top-0 left-0 h-full w-full bg-cover bg-center"
+                  ref={(el) => el && (imagesRefs.current[i] = el)}
                   style={{
-                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%), url("${section.img}")`,
+                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.82) 100%), url("${section.img}")`,
                   }}
                 >
-                  <h2
-                    className="section-heading text-white text-center font-semibold w-[90vw] max-w-[1200px] text-[clamp(1rem,4vw,9rem)] normal-case leading-none z-10"
-                    ref={(el) => {
-                      if (el) headingRefs.current[i] = el;
-                    }}
-                  >
-                    {section.text}
-                  </h2>
+                  <div className="size-full flex items-center justify-center px-3">
+                    <h2
+                      ref={(el) => el && (headingRefs.current[i] = el)}
+                      className="section-heading text-center text-white font-semibold normal-case leading-none z-10"
+                      style={{
+                        fontFamily: "var(--font-albert-sans)",
+                        fontSize: "clamp(28px, 6vw, 88px)",
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {section.text}
+                    </h2>
+                  </div>
                 </div>
               </div>
             </div>

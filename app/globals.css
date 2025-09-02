@@ -1,12 +1,6 @@
 @import "tw-animate-css";
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
-:root {
-  --scroll-velocity: 0;
-}
-
 @theme {
   --color-primary: #ffbe00;
   --color-primary-50: #fffeea;

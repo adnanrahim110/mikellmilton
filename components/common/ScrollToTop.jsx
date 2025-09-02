@@ -88,7 +88,7 @@ const ScrollToTop = () => {
   return (
     <div
       className={[
-        "fixed bottom-6 right-6 z-50 pointer-events-none",
+        "fixed bottom-4 right-3 z-50 pointer-events-none",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
         "transition-all duration-300 ease-out",
       ].join(" ")}
@@ -106,7 +106,7 @@ const ScrollToTop = () => {
           width={size}
           height={size}
           viewBox={`0 0 ${size} ${size}`}
-          className="absolute inset-0"
+          className="absolute inset-0 -top-px -left-px"
           aria-hidden="true"
         >
           <circle

@@ -12,14 +12,22 @@ import Title from "../ui/Title";
 const Sec5 = () => {
   return (
     <section className="relative w-full pt-[130px]">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-16 -left-20 h-[380px] w-[380px] rounded-full bg-primary/20 blur-3xl opacity-70" />
+        <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
+        <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+      </div>
+
       <div className="container">
         <Subtitle icon={FaPeopleArrows}>The dope break through</Subtitle>
+
         <div className="space-y-6 mb-16">
           <Title after={[{ word: 2, src: "/imgs/sec5_title.jpg" }]}>
             A 21st Century Prophecy for the Boomers, GEN X, Millennials, GEN Z,
             and GEN ALPHA.
           </Title>
         </div>
+
         <div className="grid gap-10 mb-8 grid-cols-[1fr_0.8fr]">
           <div className="space-y-8">
             <Quote author="Revelation 7:9">
@@ -29,6 +37,7 @@ const Sec5 = () => {
               were wearing white robes and were holding palm branches in their
               hands.
             </Quote>
+
             <P>
               So let us answer the first question. Yes, there are traitors in
               our midst; from every nation. Bullies and Wizards working for the
@@ -48,11 +57,12 @@ const Sec5 = () => {
               BREAKTHROUGH!
             </P>
           </div>
+
           <MotionInView
             as={motion.div}
             v={variants.fadeIn}
             viewport={{ once: true, amount: 0.5 }}
-            className="overflow-hidden"
+            className="overflow-hidden rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl"
           >
             <motion.div
               variants={variants.wipeRight}
@@ -65,6 +75,8 @@ const Sec5 = () => {
                 className="block w-full h-auto object-cover"
               />
             </motion.div>
+
+            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
           </MotionInView>
         </div>
       </div>
