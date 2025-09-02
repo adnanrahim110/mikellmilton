@@ -245,7 +245,7 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
                 className={cn(
                   "h-10 rounded-lg overflow-hidden relative transition-all duration-300",
                   currentIndex === i
-                    ? "w-20 scale-y-[115%] -translate-y-0.5"
+                    ? "w-20 scale-y-[135%] -translate-y-2 shadow-[0_0_10px] shadow-white/5"
                     : "w-14"
                 )}
                 onClick={() => {
