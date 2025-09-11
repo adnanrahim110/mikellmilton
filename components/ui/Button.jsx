@@ -30,7 +30,7 @@ const Button = ({
       {...(href ? { href } : { onClick, type, disabled })}
       {...props}
       className={cn(
-        "overflow-hidden inline-block relative min-w-32 px-6 p-2 h-12 border-none rounded-md text-xl text-center font-bold cursor-pointer z-10 group btn",
+        "overflow-hidden inline-flex items-center justify-center relative min-w-32 px-6 p-2 h-12 border-none rounded-md text-xl text-center font-bold cursor-pointer z-10 group btn",
         t.bg,
         t.text,
         className
@@ -54,7 +54,7 @@ const Button = ({
 
       <span
         className={cn(
-          "group-hover:opacity-100 group-hover:duration-1000 duration-100 opacity-0 text-center absolute top-2.5 left-0 w-full z-10"
+          "group-hover:opacity-100 group-hover:duration-1000 duration-100 opacity-0 text-center absolute flex items-center justify-center top-2.5 left-0 w-full z-10"
         )}
       >
         {children}

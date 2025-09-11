@@ -68,11 +68,11 @@ const Cursor = () => {
           if (lastLinkRef.current !== link) {
             lastLinkRef.current = link;
             const r = link.getBoundingClientRect();
-            const w = Math.max(10, Math.round(r.width) + 8);
-            const h = Math.max(10, Math.round(r.height) + 8);
+            const w = Math.max(10, Math.round(r.width) + 16);
+            const h = Math.max(10, Math.round(r.height) + 12);
             setLinkRect({ w, h });
-            setRadius("0.5rem");
-            setOpcty(0.3);
+            setRadius("0.3rem");
+            setOpcty(0.2);
           }
           if (blend !== "difference") setBlend("difference");
           return;
