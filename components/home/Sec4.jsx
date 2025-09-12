@@ -22,22 +22,20 @@ const Sec4 = () => {
         </Subtitle>
 
         <div className="space-y-5">
-          <Title tone="light">The DOPE Break through</Title>
+          <Title tone="light">Welcome to the DOPE Breakthrough</Title>
 
           <P className="text-secondary-300">
-            The Enemies of Mankind have controlled the West, from the school
-            yard to the political and military halls of power, ever since
-            Alexander was “Great.” When the Industrial Age of Bullies ended,
-            where physical prowess carried the BIG STICK, the lightning-fast wit
-            of computer wizards ushered in the Age of Sorcery where BIG TECH
-            harnesses power through knowledge and manipulation of unseen forces.
-            The world of technology and magic are closer than you think.
-            Alien-angels, gods, and goddesses influence the course of 21st
-            century world events. If you can’t see this, you’re completely under
-            enemy control.{" "}
-            <strong>Operation 2nd Coming will commence 10/16/2025.</strong>
-            Do you have what it takes to{" "}
-            <strong>BREAKTHROUGH and BREAK FREE?</strong>
+            This is not just a game; it’s a journey of unlocking your true
+            potential and discovering the wisdom within you. Step into a new
+            reality and prepare for the transformation you’ve been waiting for.
+            Are you ready to face spiritual warfare and rise above the
+            challenges? The path to your true self may be tough, but with the
+            right mindset, you can overcome it. Like the great warriors before
+            you, it’s time to break free from what holds you back. This journey
+            is about more than survival it’s about thriving and tapping into
+            your divine power. Victory is already secured, but will you answer
+            the call to claim it? The choice is yours, and the time to act is
+            now.
           </P>
         </div>
       </div>

@@ -7,14 +7,6 @@ import { MotionInView, variants } from "@/utils/motion";
 import { motion } from "motion/react";
 
 const AboutFeatureWipe = ({
-  eyebrow = "Lorem ipsum",
-  title = "Lorem ipsum dolor",
-  lead = " Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos expedita aliquid, ex, deleniti, necessitatibus architecto ut possimus libero est nemo reprehenderit? Corrupti dolorem unde nisi repudiandae esse, suscipit eius iusto architecto debitis, earum rerum quibusdam iure laudantium aut magni eveniet.",
-  bullets = [
-    "orem, ipsum dolor sit amet consectetur",
-    "orem, ipsum dolor sit amet consectetur",
-    "orem, ipsum dolor sit amet consectetur",
-  ],
   images = [
     { src: "/imgs/home-sec10.jpeg", alt: "Field note" },
     { src: "/imgs/home-sec5.jpeg", alt: "Workshop" },
@@ -40,12 +32,20 @@ const AboutFeatureWipe = ({
       <div className="container">
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
           <div className="space-y-6">
-            <Subtitle tone="dark">{eyebrow}</Subtitle>
-            <Title className="text-[clamp(28px,5vw,44px)]">{title}</Title>
-            <P>{lead}</P>
-
+            <Subtitle tone="dark">
+              Witness to prophecy. Servant of destiny.
+            </Subtitle>
+            <Title className="text-[clamp(28px,5vw,44px)]">
+              THE VISION I CARRY
+            </Title>
             <ul className="grid gap-3 pt-2">
-              {bullets.map((t, i) => (
+              {[
+                "I write to reveal prophecy that has been hidden for generations.",
+                "I teach so that the scattered can rediscover their true identity.",
+                "I build to prepare a people ready for sovereignty and eternity.",
+                "I move with the conviction that every word written becomes a torch for others to run with.",
+                "I serve not for myself, but for YAHAWAH’s plan through Christ-King Yashiah.",
+              ].map((t, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="inline-flex items-center justify-center size-8 rounded-lg bg-primary/15 text-primary">
                     <span className="size-2 rounded-full bg-primary" />
@@ -54,6 +54,10 @@ const AboutFeatureWipe = ({
                 </li>
               ))}
             </ul>
+            <P>
+              This is my calling: to stand as a witness, to write as a servant,
+              and to make the truth known in this generation.
+            </P>
           </div>
 
           <div className="grid gap-5">

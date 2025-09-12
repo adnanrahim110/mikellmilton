@@ -6,17 +6,7 @@ import Title from "@/components/ui/Title";
 import { BookOpenText, Sparkles, Target } from "lucide-react";
 import { motion } from "motion/react";
 
-const AboutStory = ({
-  eyebrow = "Origin",
-  title = "Why I do this",
-  lead = "The through-line is simple. Clarity first. Then action. I write, teach, and build around that idea so people move with purpose.",
-  bullets = [
-    { icon: Sparkles, text: "Clarity over noise. Build for signal." },
-    { icon: Target, text: "Aim true. Make decisions that age well." },
-    { icon: BookOpenText, text: "Write it down. Teach it so others can run." },
-  ],
-  portrait = "/imgs/about-portrait.jpg",
-}) => {
+const AboutStory = ({ portrait = "/imgs/about-portrait.jpg" }) => {
   return (
     <section className="relative py-[120px]">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -36,20 +26,23 @@ const AboutStory = ({
       <div className="container">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-            <Subtitle tone="dark">{eyebrow}</Subtitle>
-            <Title className="text-[clamp(28px,5vw,44px)]">{title}</Title>
-            <P>{lead}</P>
-
-            <ul className="mt-2 grid gap-3">
-              {bullets.map(({ icon: Icon, text }, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="inline-flex items-center justify-center size-9 rounded-lg bg-primary/15 text-primary">
-                    <Icon className="w-4 h-4" />
-                  </span>
-                  <span className="text-secondary">{text}</span>
-                </li>
-              ))}
-            </ul>
+            <Subtitle tone="dark">Clarity first. Action always.</Subtitle>
+            <Title className="text-[clamp(28px,5vw,44px)]">
+              Why It Matters
+            </Title>
+            <P>
+              The through-line has always been simple: clarity first, then
+              action. I write, teach, and build so people can move with purpose.
+              In a world full of noise, I believe in choosing the signal, the
+              truth that cuts through distraction and points us toward lasting
+              direction.
+            </P>
+            <P>
+              Clarity leads to courage, and courage leads to impact. That’s why
+              I aim true, make decisions that age well, and leave words behind
+              that others can run with. Writing is not just expression, it’s a
+              map, a guide, and a mission.
+            </P>
           </div>
 
           <motion.div

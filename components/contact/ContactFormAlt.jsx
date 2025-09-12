@@ -12,22 +12,23 @@ import {
   Sparkles,
 } from "lucide-react";
 import { motion } from "motion/react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 const chipClasses =
-  "inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3.5 py-2 text-xs font-semibold text-white/90 hover:bg-white/15 hover:border-white/20 transition";
+  "inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 text-sm py-2 font-semibold text-black/90 hover:bg-white/15 hover:border-white/20 transition";
 
 const topics = [
   { key: "general", label: "General", Icon: Sparkles },
   { key: "speaking", label: "Speaking", Icon: BookOpenText },
-  { key: "partnerships", label: "Partnerships", Icon: Phone },
+  // { key: "partnerships", label: "Partnerships", Icon: Phone },
 ];
 
 const ContactFormAlt = ({
   id = "contact-form",
   eyebrow = "Contact",
-  title = "Start the conversation",
-  lead = "One clear goal. One useful next step. Tell me what you need and we’ll move.",
+  title = "Your Words Begin The BREAKTHROUGH",
+  lead = "One voice matters. One message can open the way. Share what’s on your heart, and together we’ll take the next step toward purpose.",
   email = "hello@yourdomain.com",
   phone = "+1 000 000 0000",
   action = "/api/contact",
@@ -101,27 +102,27 @@ const ContactFormAlt = ({
 
       <div className="container">
         <div className="grid items-start gap-10 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="space-y-6">
+          <div className="space-y-6 mt-4">
             <Subtitle tone="dark">{eyebrow}</Subtitle>
             <Title className="text-[clamp(30px,5.6vw,48px)]">{title}</Title>
             <p className="text-lg text-secondary">{lead}</p>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <a href={`mailto:${email}`} className={chipClasses}>
-                <span className="inline-grid place-items-center size-7 rounded-lg bg-primary/20 text-primary">
-                  <Mail className="w-4 h-4" />
+              <Link href={`mailto:${email}`} className={chipClasses}>
+                <span className="inline-grid place-items-center size-auto p-2 rounded-lg bg-primary/20 text-primary">
+                  <Mail className="size-5" />
                 </span>
                 {email}
-              </a>
-              <a
+              </Link>
+              <Link
                 href={`tel:${phone.replace(/\s+/g, "")}`}
                 className={chipClasses}
               >
-                <span className="inline-grid place-items-center size-7 rounded-lg bg-primary/20 text-primary">
-                  <Phone className="w-4 h-4" />
+                <span className="inline-grid place-items-center size-auto p-2 rounded-lg bg-primary/20 text-primary">
+                  <Phone className="size-5" />
                 </span>
                 {phone}
-              </a>
+              </Link>
             </div>
 
             <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 ring-1 ring-black/5 shadow-inner p-4">
@@ -161,7 +162,7 @@ const ContactFormAlt = ({
                           value={state.name}
                           onChange={onChange}
                           placeholder="Your name"
-                          className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
+                          className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner shadow-black/15 focus:outline-none focus:ring-4 focus:ring-primary/25"
                           required
                         />
                       </label>
@@ -175,11 +176,11 @@ const ContactFormAlt = ({
                           value={state.email}
                           onChange={onChange}
                           placeholder="you@email.com"
-                          className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
+                          className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner shadow-black/15 focus:outline-none focus:ring-4 focus:ring-primary/25"
                           required
                         />
                       </label>
-                      <label className="block sm:col-span-2">
+                      <label className="block">
                         <span className="block text-xs font-semibold text-secondary-700 mb-1.5">
                           Phone (optional)
                         </span>
@@ -188,34 +189,33 @@ const ContactFormAlt = ({
                           value={state.phone}
                           onChange={onChange}
                           placeholder="+1 000 000 0000"
-                          className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
+                          className="w-full rounded-xl border border-white bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner shadow-black/10 focus:outline-none focus:ring-4 focus:ring-primary/25"
                         />
                       </label>
-                    </div>
-
-                    <div className="grid gap-3">
-                      <span className="block text-xs font-semibold text-secondary-700">
-                        Topic
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                        {topics.map(({ key, label, Icon }) => {
-                          const active = state.topic === key;
-                          return (
-                            <button
-                              type="button"
-                              key={key}
-                              onClick={() => onSelectTopic(key)}
-                              className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition ${
-                                active
-                                  ? "bg-primary text-secondary-950 shadow"
-                                  : "bg-white/80 text-secondary-900 border border-white/50 shadow-inner hover:bg-white"
-                              }`}
-                            >
-                              <Icon className="w-4 h-4" />
-                              {label}
-                            </button>
-                          );
-                        })}
+                      <div className="grid gap-1.5">
+                        <span className="block text-xs font-semibold text-secondary-700">
+                          Topic
+                        </span>
+                        <div className="flex flex-wrap gap-3">
+                          {topics.map(({ key, label, Icon }) => {
+                            const active = state.topic === key;
+                            return (
+                              <button
+                                type="button"
+                                key={key}
+                                onClick={() => onSelectTopic(key)}
+                                className={`inline-flex items-center gap-2 rounded-xl px-5 py-3.5 text-xs font-semibold transition ${
+                                  active
+                                    ? "bg-primary text-secondary-950 shadow-[inset_0_0_5px] shadow-black/50"
+                                    : "bg-white/80 text-secondary-900 border border-white/50 shadow-inner shadow-black/15 hover:bg-white"
+                                }`}
+                              >
+                                <Icon className="w-4 h-4" />
+                                {label}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
 
@@ -229,7 +229,7 @@ const ContactFormAlt = ({
                         onChange={onChange}
                         placeholder="Write your message…"
                         rows={7}
-                        className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
+                        className="w-full rounded-xl border border-white/50 bg-white/85 px-3.5 py-3 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner shadow-black/15 focus:outline-none focus:ring-4 focus:ring-primary/25 resize-none"
                         required
                       />
                     </label>
@@ -272,27 +272,10 @@ const ContactFormAlt = ({
                     </div>
                   </div>
                 )}
-
-                <motion.div
-                  aria-hidden
-                  className="pointer-events-none absolute -inset-4 rounded-[30px] opacity-60"
-                  style={{
-                    background:
-                      "conic-gradient(from 0deg, rgba(255,190,0,.42), rgba(255,190,0,.12) 30%, transparent 60%, rgba(255,190,0,.28) 85%, rgba(255,190,0,.42))",
-                    filter: "blur(12px)",
-                  }}
-                  initial={{ rotate: 0 }}
-                  whileInView={{ rotate: 360 }}
-                  transition={{
-                    duration: 28,
-                    ease: "linear",
-                    repeat: Infinity,
-                  }}
-                />
               </div>
             </div>
 
-            <div className="mt-4 flex items-center gap-3 text-xs text-secondary-600">
+            <div className="mt-4 flex items-center gap-3 justify-center text-center text-xs text-secondary-600">
               <span className="inline-grid place-items-center size-6 rounded-lg bg-black/5 text-secondary-900">
                 <Sparkles className="w-3.5 h-3.5" />
               </span>

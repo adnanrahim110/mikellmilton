@@ -152,8 +152,7 @@ const Footer = ({ links = NAVIGATION_LINK }) => {
               </Link>
 
               <p className="text-sm leading-relaxed text-secondary-700">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Tenetur nostrum.
+                Own the prophecy. Live the Breakthrough.
               </p>
 
               <div className="flex items-center gap-3 pt-1">

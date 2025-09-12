@@ -115,7 +115,7 @@ const Sec7 = () => {
             <div className="container mx-auto px-4">
               <div className="py-14">
                 <Subtitle tone="light" icon={UserRound} stroke={false}>
-                  More about me
+                  about me
                 </Subtitle>
                 <div className="space-y-5">
                   <Title tone="light">
@@ -133,11 +133,18 @@ const Sec7 = () => {
                     YAHAWAH.
                   </Quote>
                   <P className="text-neutral-200">
-                    Target secure General K'el. We blew in the front door of the
-                    EOM headquarters with a 'Shekinah-Dunamis' explosive charge.
-                    The C.C. CORP war gamers systematically cleared every church
-                    dungeon, eliminating wolf threats and making sure we are in
-                    total control of the entire 2nd Exodus.
+                    Mikell M. Milton, with L.A. Doyle, brings together prophecy,
+                    history, and modern revelation in{" "}
+                    <em>
+                      The Dope Breakthrough – Divining Our Perfect Eternity
+                    </em>
+                    . As a voice for the 21st-century Israelites in the
+                    Diaspora, his writing bridges scripture with lived reality,
+                    speaking to every generation Boomers, Gen X, Millennials,
+                    Gen Z, and Gen Alpha. With a prophetic lens and a call to
+                    destiny, his work challenges readers to see the greater
+                    story already written: a breakthrough that was always
+                    promised, and an eternity that is certain.
                   </P>
                 </div>
               </div>

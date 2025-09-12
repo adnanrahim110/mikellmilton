@@ -15,6 +15,7 @@ const Quote = ({
   delay = 0,
   once = true,
   duration = 1,
+  iconClass = "",
 }) => {
   const tones = {
     light: {
@@ -42,7 +43,13 @@ const Quote = ({
       delay={delay}
       className={cn("p-3 pl-[82px] relative", t.bg, t.text, className)}
     >
-      <span className={cn("absolute -top-1.5 left-0 text-[78px]", t.icon)}>
+      <span
+        className={cn(
+          "absolute -top-1.5 left-0 text-[78px]",
+          t.icon,
+          iconClass
+        )}
+      >
         <LiaQuoteLeftSolid />
       </span>
       <p className={cn("leading-[1.4] text-base italic font-medium", t.text)}>

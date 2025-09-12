@@ -6,26 +6,9 @@ import Title from "@/components/ui/Title";
 import { MotionInView, variants } from "@/utils/motion";
 import { Compass, PenTool, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
+import Quote from "../ui/Quote";
 
-const AboutBandDark = ({
-  eyebrow = "Focus",
-  title = "What I’m here to do",
-  lead = "Clarity first. Then action. That’s the operating system behind every project I touch.",
-  points = [
-    {
-      Icon: Compass,
-      text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      Icon: PenTool,
-      text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      Icon: Sparkles,
-      text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-  ],
-}) => {
+const AboutBandDark = () => {
   return (
     <section className="relative z-[1] bg-secondary py-[90px] md:py-[110px]">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -46,7 +29,7 @@ const AboutBandDark = ({
         <div className="grid items-center">
           <div className="space-y-6">
             <Subtitle tone="light" icon={PenTool} stroke={false}>
-              {eyebrow}
+              MY MISSION
             </Subtitle>
 
             <div className="relative">
@@ -57,7 +40,7 @@ const AboutBandDark = ({
                 duration={0.9}
               >
                 <Title tone="light" className="text-[clamp(28px,5vw,48px)]">
-                  {title}
+                  Writing vision. Revealing destiny.
                 </Title>
               </MotionInView>
 
@@ -82,41 +65,23 @@ const AboutBandDark = ({
               delay={0.1}
             >
               <P className="text-secondary-50">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Doloribus quidem incidunt magnam dicta unde sapiente est
-                placeat, aliquam ea commodi nisi possimus beatae natus ipsum
-                voluptates deleniti dignissimos qui? Fuga nihil iusto architecto
-                adipisci voluptates placeat quo distinctio voluptatibus,
-                deleniti perferendis. Aperiam veritatis necessitatibus autem
-                quibusdam veniam repellendus id voluptas est dicta dolor unde,
-                dolores alias rerum quidem explicabo rem sunt. Impedit odio
-                aliquam ipsum minus nesciunt laudantium optio eius. Libero,
-                obcaecati. Illo vitae cupiditate excepturi cum corrupti
-                laboriosam asperiores.
+                My purpose is simple yet eternal: to write, teach, and build so
+                that others may see the path already written for them. Through
+                The Dope Breakthrough – Divining Our Perfect Eternity, my work
+                points to prophecy, identity, and destiny, calling this
+                generation of the Diaspora to remember who they are and what
+                they are here to do.
+              </P>
+              <Quote tone="dark" author="Habakkuk 2:2" className="mt-3.5 mb-7">
+                Write the vision and make it plain on tablets, that he may run
+                who reads it.
+              </Quote>
+              <P className="text-secondary-50">
+                This is my charge: to record the vision, to make it clear, and
+                to pass it forward so that others may move with purpose toward
+                eternity.
               </P>
             </MotionInView>
-
-            <ul className="grid gap-3 pt-2">
-              {points.map(({ Icon, text }, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.5 }}
-                  transition={{
-                    duration: 0.6,
-                    ease: [0.22, 1, 0.36, 1],
-                    delay: i * 0.06,
-                  }}
-                  className="flex items-start gap-3"
-                >
-                  <span className="inline-flex items-center justify-center size-9 rounded-lg bg-primary/15 text-primary">
-                    <Icon className="w-4 h-4" />
-                  </span>
-                  <span className="text-secondary-200">{text}</span>
-                </motion.li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>

@@ -30,7 +30,6 @@ const sec9cards = [
 const Sec9 = () => {
   return (
     <section className="relative py-[120px]">
-      {/* themed backdrop */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-20 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
@@ -39,7 +38,6 @@ const Sec9 = () => {
 
       <div className="container relative">
         <div className="grid items-start gap-10 md:grid-cols-5">
-          {/* left content */}
           <div className="md:col-span-3">
             <div className="space-y-8">
               <div className="space-y-3">
@@ -47,35 +45,40 @@ const Sec9 = () => {
                   <span className="inline-flex items-center justify-center size-12 rounded-full bg-primary/15 text-primary">
                     <FaBookOpen className="text-[28px]" />
                   </span>
-                  The D.O.P.E. Breakthrough
+                  Discover Your Destiny
                 </Title>
                 <h3 className="text-black text-xl tracking-tight pl-[60px]">
-                  Mikell M. Milton and L.A. Doyle
+                  The Dope Breakthrough – Divining Our Perfect Eternity
                 </h3>
               </div>
 
               <div className="space-y-4 text-secondary leading-relaxed">
                 <P>
-                  The D.O.P.E. Breakthrough is a supernatural action adventure
-                  that takes place in the Kingdom of Amen-Amensa. But the fact
-                  is, the divine axiom “As above, so below” suggests that there
-                  is a mirroring connection between the heavenly Kingdom of
-                  Amen-Amensa and planet Earth’s 21st century Global Community.
+                  Through these words, Mikell M. Milton, with L.A. Doyle,
+                  answers the call to prophecy, writing as a servant and
+                  witness, so that the scattered may see their destiny and know:
+                  in the Beginning, you already know the Ending.
                 </P>
                 <P>
-                  Was the 2020 global lockdown just a random moment in time? Or
-                  was it a supernatural event, a souped up breakthrough from
-                  “Above” that goes beyond politics, religion, and the world
-                  wide web of entertainment?
+                  This isn’t your usual sci-fi. It’s supernatural action woven
+                  with prophecy, connecting generations from Boomers to Gen
+                  Alpha to the royal lines of Judah. Prophets, Simon-wrestling
+                  believers, and spiritual warriors thrust you into a battle
+                  that rewrites history and exposes your true place in it.
                 </P>
                 <P>
-                  With this debut novel, The DBT Franchise Ministry offers
-                  hidden pieces of humanity’s origin story and together, with
-                  YOU, the interactive reader, we will witness how sleepwalkers
-                  implode the real world system as the New Earth reality BREAKS
-                  THROUGH!
+                  Here’s the truth they didn’t tell you: your ancestry isn’t
+                  just about tribes in Africa; it’s about Judean royalty. This
+                  book gives you the map, the weapon, and the invitation to join
+                  a rebellion of truth that has been centuries in the making.
                 </P>
-                <P className="italic text-secondary-800">It Was Written.</P>
+                <P className="italic text-secondary-800">
+                  Milton doesn’t ease you in. His writing hits like a wake-up
+                  siren scripture, spiritual insight, and cultural critique all
+                  in one. Faith here is lived proof, not polite conversation.
+                  That edge is intentional. Real change never comes from comfort
+                  zones.
+                </P>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">

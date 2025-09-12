@@ -4,12 +4,12 @@ import { MotionInView, variants } from "@/utils/motion";
 import { motion } from "motion/react";
 import React from "react";
 import P from "../ui/P";
+import Subtitle from "../ui/Subtitle";
 import Title from "../ui/Title";
 
 const Sec10 = () => {
   return (
     <section className="relative py-28">
-      {/* themed backdrop */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
@@ -18,7 +18,6 @@ const Sec10 = () => {
 
       <div className="container">
         <div className="grid lg:grid-cols-[0.75fr_1fr] gap-10 items-center">
-          {/* image with wipe-in from left and themed frame */}
           <MotionInView
             as={motion.div}
             v={variants.fadeIn}
@@ -39,35 +38,29 @@ const Sec10 = () => {
             <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
           </MotionInView>
 
-          {/* text */}
           <div className="space-y-8">
+            <Subtitle>Awakening Divine Power</Subtitle>
             <Title className="text-[46px]">What are your Divine powers?</Title>
 
             <P>
-              After the target was secured, the C.C. CORP (www.cccorpba.com) and
-              the Office of the Crown Prince of Yehudah, Israel
-              (www.officeofcpoyi.com) under the strategic guidance of General
-              K’el, hacked into the capstone antenna atop the Egyptian obelisk
-              in Washington, D.C. The Bizbrainz immediately began rewriting
-              planetary control codes.
+              In the Kingdom of Amen-Amensa, hidden forces have been guiding
+              humanity for centuries. Through the DBT homing device, fragments
+              of truth about the New Earth reality are being revealed.
+              Sleepwalkers stir across the globe, unaware that the divine plan
+              is unfolding, and higher powers are rewriting the course of human
+              history.
             </P>
 
             <P>
-              On October 16, 2025, after 30 years of rewriting the capstone’s
-              “Laus Deo” code, the DBT homing device will finally activate the
-              EMERGENCY “Mayday” signal. Operation 2nd Coming will breach all
-              world system defenses shortly thereafter. Did you think we were
-              waiting ON YOU to BREAKTHROUGH?
+              As the breakthrough approaches, the unseen hands of the Creator
+              activate signals that pierce the limits of the world system. Those
+              who align with the sacred purpose will rise, and through their
+              actions, blessings will flow to all nations.
             </P>
 
-            <P>
-              Those who bless Israel will be blessed and those who work to keep
-              Israel at the bottom will be cursed. And all the people on Earth
-              will be blessed through you.
-            </P>
-
-            <P className="text-right text-black">
-              <strong>-Genesis 12:3</strong>
+            <P className="text-right text-secondary italic font-albert-sans">
+              —Inspired by the eternal principle:
+              <strong className="text-black"> As above, so below</strong>
             </P>
           </div>
         </div>

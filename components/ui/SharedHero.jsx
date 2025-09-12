@@ -41,8 +41,8 @@ const SharedHero = ({
   };
 
   return (
-    <section className={cn("relative pt-20", className)}>
-      <div className="relative w-full h-[calc(100dvh_-_80px)] max-h-[680px] overflow-hidden">
+    <section className={cn("relative pt-28", className)}>
+      <div className="relative w-full overflow-hidden">
         <motion.img
           src={bgImage}
           alt=""
@@ -67,7 +67,7 @@ const SharedHero = ({
 
         <div className="relative h-full">
           <div className="container h-full">
-            <div className="grid h-full gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center">
+            <div className="grid h-full gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center pt-32 pb-28">
               <div className="max-w-2xl">
                 <Subtitle tone="light" icon={Icon} stroke={false}>
                   {eyebrow}
@@ -113,7 +113,7 @@ const SharedHero = ({
                   {secondaryCta?.href && (
                     <Link
                       href={secondaryCta.href}
-                      className="inline-flex items-center rounded-xl border border-white/60 bg-white/80 px-5 py-3 text-sm font-semibold text-secondary-900 shadow-inner transition hover:bg-white/90"
+                      className="inline-flex items-center rounded-md border border-white/60 bg-white/80 px-5 py-2.5 font-semibold text-secondary-900 shadow-inner transition hover:bg-white/90"
                     >
                       {secondaryCta.label}
                     </Link>
@@ -121,7 +121,6 @@ const SharedHero = ({
                 </motion.div>
               </div>
 
-              {/* smaller kinetic crest */}
               <div className="relative hidden lg:block">
                 <motion.div
                   className="relative ml-auto w-full aspect-square max-w-[400px]"

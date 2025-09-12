@@ -4,12 +4,7 @@ import Title from "@/components/ui/Title";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 
-const AboutParallaxQuote = ({
-  imageSrc = "/imgs/home-sec3.jpeg",
-  quote = "Purpose first. Clarity next. Action always.",
-  author = "— Field Notes",
-  height = 600, // px
-}) => {
+const AboutParallaxQuote = ({ imageSrc = "/imgs/home-sec3.jpeg" }) => {
   const ref = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -21,11 +16,7 @@ const AboutParallaxQuote = ({
   const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
 
   return (
-    <section
-      ref={ref}
-      className="relative w-full overflow-hidden"
-      style={{ height }}
-    >
+    <section ref={ref} className="relative w-full overflow-hidden py-40">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-amber-500/10 blur-3xl opacity-60" />
@@ -62,10 +53,12 @@ const AboutParallaxQuote = ({
                 tone="light"
                 className="text-[clamp(20px,3.6vw,36px)] leading-tight"
               >
-                {quote}
+                “You are My witnesses,” declares YAHAWAH, “and My servant whom I
+                have chosen, so that you may know and believe Me and understand
+                that I am He.”
               </Title>
               <p className="mt-3 text-secondary-200 text-sm md:text-base">
-                {author}
+                ~ Isaiah 43:10
               </p>
 
               <span
