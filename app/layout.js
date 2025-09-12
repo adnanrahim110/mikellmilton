@@ -19,7 +19,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
-  title: "Michell Milton",
+  title: "Mikell Milton",
   description: "",
 };
 
