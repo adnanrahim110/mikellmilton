@@ -17,6 +17,7 @@ const SharedHero = ({
   primaryCta = {},
   secondaryCta = { label: "Contact", href: "/contact" },
   className = "",
+  subtitleMaxW = "",
 }) => {
   return (
     <section className={cn("relative", className)}>
@@ -42,63 +43,64 @@ const SharedHero = ({
         />
         <div className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-primary/25 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 size-[520px] rounded-full bg-amber-500/15 blur-3xl" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-black/20" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/60 to-black/30" />
 
         <div className="relative h-full">
           <div className="container h-full">
-            <div className="grid h-full gap-10 lg:grid-cols-[1.4fr_auto] items-center pt-44 pb-28">
-              <div className="max-w-2xl">
-                <Subtitle tone="light" icon={Icon} stroke={false}>
-                  {eyebrow}
-                </Subtitle>
+            <div className="pt-44 pb-28 max-w-[992px]">
+              <Subtitle
+                tone="light"
+                icon={Icon}
+                stroke={false}
+                className={subtitleMaxW ? subtitleMaxW : "max-w-[950px]"}
+              >
+                {eyebrow}
+              </Subtitle>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.9,
-                    ease: [0.22, 1, 0.36, 1],
-                    delay: 0.05,
-                  }}
-                  className="space-y-4"
-                >
-                  <Title tone="light" className="text-[clamp(28px,6vw,56px)]">
-                    {title}
-                  </Title>
-                  <P className="text-secondary-50 max-w-[56ch]">
-                    {description}
-                  </P>
-                </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.9,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 0.05,
+                }}
+                className="space-y-4"
+              >
+                <Title tone="light" className="text-[clamp(28px,6vw,56px)]">
+                  {title}
+                </Title>
+                <P className="text-secondary-50">{description}</P>
+              </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.8,
-                    ease: [0.22, 1, 0.36, 1],
-                    delay: 0.2,
-                  }}
-                  className="mt-6 flex flex-wrap items-center gap-3"
-                >
-                  {primaryCta?.href && (
-                    <Button
-                      href={primaryCta.href}
-                      tone="white"
-                      className="shadow-lg"
-                    >
-                      {primaryCta.label}
-                    </Button>
-                  )}
-                  {secondaryCta?.href && (
-                    <Link
-                      href={secondaryCta.href}
-                      className="inline-flex items-center rounded-md border border-white/60 bg-white/80 px-5 py-2.5 font-semibold text-secondary-900 shadow-inner transition hover:bg-white/90"
-                    >
-                      {secondaryCta.label}
-                    </Link>
-                  )}
-                </motion.div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 0.2,
+                }}
+                className="mt-6 flex flex-wrap items-center gap-3"
+              >
+                {primaryCta?.href && (
+                  <Button
+                    href={primaryCta.href}
+                    tone="white"
+                    className="shadow-lg"
+                  >
+                    {primaryCta.label}
+                  </Button>
+                )}
+                {secondaryCta?.href && (
+                  <Link
+                    href={secondaryCta.href}
+                    className="inline-flex items-center rounded-md border border-white/60 bg-white/80 px-5 py-2.5 font-semibold text-secondary-900 shadow-inner transition hover:bg-white/90"
+                  >
+                    {secondaryCta.label}
+                  </Link>
+                )}
+              </motion.div>
             </div>
           </div>
         </div>

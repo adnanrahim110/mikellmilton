@@ -10,38 +10,74 @@ import {
   useTransform,
 } from "framer-motion";
 import { UserRound } from "lucide-react";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import P from "../ui/P";
-import Quote from "../ui/Quote";
 import Subtitle from "../ui/Subtitle";
 import Title from "../ui/Title";
 
 const Sec7 = () => {
   const targetRef = useRef(null);
 
+  const R = {
+    s1Out: [0.06, 0.13],
+    s2In: [0.08, 0.16],
+    s2Out: [0.2, 0.3],
+    s3In: [0.3, 0.4],
+    hold: [0.4, 0.48],
+    hand: [0.46, 0.56],
+  };
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end start"],
   });
 
-  const x = useTransform(
+  const panel1X = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.3, 1],
-    ["0%", "-100%", "-100%", "-100%"]
+    [0, R.hand[0], R.hand[1], 1],
+    ["0%", "0%", "-100%", "-100%"]
+  );
+  const panel2X = useTransform(
+    scrollYProgress,
+    [0, R.hand[0], R.hand[1], 1],
+    ["100%", "100%", "0%", "0%"]
+  );
+  const secondPanelX = panel2X;
+
+  const s1Y = useTransform(
+    scrollYProgress,
+    [0, R.s1Out[0], R.s1Out[1]],
+    ["0vh", "0vh", "-100vh"]
+  );
+  const s1Op = useTransform(scrollYProgress, R.s1Out, [1, 0]);
+
+  const s2Y = useTransform(
+    scrollYProgress,
+    [0, R.s2In[0], R.s2In[1], R.s2Out[0], R.s2Out[1]],
+    ["100vh", "100vh", "0vh", "0vh", "-100vh"]
+  );
+  const s2Op = useTransform(
+    scrollYProgress,
+    [R.s2In[0], R.s2In[1], R.s2Out[0], R.s2Out[1]],
+    [0, 1, 1, 0]
   );
 
-  const secondPanelX = useTransform(
+  const s3Y = useTransform(
     scrollYProgress,
-    [0, 0.25, 1],
-    ["100%", "0%", "0%"]
+    [0, R.s3In[0], R.s3In[1], R.hold[0], R.hold[1]],
+    ["100vh", "100vh", "0vh", "0vh", "0vh"]
   );
+  const s3Op = useTransform(scrollYProgress, R.s3In, [0, 1]);
 
-  const itemsProgressRaw = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
-
+  const itemsProgressRaw = useTransform(
+    scrollYProgress,
+    [R.hand[1] + 0.03, 0.858],
+    [0, 1]
+  );
   const itemsProgress = useMotionValue(0);
   const animRef = useRef(null);
-  const SPEED = 0.5;
-  const MIN_DUR = 0.05;
+  const SPEED = 0.6;
+  const MIN_DUR = 0.08;
 
   useMotionValueEvent(itemsProgressRaw, "change", (raw) => {
     const to = Math.max(0, Math.min(1, raw ?? 0));
@@ -55,52 +91,48 @@ const Sec7 = () => {
     });
   });
 
-  const wheelItems = [
-    {
-      icon: "blueprint.png",
-      author: "Psalm 64:1",
-      quote:
-        ".Hear my voice, Abba Yahawah, in my meditation; Preserve my life from fear of the enemy.",
-    },
-    {
-      icon: "reading-book.png",
-      author: "Joel 2:12",
-      quote:
-        '"Now therefore,"says Lord Yashiah, "Turn to me with all your heart, With fasting, with weeping, and with mourning."',
-    },
-    {
-      icon: "property-insurance.png",
-      author: "James 1:21",
-      quote:
-        "Therefore, lay aside all filthiness and overflow of wickedness, and receive with meekness the implanted word, which is able to save your souls.",
-    },
-    {
-      icon: "goodwill.png",
-      author: "Revelation 2:26",
-      quote:
-        'And Christ-King Yashiah said,"And he or she who overcomes, and keeps MY works until the end, to them I will give power over the nations."',
-    },
-  ];
+  const wheelItems = useMemo(
+    () => [
+      {
+        icon: "blueprint.png",
+        author: "Jammy Carnod",
+        quote:
+          "The Dope Breakthrough hits you like a wake-up blast, shaking you to your core. It’s not just reading, it’s an awakening. Ancient truths wrapped in modern fire, burning through the layers of what we think we know.",
+      },
+      {
+        icon: "reading-book.png",
+        author: "Avery Len",
+        quote:
+          "Milton and Doyle blends prophecy with raw, street-smart wisdom, creating a unique firestorm of ideas. The words don’t just sit on the page they ignite your mind, keeping you hooked long after you’ve put the book down.",
+      },
+      {
+        icon: "property-insurance.png",
+        author: "Sammy Sam",
+        quote:
+          "Raw, fearless, spiritual. It doesn’t just land on your heart it drills in. Highly recommend to anyone seeking truth and purpose.!!",
+      },
+      {
+        icon: "goodwill.png",
+        author: "Taylor Ben",
+        quote:
+          "Authors write with an intensity that makes faith and prophecy feel alive. This isn’t just entertainment, it’s an invitation to see the world differently. I loved the cast of characters warriors, and believers and the way the narrative connects generations and history in a way that feels urgent and real.",
+      },
+    ],
+    []
+  );
 
   const [scope, animate] = useAnimate();
   const lastLandedRef = useRef(-1);
 
   useMotionValueEvent(itemsProgress, "change", (p) => {
     const n = wheelItems.length;
-    const landed = Math.min(n - 1, Math.floor((p ?? 0) * n) - 1);
+    const landed = Math.min(n - 1, Math.floor(Math.max(0, Math.min(1, p)) * n));
     if (landed !== lastLandedRef.current) {
       if (landed >= 0) {
         animate(
           `[data-wheel="inner-${landed}"]`,
           { scale: [1, 1.04, 1] },
-          { times: [0, 0.35, 1], duration: 0.4, ease: "easeOut" }
-        );
-      }
-      if (landed - 1 >= 0) {
-        animate(
-          `[data-wheel="inner-${landed - 1}"]`,
-          { x: [0, -8, 0], scale: [1, 0.98, 1] },
-          { times: [0, 0.4, 1], duration: 0.35, ease: [0.17, 0.67, 0.3, 1] }
+          { times: [0, 0.4, 1], duration: 0.5, ease: "easeOut" }
         );
       }
       lastLandedRef.current = landed;
@@ -108,50 +140,84 @@ const Sec7 = () => {
   });
 
   return (
-    <section ref={targetRef} className="mt-[120px] relative h-[500vh]">
+    <section ref={targetRef} className="relative mt-[120px] h-[760vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <motion.div className="absolute inset-0 z-10" style={{ x }}>
-          <div className="min-w-full h-full relative bg-[#3C3D40] bg-cover bg-no-repeat bg-center bg-[url('/imgs/texture.jpg')] bg-blend-multiply flex flex-col justify-center">
-            <div className="container mx-auto px-4">
-              <div className="py-14">
+        <motion.div className="absolute inset-0 z-10" style={{ x: panel1X }}>
+          <div className="absolute inset-0 bg-[#2E3033] bg-[url('/imgs/texture.jpg')] bg-cover bg-center bg-no-repeat bg-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent" />
+          <motion.div
+            style={{ y: s1Y, opacity: s1Op }}
+            className="absolute inset-x-0 top-[18vh] md:top-[20vh] h-[36vh] md:h-[40vh]"
+          >
+            <div className="h-full flex items-center">
+              <div className="container mx-auto px-4">
                 <Subtitle tone="light" icon={UserRound} stroke={false}>
-                  about me
+                  ABOUT THE AUTHORS
                 </Subtitle>
-                <div className="space-y-5">
-                  <Title tone="light">
-                    A Prophecy for the 21st Century Israelites in the Diaspora
+                <div className="mt-8 max-w-3xl">
+                  <Title as="h3" tone="light">
+                    Mikell M. Milton
                   </Title>
-                  <Quote tone="dark" className="mb-8" author="ROMANS 8:18-21">
-                    18] I consider that our present sufferings are not worth
-                    comparing with the glory that will be revealed in us. 19]
-                    For the creation waits in eager expectation for the children
-                    of YAHAWAH to be revealed. 20] For the creation was
-                    subjected to frustration, not by its own choice, but by the
-                    will of the one who subjected it, in hope 21] that[a] the
-                    creation itself will be liberated from its bondage to decay
-                    and brought into the freedom and glory of the children of
-                    YAHAWAH.
-                  </Quote>
-                  <P className="text-neutral-200">
-                    Mikell M. Milton, with L.A. Doyle, brings together prophecy,
-                    history, and modern revelation in{" "}
-                    <em>
-                      The Dope Breakthrough – Divining Our Perfect Eternity
-                    </em>
-                    . As a voice for the 21st-century Israelites in the
-                    Diaspora, his writing bridges scripture with lived reality,
-                    speaking to every generation Boomers, Gen X, Millennials,
-                    Gen Z, and Gen Alpha. With a prophetic lens and a call to
-                    destiny, his work challenges readers to see the greater
-                    story already written: a breakthrough that was always
-                    promised, and an eternity that is certain.
+                  <P className="mt-3 text-neutral-200/95 leading-relaxed">
+                    Mikell writes with prophetic intensity, blending scripture
+                    with lived experience. His voice carries urgency and
+                    clarity, calling readers to rise above distraction and walk
+                    with purpose.
                   </P>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
+          <motion.div
+            style={{ y: s2Y, opacity: s2Op }}
+            className="absolute inset-x-0 top-[18vh] md:top-[20vh] h-[40vh] md:h-[42vh]"
+          >
+            <div className="h-full flex items-center">
+              <div className="container mx-auto px-4">
+                <Subtitle tone="light" icon={UserRound} stroke={false}>
+                  ABOUT THE AUTHORS
+                </Subtitle>
+                <div className="mt-8 max-w-3xl">
+                  <Title as="h3" tone="light">
+                    L.A. Doyle
+                  </Title>
+                  <P className="mt-3 text-neutral-200/95 leading-relaxed">
+                    L.A. writes with a focus on unity, prophecy, and purpose,
+                    bringing a distinct voice to the DBT Franchise Ministry. As
+                    co-author of The Dope Breakthrough, her perspective
+                    emphasizes collaboration between men and women, Israelites
+                    and Gentiles, showing that prophecy was always meant to be
+                    lived in partnership.
+                  </P>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            style={{ y: s3Y, opacity: s3Op }}
+            className="absolute inset-x-0 top-[18vh] md:top-[20vh] h-[52vh] md:h-[56vh]"
+          >
+            <div className="h-full flex items-center">
+              <div className="container mx-auto px-4">
+                <Subtitle tone="light" icon={UserRound} stroke={false}>
+                  ABOUT THE AUTHORS
+                </Subtitle>
+                <div className="mt-8 max-w-3xl">
+                  <Title tone="light">Why two Authors</Title>
+                  <P className="mt-3 text-neutral-200/95 leading-relaxed">
+                    We write as a team. Mikell M. Milton and L.A. Doyle bring
+                    together prophecy, history, and lived experience to serve
+                    one purpose, helping readers see the destiny already written
+                    for them. Our work speaks across generations Boomers, Gen X,
+                    Millennials, Gen Z, and Gen Alpha with a simple through
+                    line, clarity first, then action. We write, teach, and build
+                    so people can move with purpose.
+                  </P>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
-
         <motion.div
           className="absolute inset-0 z-20"
           style={{ x: secondPanelX }}
@@ -159,13 +225,17 @@ const Sec7 = () => {
           <div className="min-w-full h-full relative">
             <img
               src="/imgs/home-sec7.png"
+              alt="Readers and community"
               className="w-full h-full object-cover object-top"
-              alt=""
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-            <div className="absolute bottom-0 left-0 right-0 pb-20" ref={scope}>
-              <div className="container xl:max-w-[1240px]! mx-auto">
-                <div className="grid lg:grid-cols-4 gap-5">
+            <div
+              className="absolute bottom-0 left-0 right-0 pb-12 sm:pb-16"
+              ref={scope}
+            >
+              <div className="container mx-auto px-4 xl:max-w-[1240px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
                   {wheelItems.map((item, idx) => {
                     const n = wheelItems.length;
                     const segStart = idx / n;
@@ -176,37 +246,49 @@ const Sec7 = () => {
                       [segStart, segEnd],
                       [0, 1]
                     );
-                    const tx = useTransform(t, [0, 1], ["100vw", "0vw"]);
-                    const rot = useTransform(t, [0, 1], [720, 0]);
+                    const ty = useTransform(t, [0, 1], ["24px", "0px"]);
                     const op = useTransform(t, [0, 0.2, 1], [0, 1, 1]);
+                    const scale = useTransform(t, [0, 1], [0.96, 1]);
 
                     return (
                       <motion.div
                         key={idx}
-                        className="flex-shrink-0"
-                        style={{ x: tx, rotate: rot, opacity: op }}
+                        className="min-w-0"
+                        style={{ y: ty, opacity: op, scale }}
                       >
                         <div
                           data-wheel={`inner-${idx}`}
-                          className="size-full aspect-square flex items-center justify-center flex-col rounded-full px-8 bg-black/60 backdrop-blur-md border border-white/20 hover:bg-black/60 hover:border-primary transition-colors duration-300"
+                          className="h-full aspect-square lg:aspect-auto rounded-3xl p-6 bg-white/8 backdrop-blur-sm border border-white/15 hover:border-white/30 transition-colors"
                         >
-                          <span className="size-[70px] flex items-center justify-center bg-gradient-to-br from-amber-400 to-amber-600 rounded-full mb-4 shadow-lg">
+                          <div className="mx-auto mb-4 size-[70px] grid place-items-center rounded-full shadow-lg bg-gradient-to-br from-amber-400 to-amber-600">
                             <img
                               src={`/imgs/${item.icon}`}
                               alt={item.author}
-                              className="w-10 h-10 object-contain filter invert"
+                              className="w-9 h-9 object-contain invert"
                             />
-                          </span>
-                          <h4 className="text-base font-bold text-white mb-3 text-center">
+                          </div>
+                          <h4 className="text-base font-semibold text-white text-center mb-2">
                             {item.author}
                           </h4>
-                          <p className="text-sm text-white/90 text-center leading-relaxed">
+                          <p className="text-sm text-white/90 leading-relaxed text-center">
                             {item.quote}
                           </p>
                         </div>
                       </motion.div>
                     );
                   })}
+                </div>
+                <div className="mt-6 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                  <motion.div
+                    className="h-full bg-white/70"
+                    style={{
+                      width: useTransform(
+                        itemsProgress,
+                        [0, 1],
+                        ["0%", "100%"]
+                      ),
+                    }}
+                  />
                 </div>
               </div>
             </div>

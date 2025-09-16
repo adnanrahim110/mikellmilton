@@ -4,8 +4,8 @@ export const NAVIGATION_LINK = [
     url: "/",
   },
   {
-    title: "About Me",
-    url: "/about-me",
+    title: "About Us",
+    url: "/about-us",
   },
   {
     title: "About Books",
@@ -28,6 +28,7 @@ export const BOOKS = [
     title: "The D.O.P.E Breakthrough",
     price: 165.00,
     type: "EB - Album",
+    mode: "digital"
   },
   {
     id: 2,
@@ -35,5 +36,6 @@ export const BOOKS = [
     title: "The D.O.P.E Breakthrough",
     price: 65.00,
     type: "E - Book",
+    mode: "digital"
   },
 ]

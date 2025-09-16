@@ -1,3 +1,5 @@
+"use client";
+
 import {
   clearCart,
   decrement,
@@ -8,12 +10,13 @@ import {
   selectSubtotal,
   setQuantity,
 } from "@/lib/cartSlice";
+import { toast } from "@/utils/toast";
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import React, { useEffect, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import Button from "../ui/Button";
 
 const Sidebar = ({
@@ -21,9 +24,12 @@ const Sidebar = ({
   setOpenCart,
   currency = "USD",
   onCheckout = () => {},
+  onUpdateQty,
+  onRemove,
 }) => {
   const panelRef = useRef(null);
   const lastFocusRef = useRef(null);
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const items = useSelector(selectCartItems);
@@ -31,6 +37,15 @@ const Sidebar = ({
   const subtotal = useSelector(selectSubtotal);
 
   const hasItems = items.length > 0;
+
+  const handleCheckout = () => {
+    if (!hasItems) return;
+    setOpenCart(false);
+    try {
+      onCheckout?.();
+    } catch {}
+    router.push("/checkout");
+  };
 
   useEffect(() => {
     if (!openCart) return;
@@ -60,8 +75,26 @@ const Sidebar = ({
   }, [openCart]);
 
   const handleRemove = (id, title) => {
-    onRemove ? onRemove(id) : dispatch(removeFromCart(id));
-    toast.info(`Removed "${title}" from cart`);
+    if (onRemove) onRemove(id, title);
+    else dispatch(removeFromCart(id));
+    toast.success(`Removed "${title}" from cart`);
+  };
+
+  const setQty = (id, qty) => {
+    const q = Math.max(1, Number(qty) || 1);
+    if (onUpdateQty) onUpdateQty(id, q);
+    else dispatch(setQuantity({ id, quantity: q }));
+  };
+
+  const decQty = (id, current) => {
+    const next = Math.max(1, (current || 1) - 1);
+    if (onUpdateQty) onUpdateQty(id, next);
+    else dispatch(decrement({ id }));
+  };
+
+  const incQty = (id) => {
+    if (onUpdateQty) onUpdateQty(id, undefined);
+    else dispatch(increment({ id }));
   };
 
   const format = (n) =>
@@ -76,7 +109,7 @@ const Sidebar = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18, ease: "easeOut" }}
-          className="fixed inset-0 z-[1000] bg-black/30 backdrop-blur-xs"
+          className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-xs"
           onClick={() => setOpenCart(false)}
         >
           <motion.div
@@ -143,7 +176,8 @@ const Sidebar = ({
               ) : (
                 <ul className="space-y-4">
                   {items.map((it) => {
-                    const atMin = (it.quantity || 1) <= 1;
+                    const qty = it.quantity || 1;
+                    const atMin = qty <= 1;
                     return (
                       <li
                         key={it.id}
@@ -169,9 +203,7 @@ const Sidebar = ({
                               {it.title}
                             </h3>
                             <button
-                              onClick={() =>
-                                dispatch(removeFromCart(it.id, it.title))
-                              }
+                              onClick={() => handleRemove(it.id, it.title)}
                               className="rounded-full p-1 text-neutral-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                               aria-label={`Remove ${it.title}`}
                               title="Remove"
@@ -187,9 +219,7 @@ const Sidebar = ({
                           <div className="mt-2 flex items-center justify-between">
                             <div className="inline-flex items-center rounded-full border border-black/10 bg-white">
                               <button
-                                onClick={() =>
-                                  dispatch(decrement({ id: it.id }))
-                                }
+                                onClick={() => decQty(it.id, qty)}
                                 className={`p-1.5 rounded-l-full ${
                                   atMin
                                     ? "opacity-40 cursor-not-allowed"
@@ -204,21 +234,12 @@ const Sidebar = ({
                                 type="number"
                                 inputMode="numeric"
                                 min={1}
-                                value={it.quantity}
-                                onChange={(e) =>
-                                  dispatch(
-                                    setQuantity({
-                                      id: it.id,
-                                      quantity: Number(e.target.value || 1),
-                                    })
-                                  )
-                                }
+                                value={qty}
+                                onChange={(e) => setQty(it.id, e.target.value)}
                                 className="w-10 text-center text-sm outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               />
                               <button
-                                onClick={() =>
-                                  dispatch(increment({ id: it.id }))
-                                }
+                                onClick={() => incQty(it.id)}
                                 className="p-1.5 rounded-r-full hover:bg-neutral-100"
                                 aria-label="Increase quantity"
                               >
@@ -227,7 +248,7 @@ const Sidebar = ({
                             </div>
 
                             <div className="text-right font-semibold">
-                              {format(it.price * it.quantity)}
+                              {format((it.price || 0) * qty)}
                             </div>
                           </div>
                         </div>
@@ -267,7 +288,7 @@ const Sidebar = ({
                 )}
 
                 <motion.button
-                  onClick={hasItems ? onCheckout : undefined}
+                  onClick={handleCheckout}
                   whileHover={hasItems ? { y: -1, scale: 1.01 } : {}}
                   whileTap={hasItems ? { scale: 0.98 } : {}}
                   aria-disabled={!hasItems}

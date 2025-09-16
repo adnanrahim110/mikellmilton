@@ -80,7 +80,7 @@ const Button = ({
             <span
               key={i}
               className={cn(
-                "absolute w-[150%] h-40 top-1/2 -translate-y-1/2 -left-4 rotate-[9deg] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left z-[2]",
+                "absolute w-[150%] h-40 top-1/2 -translate-y-1/2 -left-4 rotate-[7deg] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left z-[2]",
                 i === 0
                   ? "bg-primary-200 group-hover:duration-500 duration-1000"
                   : i === 1

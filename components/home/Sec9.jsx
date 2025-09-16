@@ -45,39 +45,34 @@ const Sec9 = () => {
                   <span className="inline-flex items-center justify-center size-12 rounded-full bg-primary/15 text-primary">
                     <FaBookOpen className="text-[28px]" />
                   </span>
-                  Discover Your Destiny
+                  The D.O.P.E. Breakthrough
                 </Title>
                 <h3 className="text-black text-xl tracking-tight pl-[60px]">
-                  The Dope Breakthrough – Divining Our Perfect Eternity
+                  Mikell M. Milton and L.A. Doyle
                 </h3>
               </div>
 
               <div className="space-y-4 text-secondary leading-relaxed">
                 <P>
-                  Through these words, Mikell M. Milton, with L.A. Doyle,
-                  answers the call to prophecy, writing as a servant and
-                  witness, so that the scattered may see their destiny and know:
-                  in the Beginning, you already know the Ending.
+                  The D.O.P.E. Breakthrough is not just a supernatural action
+                  adventure, it is a prophecy revealed in story form. Set in the
+                  Kingdom of Amen-Amensa, it unfolds under the divine axiom, “As
+                  above, so below,” pointing to the unbreakable connection
+                  between Heaven’s Kingdom and Earth’s 21st-century global
+                  community.
                 </P>
                 <P>
-                  This isn’t your usual sci-fi. It’s supernatural action woven
-                  with prophecy, connecting generations from Boomers to Gen
-                  Alpha to the royal lines of Judah. Prophets, Simon-wrestling
-                  believers, and spiritual warriors thrust you into a battle
-                  that rewrites history and exposes your true place in it.
-                </P>
-                <P>
-                  Here’s the truth they didn’t tell you: your ancestry isn’t
-                  just about tribes in Africa; it’s about Judean royalty. This
-                  book gives you the map, the weapon, and the invitation to join
-                  a rebellion of truth that has been centuries in the making.
+                  Was the 2020 global lockdown a coincidence of time, or was it
+                  a sign from Above a breakthrough beyond politics, religion,
+                  and the world’s broken systems?
                 </P>
                 <P className="italic text-secondary-800">
-                  Milton doesn’t ease you in. His writing hits like a wake-up
-                  siren scripture, spiritual insight, and cultural critique all
-                  in one. Faith here is lived proof, not polite conversation.
-                  That edge is intentional. Real change never comes from comfort
-                  zones.
+                  With this debut work, we the DBT Franchise Ministry, speak as
+                  one voice: Israelite and Gentile, Shem and Japheth (Genesis
+                  9:27), walking together in covenant. Scripture promises that
+                  every nation, tribe, and tongue will be gathered (Revelation
+                  7:9), and through these pages, readers are invited to witness
+                  deception crumble as the New Earth reality BREAKS THROUGH.
                 </P>
               </div>
 
@@ -120,7 +115,6 @@ const Sec9 = () => {
             </div>
           </div>
 
-          {/* right sticky book */}
           <div className="md:col-span-2 md:sticky md:top-12">
             <div className="relative mx-auto w-full max-w-xs">
               <div className="absolute -inset-3 rounded-3xl bg-white/40 blur-xl opacity-50 pointer-events-none" />

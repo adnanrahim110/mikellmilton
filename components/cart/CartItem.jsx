@@ -22,7 +22,7 @@ export default function CartItem({ item, onQty, onRemove }) {
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       className="grid grid-cols-[100px_1fr_auto] gap-4 items-center"
     >
-      <div className="overflow-hidden rounded-xl bg-white/70 ring-1 ring-black/5">
+      <div className="overflow-hidden bg-white/70 ring-1 ring-black/5">
         <img
           src={img}
           alt={item.title}
@@ -43,7 +43,7 @@ export default function CartItem({ item, onQty, onRemove }) {
           </div>
           <button
             onClick={() => onRemove(item.id, item.title)}
-            className="shrink-0 inline-flex items-center justify-center size-8 rounded-lg bg-black/5 text-secondary-700 hover:text-primary hover:bg-black/10 transition"
+            className="shrink-0 inline-flex items-center justify-center size-8 rounded-lg bg-black/5 text-secondary-700 hover:text-red-500 cursor-pointer btn hover:bg-black/10 transition"
             aria-label="Remove item"
           >
             <Trash2 className="w-4 h-4" />
@@ -54,7 +54,7 @@ export default function CartItem({ item, onQty, onRemove }) {
           <div className="inline-flex items-center rounded-xl border border-white/60 bg-white/80 shadow-inner">
             <button
               onClick={dec}
-              className={`px-2 py-2 text-secondary-900 hover:text-primary transition ${
+              className={`px-2 py-2 text-secondary-900 hover:text-primary transition btn ${
                 qty <= 1
                   ? "opacity-40 cursor-not-allowed hover:text-secondary-900"
                   : ""
@@ -75,7 +75,7 @@ export default function CartItem({ item, onQty, onRemove }) {
             />
             <button
               onClick={inc}
-              className="px-2 py-2 text-secondary-900 hover:text-primary transition"
+              className="px-2 py-2 text-secondary-900 hover:text-primary transition btn"
               aria-label="Increase quantity"
             >
               <Plus className="w-4 h-4" />

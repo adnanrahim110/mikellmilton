@@ -102,6 +102,41 @@
   .container {
     @apply w-full px-3 mx-auto sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] xxl:max-w-[1320px] xxxl:max-w-[1344px];
   }
+
+  .Toastify__toast-container {
+    @apply box-border w-fit max-w-[calc(100vw-24px)] my-2 mx-auto rounded-xl py-2.5 px-3.5 inline-flex items-center gap-2;
+  }
+
+  .Toastify__toast {
+    @apply whitespace-nowrap m-0 font-semibold;
+    width: fit-content !important;
+  }
+
+  .Toastify__toast-container .Toastify__toast--success {
+    background-color: #07bc0c !important;
+    color: white !important;
+  }
+
+  .Toastify__toast-container .Toastify__toast--error {
+    @apply bg-[#ef4444] text-white;
+  }
+
+  .Toastify__toast-container .Toastify__toast--warning {
+    @apply bg-[#f59e0b] text-black;
+    color: #111827;
+  }
+
+  .Toastify__toast-container .Toastify__toast--info {
+    @apply bg-[#3b82f6] text-white;
+  }
+
+  .Toastify__close-button {
+    @apply text-[inherit] opacity-85;
+  }
+
+  .Toastify__close-button:hover {
+    @apply opacity-100;
+  }
 }
 
 @layer components {}

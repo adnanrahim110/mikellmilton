@@ -53,12 +53,11 @@ const AboutParallaxQuote = ({ imageSrc = "/imgs/home-sec3.jpeg" }) => {
                 tone="light"
                 className="text-[clamp(20px,3.6vw,36px)] leading-tight"
               >
-                “You are My witnesses,” declares YAHAWAH, “and My servant whom I
-                have chosen, so that you may know and believe Me and understand
-                that I am He.”
+                Write the vision and make it plain on tablets, that he may run
+                who reads it.
               </Title>
               <p className="mt-3 text-secondary-200 text-sm md:text-base">
-                ~ Isaiah 43:10
+                ~ Habakkuk 2:2
               </p>
 
               <span

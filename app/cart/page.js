@@ -5,8 +5,6 @@ import CartList from "@/components/cart/CartList";
 import OrderSummary from "@/components/cart/OrderSummary";
 import PromoField from "@/components/cart/PromoField";
 import SharedHero from "@/components/ui/SharedHero";
-import Subtitle from "@/components/ui/Subtitle";
-import Title from "@/components/ui/Title";
 import {
   clearCart,
   removeFromCart,
@@ -15,10 +13,10 @@ import {
   selectSubtotal,
   setQuantity,
 } from "@/lib/cartSlice";
+import { toast } from "@/utils/toast";
 import { ShoppingCart } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 const money = (n) => `$${Number(n || 0).toFixed(2)}`;
 
@@ -37,7 +35,7 @@ export default function CartPage() {
     if (items.length === 0) return 0;
     return subtotal - discount >= 75 ? 0 : 6.99;
   }, [items.length, subtotal, discount]);
-  const tax = useMemo(() => (subtotal - discount) * 0.07, [subtotal, discount]);
+  const tax = useMemo(() => 0, []);
   const total = useMemo(
     () => Math.max(0, subtotal - discount) + shipping + tax,
     [subtotal, discount, shipping, tax]
@@ -52,11 +50,11 @@ export default function CartPage() {
   const onQty = (id, qty) => dispatch(setQuantity({ id, quantity: qty }));
   const onRemove = (id, title) => {
     dispatch(removeFromCart(id));
-    if (title) toast.info(`Removed "${title}" from cart`);
+    if (title) toast.success(`Removed "${title}" from cart`);
   };
   const onClear = () => {
     dispatch(clearCart());
-    toast.info("Cart cleared");
+    toast.success("Cart cleared");
   };
 
   return (

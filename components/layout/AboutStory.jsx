@@ -32,14 +32,14 @@ const AboutStory = ({ portrait = "/imgs/about-portrait.jpg" }) => {
             </Title>
             <P>
               The through-line has always been simple: clarity first, then
-              action. I write, teach, and build so people can move with purpose.
-              In a world full of noise, I believe in choosing the signal, the
-              truth that cuts through distraction and points us toward lasting
-              direction.
+              action. we write, teach, and build so people can move with
+              purpose. In a world full of noise, we believe in choosing the
+              signal, the truth that cuts through distraction and points us
+              toward lasting direction.
             </P>
             <P>
               Clarity leads to courage, and courage leads to impact. That’s why
-              I aim true, make decisions that age well, and leave words behind
+              we aim true, make decisions that age well, and leave words behind
               that others can run with. Writing is not just expression, it’s a
               map, a guide, and a mission.
             </P>

@@ -13,6 +13,9 @@ export default function OrderSummary({
   tax,
   total,
 }) {
+  const hasDiscount = Number(discount) > 0;
+  const showShipping = hasDiscount && Number(shipping) > 0;
+
   return (
     <div className="bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px]">
       <div className="rounded-[20px] bg-white/75 backdrop-blur-md ring-1 ring-black/5 shadow-xl p-5">
@@ -21,12 +24,14 @@ export default function OrderSummary({
         </h4>
         <div className="space-y-1">
           <SummaryRow label="Subtotal" value={money(subtotal)} />
-          <SummaryRow label="Discount" value={`- ${money(discount)}`} />
-          <SummaryRow
-            label="Shipping"
-            value={shipping === 0 ? "Free" : money(shipping)}
-          />
-          <SummaryRow label="Estimated tax" value={money(tax)} />
+          {hasDiscount ? (
+            <SummaryRow label="Discount" value={`- ${money(discount)}`} />
+          ) : null}
+
+          {showShipping ? (
+            <SummaryRow label="Shipping" value={money(shipping)} />
+          ) : null}
+          <SummaryRow label="Tax" value={money(tax)} />
           <div className="my-2 h-px w-full bg-gradient-to-r from-transparent via-black/10 to-transparent" />
           <SummaryRow label="Total" value={money(total)} strong />
         </div>

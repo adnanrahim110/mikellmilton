@@ -29,7 +29,7 @@ const AboutBandDark = () => {
         <div className="grid items-center">
           <div className="space-y-6">
             <Subtitle tone="light" icon={PenTool} stroke={false}>
-              MY MISSION
+              OUR MISSION
             </Subtitle>
 
             <div className="relative">
@@ -65,7 +65,7 @@ const AboutBandDark = () => {
               delay={0.1}
             >
               <P className="text-secondary-50">
-                My purpose is simple yet eternal: to write, teach, and build so
+                Our purpose is simple yet eternal: to write, teach, and build so
                 that others may see the path already written for them. Through
                 The Dope Breakthrough – Divining Our Perfect Eternity, my work
                 points to prophecy, identity, and destiny, calling this

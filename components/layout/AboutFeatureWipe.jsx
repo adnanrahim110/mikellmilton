@@ -35,16 +35,14 @@ const AboutFeatureWipe = ({
             <Subtitle tone="dark">
               Witness to prophecy. Servant of destiny.
             </Subtitle>
-            <Title className="text-[clamp(28px,5vw,44px)]">
-              THE VISION I CARRY
-            </Title>
+            <Title className="text-[clamp(28px,5vw,44px)]">Our mission</Title>
             <ul className="grid gap-3 pt-2">
               {[
-                "I write to reveal prophecy that has been hidden for generations.",
-                "I teach so that the scattered can rediscover their true identity.",
-                "I build to prepare a people ready for sovereignty and eternity.",
-                "I move with the conviction that every word written becomes a torch for others to run with.",
-                "I serve not for myself, but for YAHAWAH’s plan through Christ-King Yashiah.",
+                "We write to reveal prophecy that has been hidden.",
+                "We teach so the scattered rediscover identity.",
+                "We build to prepare a people for sovereignty and eternity.",
+                "We move with conviction so our words become torches others can run with.",
+                "We serve for YAHAWAH’s plan through Christ-King Yashiah.",
               ].map((t, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="inline-flex items-center justify-center size-8 rounded-lg bg-primary/15 text-primary">
@@ -55,7 +53,7 @@ const AboutFeatureWipe = ({
               ))}
             </ul>
             <P>
-              This is my calling: to stand as a witness, to write as a servant,
+              This is our calling: to stand as a witness, to write as a servant,
               and to make the truth known in this generation.
             </P>
           </div>

@@ -52,6 +52,7 @@ const Sec6 = () => {
                       price,
                       image: book.img,
                       quantity: 1,
+                      mode: book.mode,
                     })
                   );
                   toast.success(`Added "${book.title}" to cart`);
