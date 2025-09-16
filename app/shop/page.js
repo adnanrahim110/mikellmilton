@@ -2,6 +2,7 @@
 "use client";
 import ShopHero from '@/components/contact/ShopHero';
 import Sec6 from '@/components/home/Sec6';
+import ShopProducts from '@/components/shop/ShopProducts';
 import SharedHero from '@/components/ui/SharedHero';
 import { UserRound } from 'lucide-react';
 import React from 'react';
@@ -17,7 +18,8 @@ export default function Shop() {
         bgImage="/imgs/home-sec3.jpeg"
         secondaryCta={{ label: "Contact", href: "/contact" }}
       />
-      <Sec6 />
+      <ShopProducts />
+      {/* <Sec6 /> */}
     </>
   )
 }

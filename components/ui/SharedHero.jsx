@@ -5,7 +5,7 @@ import P from "@/components/ui/P";
 import Subtitle from "@/components/ui/Subtitle";
 import Title from "@/components/ui/Title";
 import { cn } from "@/utils/cn";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion } from "motion/react";
 import Link from "next/link";
 
 const SharedHero = ({
@@ -18,30 +18,8 @@ const SharedHero = ({
   secondaryCta = { label: "Contact", href: "/contact" },
   className = "",
 }) => {
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const prx = useSpring(rx, { stiffness: 120, damping: 20, mass: 0.5 });
-  const pry = useSpring(ry, { stiffness: 120, damping: 20, mass: 0.5 });
-
-  const handleMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const dx = (e.clientX - cx) / (r.width / 2);
-    const dy = (e.clientY - cy) / (r.height / 2);
-    const clamp = (v) => Math.max(-1, Math.min(1, v));
-    ry.set(clamp(dx) * 6);
-    rx.set(clamp(-dy) * 6);
-  };
-
-  const handleLeave = () => {
-    rx.set(0);
-    ry.set(0);
-  };
-
   return (
-    <section className={cn("relative pt-28", className)}>
+    <section className={cn("relative", className)}>
       <div className="relative w-full overflow-hidden">
         <motion.img
           src={bgImage}
@@ -64,10 +42,11 @@ const SharedHero = ({
         />
         <div className="pointer-events-none absolute -top-24 -left-24 size-[520px] rounded-full bg-primary/25 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 size-[520px] rounded-full bg-amber-500/15 blur-3xl" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-black/20" />
 
         <div className="relative h-full">
           <div className="container h-full">
-            <div className="grid h-full gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center pt-32 pb-28">
+            <div className="grid h-full gap-10 lg:grid-cols-[1.4fr_auto] items-center pt-44 pb-28">
               <div className="max-w-2xl">
                 <Subtitle tone="light" icon={Icon} stroke={false}>
                   {eyebrow}
@@ -119,156 +98,6 @@ const SharedHero = ({
                     </Link>
                   )}
                 </motion.div>
-              </div>
-
-              <div className="relative hidden lg:block">
-                <motion.div
-                  className="relative ml-auto w-full aspect-square max-w-[400px]"
-                  style={{
-                    rotateX: prx,
-                    rotateY: pry,
-                    transformStyle: "preserve-3d",
-                    willChange: "transform",
-                  }}
-                  onMouseMove={handleMove}
-                  onMouseLeave={handleLeave}
-                >
-                  <div
-                    className="absolute inset-[8%] rounded-[28px] bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl"
-                    style={{ transform: "translateZ(28px)" }}
-                  >
-                    <div className="absolute inset-0 rounded-[28px] overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10" />
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "radial-gradient(120% 100% at 50% 0%, rgba(255,190,0,.18) 0%, transparent 60%)",
-                        }}
-                      />
-                    </div>
-                    <div className="absolute inset-0 grid place-items-center">
-                      <div
-                        className="text-center"
-                        style={{ transform: "translateZ(36px)" }}
-                      >
-                        <div className="inline-flex items-center justify-center size-14 rounded-full bg-primary/20 ring-1 ring-primary/30 shadow">
-                          <span className="font-extrabold text-primary tracking-wider">
-                            DBT
-                          </span>
-                        </div>
-                        <div className="mt-2 text-sm text-secondary-700">
-                          Purpose • Clarity • Action
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <motion.div
-                    aria-hidden
-                    className="absolute inset-[2%] rounded-[34px] opacity-80"
-                    style={{
-                      background:
-                        "conic-gradient(from 0deg, rgba(255,190,0,.65), rgba(255,190,0,.15) 30%, transparent 60%, rgba(255,190,0,.45) 85%, rgba(255,190,0,.65))",
-                      filter: "blur(10px)",
-                    }}
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 24,
-                      ease: "linear",
-                      repeat: Infinity,
-                    }}
-                  />
-
-                  <div
-                    className="absolute inset-[3%] rounded-[32px]"
-                    style={{
-                      background:
-                        "conic-gradient(from 90deg, rgba(255,190,0,.9), rgba(255,190,0,.2) 35%, rgba(255,190,0,.9) 70%, rgba(255,190,0,.2))",
-                      WebkitMask:
-                        "radial-gradient(closest-side, transparent calc(100% - 2px), #000 0)",
-                      mask: "radial-gradient(closest-side, transparent calc(100% - 2px), #000 0)",
-                      opacity: 0.9,
-                    }}
-                  />
-
-                  {/* scalable orbit dots using % radius */}
-                  <motion.div
-                    className="absolute inset-0"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 30,
-                      ease: "linear",
-                      repeat: Infinity,
-                    }}
-                  >
-                    {Array.from({ length: 8 }).map((_, i) => (
-                      <span
-                        key={i}
-                        className="absolute left-1/2 top-1/2 size-2 rounded-full bg-primary shadow-[0_0_12px_rgba(255,190,0,.9)]"
-                        style={{
-                          transform: `rotate(${i * 45}deg) translateY(-38%)`,
-                        }}
-                      />
-                    ))}
-                  </motion.div>
-
-                  <motion.div
-                    className="absolute inset-0"
-                    animate={{ rotate: [360, 0] }}
-                    transition={{
-                      duration: 36,
-                      ease: "linear",
-                      repeat: Infinity,
-                    }}
-                  >
-                    {Array.from({ length: 12 }).map((_, i) => (
-                      <span
-                        key={i}
-                        className="absolute left-1/2 top-1/2 size-1.5 rounded-full bg-white/80"
-                        style={{
-                          transform: `rotate(${i * 30}deg) translateY(-48%)`,
-                          boxShadow: "0 0 10px rgba(255,255,255,.6)",
-                        }}
-                      />
-                    ))}
-                  </motion.div>
-
-                  <div className="pointer-events-none absolute inset-0 rounded-[36px] ring-1 ring-white/20" />
-                </motion.div>
-              </div>
-
-              {/* smaller mobile crest */}
-              <div className="lg:hidden -mt-4">
-                <div className="mx-auto w-[72%] max-w-[380px] aspect-square relative">
-                  <div className="absolute inset-[8%] rounded-[24px] bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl" />
-                  <motion.div
-                    aria-hidden
-                    className="absolute inset-[2%] rounded-[30px] opacity-80"
-                    style={{
-                      background:
-                        "conic-gradient(from 0deg, rgba(255,190,0,.65), rgba(255,190,0,.15) 30%, transparent 60%, rgba(255,190,0,.45) 85%, rgba(255,190,0,.65))",
-                      filter: "blur(9px)",
-                    }}
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 28,
-                      ease: "linear",
-                      repeat: Infinity,
-                    }}
-                  />
-                  <div
-                    className="absolute inset-[3%] rounded-[28px]"
-                    style={{
-                      background:
-                        "conic-gradient(from 90deg, rgba(255,190,0,.9), rgba(255,190,0,.2) 35%, rgba(255,190,0,.9) 70%, rgba(255,190,0,.2))",
-                      WebkitMask:
-                        "radial-gradient(closest-side, transparent calc(100% - 2px), #000 0)",
-                      mask: "radial-gradient(closest-side, transparent calc(100% - 2px), #000 0)",
-                      opacity: 0.9,
-                    }}
-                  />
-                </div>
               </div>
             </div>
           </div>

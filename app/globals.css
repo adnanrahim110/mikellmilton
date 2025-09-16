@@ -39,6 +39,7 @@
   --breakpoint-xxxl: 1600px;
 
   --animate-swing: swing 1s;
+
 }
 
 @keyframes swing {
