@@ -32,7 +32,7 @@ const SharedHero = ({
           style={{ willChange: "transform" }}
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
-        <div className="pointer-events-none absolute inset-0 opacity-35 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+        <div className="pointer-events-none absolute inset-0 opacity-35 mix-blend-multiply bg-center bg-no-repeat bg-[length:70%_80%]" />
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{

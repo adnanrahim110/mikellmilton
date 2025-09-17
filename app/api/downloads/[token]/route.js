@@ -12,6 +12,7 @@ function mimeByExt(p) {
   const ext = path.extname(p).toLowerCase();
   if (ext === ".pdf") return "application/pdf";
   if (ext === ".zip") return "application/zip";
+  if (ext === ".mp3") return "audio/mpeg";
   return "application/octet-stream";
 }
 
@@ -20,31 +21,30 @@ export async function GET(_req, { params }) {
     const token = params.token;
     const pool = getPool();
     const [rows] = await pool.query(
-      `SELECT d.*, o.status, o.public_id
-       FROM downloads d JOIN orders o ON o.id = d.order_id
-       WHERE d.download_token=? LIMIT 1`, [token]
+      "SELECT d.*, o.status FROM downloads d JOIN orders o ON o.id=d.order_id WHERE d.download_token=? LIMIT 1",
+      [token]
     );
     const dl = rows[0];
     if (!dl) return new Response("Not found", { status: 404 });
-    if (dl.status !== "paid") return new Response("Forbidden", { status: 403 });
-    if (dl.expires_at && new Date(dl.expires_at) < new Date()) return new Response("Expired", { status: 410 });
+    if (dl.status !== "paid") return new Response("Unauthorized", { status: 403 });
+    if (new Date(dl.expires_at).getTime() < Date.now()) return new Response("Expired", { status: 410 });
+    if (dl.max_downloads && dl.download_count >= dl.max_downloads) return new Response("Limit reached", { status: 429 });
 
-    const protectedRoot = path.join(process.cwd(), "protected");
-    const abs = safeJoin(protectedRoot, dl.file_url);
-    if (!fs.existsSync(abs)) return new Response("File missing", { status: 404 });
+    const base = path.resolve(process.cwd(), "protected");
+    const filePath = safeJoin(base, dl.file_url);
+    if (!fs.existsSync(filePath)) return new Response("File missing", { status: 500 });
 
-    // increment download count (best-effort)
-    pool.query(`UPDATE downloads SET download_count = download_count + 1 WHERE download_token=?`, [token]).catch(() => { });
+    await pool.query("UPDATE downloads SET download_count=download_count+1 WHERE id=?", [dl.id]);
 
-    const stat = fs.statSync(abs);
-    const headers = new Headers();
-    headers.set("Content-Type", mimeByExt(abs));
-    headers.set("Content-Length", String(stat.size));
-    headers.set("Content-Disposition", `attachment; filename="${path.basename(abs)}"`);
-
-    const stream = fs.createReadStream(abs);
-    return new Response(stream, { status: 200, headers });
+    const stream = fs.createReadStream(filePath);
+    return new Response(stream, {
+      headers: {
+        "Content-Type": mimeByExt(filePath),
+        "Content-Disposition": `attachment; filename="${path.basename(filePath)}"`,
+      },
+    });
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 400 });
+    console.error("GET /api/downloads error", e);
+    return new Response("Server error", { status: 500 });
   }
 }

@@ -3,6 +3,7 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
+import ProgressiveImage from "../ui/ProgressiveImage";
 
 const money = (n) => `$${Number(n || 0).toFixed(2)}`;
 
@@ -23,9 +24,11 @@ export default function CartItem({ item, onQty, onRemove }) {
       className="grid grid-cols-[100px_1fr_auto] gap-4 items-center"
     >
       <div className="overflow-hidden bg-white/70 ring-1 ring-black/5">
-        <img
+        <ProgressiveImage
           src={img}
           alt={item.title}
+          height={946}
+          width={640}
           className="w-full h-auto object-contain"
         />
       </div>

@@ -42,7 +42,6 @@ const Footer = ({ links = NAVIGATION_LINK }) => {
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-24 -left-36 h-[520px] w-[520px] rounded-full bg-primary/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[520px] w-[520px] rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-25 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-top bg-no-repeat bg-[length:70%_80%]" />
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{

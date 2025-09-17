@@ -1,7 +1,9 @@
 "use client";
 import Button from "@/components/ui/Button";
+import { selectCartItems } from "@/lib/cartSlice";
 import { ShieldCheck } from "lucide-react";
-import React from "react";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { cap, money } from "./helpers";
 import SectionCard from "./SectionCard";
 
@@ -20,41 +22,57 @@ export default function OrderSummary({
   placeOrder,
   processing,
 }) {
+  // Fallback to cart items from Redux if items prop isn’t provided
+  const cartItems = useSelector(selectCartItems);
+
+  const normalizedItems = useMemo(() => {
+    const src = Array.isArray(items) ? items : cartItems || [];
+    return src.map((it) => {
+      const qty = Math.max(1, it.quantity ?? it.qty ?? 1);
+      const img = it.image ?? it.img ?? "/imgs/book_cover.png";
+      const mode = it.mode ?? it.__resolvedMode ?? "digital";
+      return { ...it, qty, img, mode };
+    });
+  }, [items, cartItems]);
+
+  // If requiresShipping isn’t passed, infer it from items (any non-digital item requires shipping)
+  const requiresShippingEffective = useMemo(() => {
+    if (typeof requiresShipping === "boolean") return requiresShipping;
+    return normalizedItems.some(
+      (it) => String(it.mode).toLowerCase() !== "digital"
+    );
+  }, [requiresShipping, normalizedItems]);
+
   return (
-    <div className="lg:sticky lg:top-24 space-y-6">
+    <div className="relative space-y-6">
       <SectionCard>
         <h4 className="text-sm font-semibold text-secondary-900 mb-3">
           Order summary
         </h4>
 
         <div className="space-y-3 mb-4">
-          {items.map((it) => {
-            const qty = Math.max(1, it.quantity ?? it.qty ?? 1);
-            const img = it.image ?? it.img ?? "/imgs/book_cover.png";
-            const mode = it.mode ? it.mode : it.__resolvedMode;
-            return (
-              <div key={it.id} className="flex items-center gap-3">
-                <div className="h-14 p-1 overflow-hidden rounded-sm bg-white/70 ring-1 ring-black/5">
-                  <img
-                    src={img}
-                    alt={it.title}
-                    className="w-full h-full object-contain"
-                  />
+          {normalizedItems.map((it) => (
+            <div key={it.id} className="flex items-center gap-3">
+              <div className="h-14 p-1 overflow-hidden rounded-sm bg-white/70 ring-1 ring-black/5">
+                <img
+                  src={it.img}
+                  alt={it.title}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-secondary-900 line-clamp-1">
+                  {it.title}
                 </div>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold text-secondary-900 line-clamp-1">
-                    {it.title}
-                  </div>
-                  <div className="text-xs text-secondary-600">
-                    {cap(mode)} · Qty {qty}
-                  </div>
-                </div>
-                <div className="ml-auto text-sm font-bold text-secondary-900">
-                  {money((it.price || 0) * qty)}
+                <div className="text-xs text-secondary-600">
+                  {cap(it.mode)} · Qty {it.qty}
                 </div>
               </div>
-            );
-          })}
+              <div className="ml-auto text-sm font-bold text-secondary-900">
+                {money((Number(it.price) || 0) * it.qty)}
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="space-y-1">
@@ -70,7 +88,7 @@ export default function OrderSummary({
               </div>
             </div>
           )}
-          {requiresShipping ? (
+          {requiresShippingEffective ? (
             <div className="flex items-center justify-between py-1">
               <div className="text-sm text-secondary-700">Shipping</div>
               <div className="text-sm text-secondary-900">
@@ -104,7 +122,7 @@ export default function OrderSummary({
             />
             <button
               onClick={applyPromo}
-              disabled={!promo.trim() || !!applied}
+              disabled={!String(promo || "").trim() || !!applied}
               className="inline-flex items-center gap-2 rounded-xl bg-primary text-secondary-950 px-4 py-3 text-sm font-semibold shadow disabled:opacity-50"
             >
               Apply

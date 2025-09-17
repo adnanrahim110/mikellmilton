@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../ui/Button";
+import ProgressiveImage from "../ui/ProgressiveImage";
 
 const Sidebar = ({
   openCart,
@@ -185,10 +186,11 @@ const Sidebar = ({
                       >
                         <div className="h-20 w-20 shrink-0 overflow-hidden rounded-md bg-neutral-100 ring-1 ring-black/5">
                           {it.image ? (
-                            <img
+                            <ProgressiveImage
                               src={it.image}
                               alt={it.title}
-                              className="h-full w-full object-cover"
+                              width={80}
+                              height={80}
                             />
                           ) : (
                             <div className="h-full w-full grid place-items-center text-xs text-neutral-500">

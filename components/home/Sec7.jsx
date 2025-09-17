@@ -143,7 +143,6 @@ const Sec7 = () => {
     <section ref={targetRef} className="relative mt-[120px] h-[760vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <motion.div className="absolute inset-0 z-10" style={{ x: panel1X }}>
-          <div className="absolute inset-0 bg-[#2E3033] bg-[url('/imgs/texture.jpg')] bg-cover bg-center bg-no-repeat bg-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent" />
           <motion.div
             style={{ y: s1Y, opacity: s1Op }}

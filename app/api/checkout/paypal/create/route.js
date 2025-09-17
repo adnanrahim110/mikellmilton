@@ -13,40 +13,52 @@ export async function POST(req) {
     const draft = verifyDraft(draftId);
     const quote = await getServerQuote({ items: draft.items, coupon: draft.coupon });
 
-    const pp = await paypalCreateOrder({ total: quote.total_cents, currency: quote.currency });
+    const pp = await paypalCreateOrder({
+      total_cents: quote.total_cents,
+      currency: quote.currency,
+    });
 
     const pool = getPool();
+
     await pool.query(
       "INSERT INTO customers (email, name, phone) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=VALUES(name), phone=VALUES(phone)",
-      [customer.email, customer.name || null, customer.phone || null]
+      [customer.email, customer.name || "", customer.phone || ""]
     );
-    const [cRow] = await pool.query("SELECT id FROM customers WHERE email=? LIMIT 1", [customer.email]);
-    const customerId = cRow[0]?.id;
+    const [cRows] = await pool.query("SELECT id FROM customers WHERE email=? LIMIT 1", [customer.email]);
+    const customerId = cRows[0].id;
 
     const publicId = nanoid(12);
-    const [orderRes] = await pool.query(
-      `INSERT INTO orders (public_id, customer_id, email, phone, status, currency,
-        subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, shipping_option, paypal_order_id)
-       VALUES (?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, 'digital', ?)`,
+    await pool.query(
+      `INSERT INTO orders
+        (public_id, customer_id, customer_email, customer_name, status, currency,
+         subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, paypal_order_id)
+       VALUES (?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?)`,
       [
-        publicId, customerId || null, customer.email, customer.phone || null,
+        publicId, customerId, customer.email, customer.name || "",
         quote.currency, quote.subtotal_cents, quote.discount_cents,
-        quote.shipping_cents, quote.tax_cents, quote.total_cents, pp.id
+        quote.shipping_cents, quote.tax_cents, quote.total_cents, pp.id,
       ]
     );
-    const orderId = orderRes.insertId;
 
-    const values = quote.lines.map(l => [
-      orderId, l.productId, l.format, l.sku, l.title, l.unit_price_cents, l.quantity, l.line_total_cents
+    const [[{ id: orderId }]] = await Promise.all([
+      pool.query("SELECT id FROM orders WHERE public_id=? LIMIT 1", [publicId]),
     ]);
+
+    const values = quote.items.map(li => [
+      orderId, li.product_id, li.title, li.format, li.sku,
+      li.unit_price_cents, li.quantity, li.line_total_cents, li.is_digital ? 1 : 0
+    ]);
+
     await pool.query(
-      `INSERT INTO order_items (order_id, product_id, format, sku, title_snapshot, unit_price_cents, quantity, line_total_cents)
-       VALUES ?`, [values]
+      `INSERT INTO order_items
+        (order_id, product_id, title, format, sku, unit_price_cents, quantity, line_total_cents, is_digital)
+       VALUES ?`,
+      [values]
     );
 
-    const approve = (pp.links || []).find(l => l.rel === "approve")?.href || null;
-    return new Response(JSON.stringify({ orderId, publicId, paypalOrderId: pp.id, approveUrl: approve }), { status: 200 });
+    return new Response(JSON.stringify({ paypalOrderId: pp.id, publicId }), { status: 200 });
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 400 });
+    console.error("POST /api/checkout/paypal/create error", e);
+    return new Response(JSON.stringify({ error: "Server error" }), { status: 500 });
   }
 }

@@ -3,103 +3,305 @@
 import BillingBlock from "@/components/checkout/BillingBlock";
 import ContactForm from "@/components/checkout/ContactForm";
 import OrderSummary from "@/components/checkout/OrderSummary";
-import Payment from "@/components/checkout/Payment";
 import ShippingAddress from "@/components/checkout/ShippingAddress";
 import ShippingMethod from "@/components/checkout/ShippingMethod";
-import { buildModeLookup, computeTotals } from "@/components/checkout/helpers";
+import {
+  buildModeLookup,
+  fetchQuote,
+  toSkuItems,
+} from "@/components/checkout/helpers";
 import Button from "@/components/ui/Button";
 import SharedHero from "@/components/ui/SharedHero";
 import Subtitle from "@/components/ui/Subtitle";
 import Title from "@/components/ui/Title";
 import { selectCartItems, selectSubtotal } from "@/lib/cartSlice";
 import { Store } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { AnimatePresence, motion } from "motion/react";
+
+const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+/* ---------- localStorage helpers ---------- */
+const LS_KEYS = {
+  CONTACT: "co_contact",
+  BILLING: "co_billing",
+  SHIPPING: "co_shipping",
+  SHIPSAME: "co_shipSame",
+  SHIPMETHOD: "co_shipMethod",
+  PROMO_APPLIED: "co_applied",
+  REVEAL_PP: "co_reveal_pp", // boolean
+};
+
+const safeGet = (k, fallback) => {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const v = window.localStorage.getItem(k);
+    return v ? JSON.parse(v) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+const safeSet = (k, v) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(k, JSON.stringify(v));
+  } catch {}
+};
+const safeRemove = (k) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(k);
+  } catch {}
+};
+
+/* ---------- Validations ---------- */
+function useRequiredValidations({
+  contact,
+  billing,
+  requiresShipping,
+  shipSame,
+  shipping,
+}) {
+  const req = (v) => String(v || "").trim().length > 0;
+  const emailOk =
+    req(contact.email) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email);
+  const nameOk = req(billing.first) && req(billing.last);
+
+  let shippingOk = true;
+  if (requiresShipping) {
+    shippingOk =
+      req(billing.address1) &&
+      req(billing.city) &&
+      req(billing.state) &&
+      req(billing.zip);
+    if (!shipSame) {
+      shippingOk =
+        shippingOk &&
+        req(shipping.first) &&
+        req(shipping.last) &&
+        req(shipping.address1) &&
+        req(shipping.city) &&
+        req(shipping.state) &&
+        req(shipping.zip);
+    }
+  }
+  return {
+    emailOk,
+    nameOk,
+    shippingOk,
+    allOk: emailOk && nameOk && shippingOk,
+  };
+}
 
 export default function CheckoutPage() {
   const items = useSelector(selectCartItems);
   const subtotal = useSelector(selectSubtotal);
 
-  const [contact, setContact] = useState({ email: "", phone: "" });
-  const [billing, setBilling] = useState({
-    first: "", last: "", address1: "", address2: "", city: "", state: "", zip: "", country: "United States",
-  });
-  const [shipSame, setShipSame] = useState(true);
-  const [shipping, setShipping] = useState({
-    first: "", last: "", address1: "", address2: "", city: "", state: "", zip: "", country: "United States",
-  });
+  /* ---------- Form state (hydrated from LS) ---------- */
+  const [contact, setContact] = useState(
+    () => safeGet(LS_KEYS.CONTACT, { email: "", phone: "" }) // hydrate once
+  );
+  const [billing, setBilling] = useState(
+    () =>
+      safeGet(LS_KEYS.BILLING, {
+        first: "",
+        last: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        country: "United States",
+      }) // hydrate once
+  );
+  const [shipSame, setShipSame] = useState(
+    () => safeGet(LS_KEYS.SHIPSAME, true) // hydrate once
+  );
+  const [shipping, setShipping] = useState(
+    () =>
+      safeGet(LS_KEYS.SHIPPING, {
+        first: "",
+        last: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        country: "United States",
+      }) // hydrate once
+  );
 
-  const [shipMethod, setShipMethod] = useState("standard");
-  const [pay, setPay] = useState({ name: "", number: "", exp: "", cvc: "" });
+  const [shipMethod, setShipMethod] = useState(
+    () => safeGet(LS_KEYS.SHIPMETHOD, "standard") // hydrate once
+  );
   const [promo, setPromo] = useState("");
-  const [applied, setApplied] = useState("");
-  const [agree, setAgree] = useState(false);
+  const [applied, setApplied] = useState(() =>
+    safeGet(LS_KEYS.PROMO_APPLIED, "")
+  );
+
   const [processing, setProcessing] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const [quote, setQuote] = useState(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [draftId, setDraftId] = useState(null);
+
+  // Explicit reveal flag for PayPal buttons (hydrate once)
+  const [revealPayPal, setRevealPayPal] = useState(() =>
+    Boolean(safeGet(LS_KEYS.REVEAL_PP, false))
+  );
+
+  /* ---------- Persist to LS on change (debounce not strictly necessary here) ---------- */
+  useEffect(() => safeSet(LS_KEYS.CONTACT, contact), [contact]);
+  useEffect(() => safeSet(LS_KEYS.BILLING, billing), [billing]);
+  useEffect(() => safeSet(LS_KEYS.SHIPSAME, shipSame), [shipSame]);
+  useEffect(() => safeSet(LS_KEYS.SHIPPING, shipping), [shipping]);
+  useEffect(() => safeSet(LS_KEYS.SHIPMETHOD, shipMethod), [shipMethod]);
+  useEffect(() => safeSet(LS_KEYS.PROMO_APPLIED, applied), [applied]);
+  useEffect(() => safeSet(LS_KEYS.REVEAL_PP, revealPayPal), [revealPayPal]);
+
+  /* ---------- Modes & shipping requirement ---------- */
   const getMode = useMemo(buildModeLookup, []);
   const resolvedItems = useMemo(
     () => items.map((it) => ({ ...it, __resolvedMode: getMode(it) })),
     [items, getMode]
   );
-  const allDigital = resolvedItems.length > 0 && resolvedItems.every((it) => it.__resolvedMode === "digital");
+  const allDigital =
+    resolvedItems.length > 0 &&
+    resolvedItems.every((it) => it.__resolvedMode === "digital");
   const requiresShipping = !allDigital;
 
-  const discountRate = applied === "DOPE10" ? 0.1 : 0;
-  const { discount, shippingCost, tax, total } = computeTotals({
-    subtotal,
-    discountRate,
-    items: resolvedItems,
-    shipMethod,
-    requiresShipping,
-  });
+  /* ---------- Pricing & quote ---------- */
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        if (!items.length) {
+          if (active) {
+            setQuote(null);
+            setDraftId(null);
+          }
+          return;
+        }
+        setQuoteLoading(true);
+        const skuItems = toSkuItems(items);
 
+        const q = await fetchQuote({
+          items: skuItems,
+          coupon: applied || null,
+        });
+        if (!active) return;
+        setQuote(q);
+
+        const res = await fetch("/api/checkout/quote/sign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: skuItems, coupon: applied || null }),
+        });
+        const js = await res.json();
+        if (!active) return;
+        setDraftId(res.ok && js?.draftId ? js.draftId : null);
+      } catch {
+        if (active) setDraftId(null);
+      } finally {
+        if (active) setQuoteLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [items, applied]);
+
+  /* ---------- Derived validity ---------- */
+  const validity = useRequiredValidations({
+    contact,
+    billing,
+    requiresShipping,
+    shipSame,
+    shipping,
+  });
+  const canPay = validity.allOk && !!quote && !!draftId;
+
+  /* ---------- Promo ---------- */
   const applyPromo = () => {
     const code = promo.trim().toUpperCase();
     if (code === "DOPE10") setApplied(code);
     setPromo("");
   };
 
-  const req = (v) => String(v || "").trim().length > 0;
-  const validate = () => {
+  /* ---------- Field-level errors ---------- */
+  useEffect(() => {
     const e = {};
-    if (!req(contact.email) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) e.email = "Invalid email";
-    if (!req(billing.first)) e.first = "Required";
-    if (!req(billing.last)) e.last = "Required";
+    if (contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email))
+      e.email = "Invalid email";
+    if (billing.first || billing.last) {
+      if (!billing.first) e.first = "Required";
+      if (!billing.last) e.last = "Required";
+    }
+    setErrors(e);
+  }, [contact.email, billing.first, billing.last]);
 
-    if (requiresShipping) {
-      if (!req(billing.address1)) e.address1 = "Required";
-      if (!req(billing.city)) e.city = "Required";
-      if (!req(billing.state)) e.state = "Required";
-      if (!req(billing.zip)) e.zip = "Required";
+  /* ---------- Keep reveal state honest ---------- */
+  // If payment becomes invalid, hide and clear persisted reveal
+  useEffect(() => {
+    if (!canPay && revealPayPal) {
+      setRevealPayPal(false);
+      safeSet(LS_KEYS.REVEAL_PP, false);
+    }
+  }, [canPay]); // eslint-disable-line react-hooks/exhaustive-deps
 
-      if (!shipSame) {
-        if (!req(shipping.first)) e.sfirst = "Required";
-        if (!req(shipping.last)) e.slast = "Required";
-        if (!req(shipping.address1)) e.saddress1 = "Required";
-        if (!req(shipping.city)) e.scity = "Required";
-        if (!req(shipping.state)) e.sstate = "Required";
-        if (!req(shipping.zip)) e.szip = "Required";
+  // If cart size or draft refresh changes, require click again (also clear persisted flag)
+  useEffect(() => {
+    setRevealPayPal(false);
+    safeSet(LS_KEYS.REVEAL_PP, false);
+  }, [draftId, items.length, applied]);
+
+  /* ---------- Auto-reveal after reload if user had already clicked and can still pay ---------- */
+  useEffect(() => {
+    if (canPay && safeGet(LS_KEYS.REVEAL_PP, false)) {
+      setRevealPayPal(true);
+      // center scroll after mount
+      const el = document.getElementById("paypal-section");
+      if (el) {
+        requestAnimationFrame(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
       }
     }
+  }, [canPay]);
 
-    if (!req(pay.name)) e.pname = "Required";
-    if (!/^\d{13,19}$/.test((pay.number || "").replace(/\s+/g, ""))) e.pnum = "Invalid card";
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(pay.exp || "")) e.pexp = "MM/YY";
-    if (!/^\d{3,4}$/.test(pay.cvc || "")) e.pcvc = "Invalid CVC";
-    if (!agree) e.agree = "Required";
-
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
+  /* ---------- Place order: reveal + scroll ---------- */
+  const ppClientId = PAYPAL_CLIENT_ID || "";
   const placeOrder = () => {
-    if (!validate()) return;
-    setProcessing(true);
-    setTimeout(() => {
-      setProcessing(false);
-      window.location.href = "/thank-you";
-    }, 1200);
+    if (!canPay) {
+      if (typeof window !== "undefined" && window?.toast?.error) {
+        window.toast.error("Please complete required fields first.");
+      } else {
+        alert("Please complete required fields first.");
+      }
+      return;
+    }
+    if (!ppClientId) {
+      if (typeof window !== "undefined" && window?.toast?.error) {
+        window.toast.error("Missing PayPal client ID.");
+      } else {
+        alert("Missing PayPal client ID.");
+      }
+      return;
+    }
+
+    setRevealPayPal(true);
+    safeSet(LS_KEYS.REVEAL_PP, true);
+
+    const el = document.getElementById("paypal-section");
+    if (el) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
   };
 
   if (resolvedItems.length === 0) {
@@ -108,9 +310,15 @@ export default function CheckoutPage() {
         <div className="container">
           <div className="mb-8 space-y-3">
             <Subtitle tone="dark">Checkout</Subtitle>
-            <Title className="text-[clamp(28px,5.2vw,44px)]">Your cart is empty</Title>
+            <Title className="text-[clamp(28px,5.2vw,44px)]">
+              Your cart is empty
+            </Title>
           </div>
-          <Button href="/shop" tone="dark" className="rounded-xl inline-flex items-center gap-2">
+          <Button
+            href="/shop"
+            tone="dark"
+            className="rounded-xl inline-flex items-center gap-2"
+          >
             <span className="w-4 h-4">←</span>
             Back to shop
           </Button>
@@ -118,6 +326,24 @@ export default function CheckoutPage() {
       </section>
     );
   }
+
+  const subtotalServer = quote ? quote.subtotal_cents / 100 : subtotal;
+  const discountServer = quote ? quote.discount_cents / 100 : 0;
+  const shippingServer = quote ? quote.shipping_cents / 100 : 0;
+  const taxServer = 0;
+  const totalServer = quote
+    ? quote.total_cents / 100
+    : Math.max(0, subtotal - discountServer);
+
+  const ppOptions = useMemo(
+    () => ({
+      "client-id": ppClientId,
+      currency: quote?.currency || "USD",
+      intent: "capture",
+      components: "buttons",
+    }),
+    [ppClientId, quote?.currency]
+  );
 
   return (
     <>
@@ -135,7 +361,6 @@ export default function CheckoutPage() {
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl" />
           <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-amber-500/15 blur-3xl" />
-          <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
           <div
             className="absolute inset-0 opacity-[0.06]"
             style={{
@@ -149,12 +374,18 @@ export default function CheckoutPage() {
         <div className="container">
           <div className="mb-8 space-y-3">
             <Subtitle tone="dark">Checkout</Subtitle>
-            <Title className="text-[clamp(28px,5.2vw,44px)]">Secure payment</Title>
+            <Title className="text-[clamp(28px,5.2vw,44px)]">
+              Secure payment
+            </Title>
           </div>
 
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
-            <div className="space-y-6">
-              <ContactForm contact={contact} setContact={setContact} error={errors.email} />
+            <div className="flex flex-col gap-y-6">
+              <ContactForm
+                contact={contact}
+                setContact={setContact}
+                error={errors.email}
+              />
               <BillingBlock
                 billing={billing}
                 setBilling={setBilling}
@@ -164,33 +395,151 @@ export default function CheckoutPage() {
                 errors={errors}
               />
               {requiresShipping && !shipSame ? (
-                <ShippingAddress shipping={shipping} setShipping={setShipping} errors={errors} />
+                <ShippingAddress
+                  shipping={shipping}
+                  setShipping={setShipping}
+                  errors={errors}
+                />
               ) : null}
               {requiresShipping ? (
-                <ShippingMethod shipMethod={shipMethod} setShipMethod={setShipMethod} shippingCost={shippingCost} />
+                <ShippingMethod
+                  shipMethod={shipMethod}
+                  setShipMethod={setShipMethod}
+                  shippingCost={shippingServer}
+                />
               ) : null}
-              <Payment pay={pay} setPay={setPay} errors={errors} agree={agree} setAgree={setAgree} />
+
+              <div
+                id="paypal-section"
+                className="bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px]"
+              >
+                <div className="relative rounded-[20px] bg-white/75 backdrop-blur-md ring-1 ring-black/5 shadow-xl p-5">
+                  <h4 className="text-sm font-semibold text-secondary-900 mb-3">
+                    Payment
+                  </h4>
+
+                  {(!revealPayPal || !canPay || !ppClientId) && (
+                    <div className="absolute inset-0 z-10 rounded-[20px] bg-white/70 backdrop-blur-sm flex items-center justify-center text-sm font-semibold text-secondary-700 ring-1 ring-black/5">
+                      {!ppClientId
+                        ? "Missing PAYPAL_CLIENT_ID"
+                        : !canPay
+                        ? "Complete the form above to enable payment"
+                        : "Click “Place order” to continue"}
+                    </div>
+                  )}
+
+                  <AnimatePresence initial={false} mode="wait">
+                    {revealPayPal && canPay && ppClientId ? (
+                      <motion.div
+                        key="paypal"
+                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                        transition={{
+                          duration: 0.35,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="relative px-10"
+                      >
+                        <PayPalScriptProvider options={ppOptions}>
+                          <PayPalButtons
+                            style={{
+                              layout: "vertical",
+                              shape: "rect",
+                              label: "paypal",
+                            }}
+                            createOrder={async () => {
+                              setProcessing(true);
+                              if (!draftId)
+                                throw new Error("Unable to start payment");
+                              const fullName =
+                                `${billing.first} ${billing.last}`.trim();
+                              const res = await fetch(
+                                "/api/checkout/paypal/create",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    draftId,
+                                    customer: {
+                                      email: contact.email,
+                                      name: fullName,
+                                      phone: contact.phone || null,
+                                    },
+                                    addresses: null,
+                                  }),
+                                }
+                              );
+                              const data = await res.json();
+                              if (!res.ok) {
+                                setProcessing(false);
+                                throw new Error(
+                                  data.error || "Unable to start payment"
+                                );
+                              }
+                              return data.paypalOrderId;
+                            }}
+                            onApprove={async (data) => {
+                              try {
+                                const res = await fetch(
+                                  "/api/checkout/paypal/capture",
+                                  {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                      paypalOrderId: data.orderID,
+                                    }),
+                                  }
+                                );
+                                const json = await res.json();
+                                if (!res.ok || json.error)
+                                  throw new Error(
+                                    json.error || "Payment failed"
+                                  );
+                                window.location.href = `/download/${json.publicId}`;
+                              } catch (err) {
+                                setProcessing(false);
+                                alert(err.message || "Payment error");
+                              }
+                            }}
+                            onCancel={() => setProcessing(false)}
+                            onError={() => {
+                              setProcessing(false);
+                              alert("PayPal error");
+                            }}
+                          />
+                        </PayPalScriptProvider>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+
+                  <div className="mt-3 text-[11px] text-secondary-600">
+                    Payments are processed securely by PayPal. You’ll be
+                    redirected to your downloads after payment.
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <OrderSummary
-              items={resolvedItems}
-              subtotal={subtotal}
-              discount={discount}
-              shippingCost={shippingCost}
-              tax={tax}
-              total={total}
-              requiresShipping={requiresShipping}
-              promo={promo}
-              setPromo={setPromo}
-              applied={applied}
-              applyPromo={() => {
-                const code = promo.trim().toUpperCase();
-                if (code === "DOPE10") setApplied(code);
-                setPromo("");
-              }}
-              placeOrder={placeOrder}
-              processing={processing}
-            />
+            <div className="relative">
+              <OrderSummary
+                subtotal={subtotalServer}
+                discount={discountServer}
+                shippingCost={shippingServer}
+                tax={taxServer}
+                total={totalServer}
+                promo={promo}
+                setPromo={setPromo}
+                applied={applied}
+                applyPromo={applyPromo}
+                placeOrder={placeOrder}
+                processing={processing || quoteLoading}
+              />
+            </div>
           </div>
         </div>
       </section>

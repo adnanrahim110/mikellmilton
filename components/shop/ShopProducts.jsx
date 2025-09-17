@@ -1,10 +1,10 @@
 "use client";
 
+import { fetchDopeBooksFromDB } from "@/components/checkout/helpers";
 import FilterBar from "@/components/shop/FilterBar";
 import Button from "@/components/ui/Button";
 import Subtitle from "@/components/ui/Subtitle";
 import Title from "@/components/ui/Title";
-import { BOOKS } from "@/constants";
 import { addToCart } from "@/lib/cartSlice";
 import { toast } from "@/utils/toast";
 import { ShoppingCart } from "lucide-react";
@@ -12,69 +12,65 @@ import { AnimatePresence, motion } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ProgressiveImage from "../ui/ProgressiveImage";
+import Skeleton from "../ui/Skeleton";
 
 function slugify(s) {
   return String(s || "")
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
 }
-function canonType(raw) {
-  const x = slugify(raw);
-  if (x === "ebook" || x === "ebooks" || x === "digital" || x === "kindle")
-    return "eBook";
-  if (x === "audiobook" || x === "audiobooks" || x === "audio")
-    return "Audiobook";
-  if (x === "paperback" || x === "softcover" || x === "softback")
-    return "Paperback";
-  if (
-    x === "hardcover" ||
-    x === "hardback" ||
-    x === "casewrap" ||
-    x === "casebound"
-  )
-    return "Hardcover";
-  return String(raw || "").trim();
-}
-function useDebouncedValue(value, delay = 300) {
-  const [v, setV] = React.useState(value);
-  React.useEffect(() => {
-    const t = setTimeout(() => setV(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return v;
-}
 
-const ShopProducts = ({
-  eyebrow = "Catalog",
-  title = "All products",
-  items = BOOKS || [],
-}) => {
+const ShopProducts = ({ eyebrow = "Catalog", title = "All products" }) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const dispatch = useDispatch();
   const cartItems = useSelector((s) => s.cart.items);
 
-  const seededFormat = canonType(params.get("format") || "all") || "all";
+  const seededFormat = (params.get("format") || "all").trim() || "all";
   const [format, setFormat] = useState(seededFormat);
   const [q, setQ] = useState(params.get("q") || "");
   const [sort, setSort] = useState(params.get("sort") || "featured");
-  const dq = useDebouncedValue(q, 300);
+
+  const [itemsState, setItemsState] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const next = new URLSearchParams();
     if (format && format !== "all") next.set("format", slugify(format));
-    if (dq.trim()) next.set("q", dq.trim());
+    if (q.trim()) next.set("q", q.trim());
     if (sort && sort !== "featured") next.set("sort", sort);
     const qs = next.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-  }, [format, dq, sort, pathname, router]);
+  }, [format, q, sort, pathname, router]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const rows = await fetchDopeBooksFromDB();
+        if (alive) setItemsState(rows);
+      } catch {
+        if (alive) setItemsState([]);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const preferredOrder = ["Paperback", "Hardcover", "eBook", "Audiobook"];
   const uniqueFromItems = useMemo(
     () =>
-      Array.from(new Set(items.map((p) => canonType(p.type)).filter(Boolean))),
-    [items]
+      Array.from(
+        new Set(
+          itemsState.map((p) => String(p.type || "").trim()).filter(Boolean)
+        )
+      ),
+    [itemsState]
   );
   const ordered = [
     ...preferredOrder.filter((t) => uniqueFromItems.includes(t)),
@@ -87,13 +83,13 @@ const ShopProducts = ({
   const filtered = useMemo(() => {
     const byFormat =
       format === "all"
-        ? items
-        : items.filter((p) => canonType(p.type) === format);
+        ? itemsState
+        : itemsState.filter((p) => String(p.type || "").trim() === format);
 
-    const search = q.trim().toLowerCase(); // use live query for UI
+    const search = q.trim().toLowerCase();
     const byQuery = search
       ? byFormat.filter((p) =>
-          [p.title, p.author, canonType(p.type)]
+          [p.title, p.author, p.type]
             .filter(Boolean)
             .join(" ")
             .toLowerCase()
@@ -105,14 +101,14 @@ const ShopProducts = ({
     if (sort === "price-asc") out = [...out].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") out = [...out].sort((a, b) => b.price - a.price);
     return out;
-  }, [items, format, q, sort]);
+  }, [itemsState, format, q, sort]);
 
   const cartIdSet = useMemo(
     () => new Set(cartItems?.map((i) => i.id) ?? []),
     [cartItems]
   );
   const getId = (p) =>
-    p.id ?? `${slugify(p.title)}-${slugify(canonType(p.type))}`;
+    p.id || p.sku || `${slugify(p.title)}-${slugify(p.type)}`;
 
   const handleAdd = (p) => {
     const id = getId(p);
@@ -120,6 +116,7 @@ const ShopProducts = ({
     dispatch(
       addToCart({
         id,
+        sku: p.sku || id,
         title: p.title,
         price: Number(p.price || 0),
         image: p.img,
@@ -155,7 +152,7 @@ const ShopProducts = ({
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-amber-500/15 blur-3xl" />
-        <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{
@@ -192,62 +189,83 @@ const ShopProducts = ({
           variants={containerVariants}
           className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
-          <AnimatePresence mode="popLayout">
-            {filtered.map((p) => {
-              const id = getId(p);
-              const isInCart = cartIdSet.has(id);
-              return (
-                <motion.div
-                  layout
-                  key={id}
-                  variants={cardVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  transition={{ layout: { duration: 0.3 } }}
-                  className="relative overflow-hidden rounded-2xl border border-white/45 bg-white/80 backdrop-blur-md ring-1 ring-black/5 shadow-2xl"
-                  style={{ willChange: "transform" }}
-                >
-                  <div className="w-full overflow-hidden">
-                    <img src={p.img} alt={p.title} />
-                  </div>
-                  <div className="p-5 space-y-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-2xl font-bold text-secondary-900 line-clamp-1">
-                        {p.title}
-                      </h3>
+          {loading ? (
+            Array.from({ length: 2 }).map((_, i) => (
+              <motion.div
+                key={`s-${i}`}
+                variants={cardVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ layout: { duration: 0.3 } }}
+              >
+                <Skeleton className="w-full aspect-[415/613]" />
+              </motion.div>
+            ))
+          ) : (
+            <AnimatePresence mode="popLayout">
+              {filtered.map((p) => {
+                const id = getId(p);
+                const isInCart = cartIdSet.has(id);
+                return (
+                  <motion.div
+                    layout
+                    key={id}
+                    variants={cardVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={{ layout: { duration: 0.3 } }}
+                    className="relative overflow-hidden rounded-2xl border border-white/45 bg-white/80 backdrop-blur-md ring-1 ring-black/5 shadow-2xl"
+                    style={{ willChange: "transform" }}
+                  >
+                    <div className="w-full overflow-hidden">
+                      <ProgressiveImage
+                        width={415}
+                        height={613}
+                        priority
+                        src={p.img}
+                        alt={p.title}
+                      />
                     </div>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="inline-flex items-center gap-2">
-                        <strong className="text-neutral-500">Price:</strong>
-                        <span className="text-primary font-bold">
-                          ${Number(p.price || 0).toFixed(2)}
-                        </span>
+                    <div className="p-5 space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-2xl font-bold text-secondary-900 line-clamp-1">
+                          {p.title}
+                        </h3>
                       </div>
-                      <span className="inline-flex items-center justify-center rounded-md bg-primary/15 text-primary px-2.5 py-1 text-xs font-semibold">
-                        {canonType(p.type)}
-                      </span>
-                      {p.badge ? (
-                        <span className="inline-flex items-center justify-center rounded-md bg-black/5 text-secondary-700 px-2.5 py-1 text-xs">
-                          {p.badge}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="inline-flex items-center gap-2">
+                          <strong className="text-neutral-500">Price:</strong>
+                          <span className="text-primary font-bold">
+                            ${Number(p.price || 0).toFixed(2)}
+                          </span>
+                        </div>
+                        <span className="inline-flex items-center justify-center rounded-md bg-primary/15 text-primary px-2.5 py-1 text-xs font-semibold">
+                          {p.type}
                         </span>
-                      ) : null}
+                        {p.badge ? (
+                          <span className="inline-flex items-center justify-center rounded-md bg-black/5 text-secondary-700 px-2.5 py-1 text-xs">
+                            {p.badge}
+                          </span>
+                        ) : null}
+                      </div>
+                      <Button
+                        tone={isInCart ? "cart" : "dark"}
+                        disabled={isInCart}
+                        onClick={() => handleAdd(p)}
+                        className="w-full rounded-xl mt-1"
+                      >
+                        {isInCart ? "Added" : "Add to cart"}
+                        <ShoppingCart className="ml-2 h-4 w-4" />
+                      </Button>
                     </div>
-                    <Button
-                      tone={isInCart ? "cart" : "dark"}
-                      disabled={isInCart}
-                      onClick={() => handleAdd(p)}
-                      className="w-full rounded-xl mt-1"
-                    >
-                      {isInCart ? "Added" : "Add to cart"}
-                      <ShoppingCart className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          )}
         </motion.div>
 
         {filtered.length === 0 && (

@@ -51,7 +51,7 @@ const ContactFormSection = ({
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-28 -left-28 h-[460px] w-[460px] rounded-full bg-primary/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[460px] w-[460px] rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-15 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+        <div className="absolute inset-0 opacity-15 mix-blend-multiply bg-[url('/imgs/texture2.png')] bg-center bg-no-repeat bg-[length:70%_80%]" />
         <div
           className="absolute inset-0 opacity-[0.08]"
           style={{

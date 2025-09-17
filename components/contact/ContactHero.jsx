@@ -24,7 +24,7 @@ const ContactHero = ({
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-28 -left-28 h-[460px] w-[460px] rounded-full bg-primary/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[460px] w-[460px] rounded-full bg-amber-500/15 blur-3xl" />
-        <div className="absolute inset-0 opacity-30 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{

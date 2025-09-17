@@ -22,7 +22,7 @@ const AboutBandDark = () => {
             backgroundSize: "22px 22px, 22px 22px",
           }}
         />
-        <div className="absolute inset-0 opacity-20 mix-blend-multiply bg-[url('/imgs/texture2.jpg')] bg-center bg-no-repeat bg-[length:70%_80%]" />
+        <div className="absolute inset-0 opacity-20 mix-blend-multiply bg-[url('/imgs/texture2.png')] bg-center bg-no-repeat bg-[length:70%_80%]" />
       </div>
 
       <div className="container">

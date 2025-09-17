@@ -1,96 +1,72 @@
 // components/checkout/helpers.js
-export const money = (n) => `$${Number(n || 0).toFixed(2)}`;
+
+/* ========= Existing helpers (unchanged) ========= */
+export const money = (n, cur = "USD") =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: cur }).format(Number(n || 0));
 
 const norm = (s) => String(s || "").toLowerCase();
 export const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
-// Keep signature the same so existing imports don't break.
-// We default to digital for your two known SKUs/ids; fallback physical for unknowns.
+// Backward-compatible mode resolver for seeded items (kept for other parts that may rely on it)
 export function buildModeLookup() {
   return (item) => {
     const m = norm(item?.mode);
     if (m === "digital" || m === "physical") return m;
-
-    // Your two products (stable ids you already use in cart)
-    if (item?.id === 1 || item?.id === 2) return "digital";
-
-    // Fallback: assume physical if we don't know
-    return "physical";
+    return "digital";
   };
 }
 
-// Keep for cart page math if used there; tax fixed 0 as requested.
-export function computeTotals({ subtotal, discountRate, items, shipMethod, requiresShipping }) {
-  const discount = subtotal * (discountRate || 0);
-  const shippingCost = requiresShipping
-    ? shipMethod === "overnight"
-      ? 29.99
-      : shipMethod === "express"
-        ? 14.99
-        : subtotal - discount >= 75 || items.length === 0
-          ? 0
-          : 6.99
-    : 0;
-  const tax = 0;
-  const total = Math.max(0, subtotal - discount) + shippingCost + tax;
-  return { discount, shippingCost, tax, total };
+// Convert cart items -> server SKU payload
+export function toSkuItems(items = []) {
+  return items.map((it) => ({
+    sku: it.sku || it.id || it.slug, // prefer real SKU if present
+    quantity: Number(it.quantity || 1),
+  }));
 }
 
-/* === NEW: server-powered checkout helpers === */
-
-// Map your cart items (id 1/2) to SKUs that exist in DB seed
-export function toSkuItems(cartItems) {
-  return (cartItems || []).map((it) => {
-    let sku;
-    if (it.id === 1) sku = "DOPE-AB"; // Audiobook ZIP
-    else if (it.id === 2) sku = "DOPE-EB"; // eBook PDF
-    else throw new Error("Unknown cart item id: " + it.id);
-    return { sku, qty: Math.max(1, Number(it.quantity || 1)) };
-  });
-}
-
+// Fetch canonical server quote
 export async function fetchQuote({ items, coupon }) {
   const res = await fetch("/api/checkout/quote", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ items, coupon }),
+    cache: "no-store",
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Quote failed");
-  return data; // {draftId, lines, subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, currency}
+  if (!res.ok) throw new Error("Failed to fetch quote");
+  return await res.json();
 }
 
-// Load the two formats from DB and map to your card shape (no UI changes)
+/* ========= New shared product fetcher (DB only) ========= */
+function slugify(s) {
+  return String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+function canonType(raw) {
+  const x = slugify(raw);
+  if (x === "ebook" || x === "ebooks" || x === "digital" || x === "kindle") return "eBook";
+  if (x === "audiobook" || x === "audiobooks" || x === "audio") return "Audiobook";
+  if (x === "paperback" || x === "softcover" || x === "softback") return "Paperback";
+  if (x === "hardcover" || x === "hardback" || x === "casewrap" || x === "casebound") return "Hardcover";
+  return String(raw || "").trim();
+}
+
+/**
+ * Fetches products from /api/products and maps them to the UI shape.
+ * Assumes the API returns a **public** image column (image_url), NOT the private file download path.
+ *
+ * Returns: [{ id, sku, title, price, img, type, mode, badge? }]
+ */
 export async function fetchDopeBooksFromDB() {
-  const res = await fetch("/api/products?limit=20", { cache: "no-store" });
-  const { items = [] } = await res.json();
-  const rows = items.filter((r) => r.slug === "the-dope-breakthrough");
+  const res = await fetch("/api/products", { cache: "no-store" });
+  if (!res.ok) throw new Error("products fetch failed");
+  const rows = await res.json();
 
-  const out = [];
-
-  const ab = rows.find((r) => r.format === "audiobook" && r.sku === "DOPE-AB");
-  if (ab) {
-    out.push({
-      id: 1,
-      img: "/imgs/eb-album.png",
-      title: ab.title,
-      price: Number(ab.price_cents || 0) / 100,
-      type: "EB - Album",
-      mode: "digital",
-    });
-  }
-
-  const eb = rows.find((r) => r.format === "ebook" && r.sku === "DOPE-EB");
-  if (eb) {
-    out.push({
-      id: 2,
-      img: "/imgs/book_cover.png",
-      title: eb.title,
-      price: Number(eb.price_cents || 0) / 100,
-      type: "E - Book",
-      mode: "digital",
-    });
-  }
-
-  return out;
+  return rows.map((r) => ({
+    id: r.sku || `${r.product_id}-${r.format}`,
+    sku: r.sku,
+    title: r.title,
+    price: Number(r.price_cents || 0) / 100,
+    img: r.image_url || "/imgs/book_cover.png", // use the DB image_url; fallback keeps UI intact
+    type: canonType(r.format),
+    mode: r.is_digital ? "digital" : "physical",
+  }));
 }
