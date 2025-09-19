@@ -44,8 +44,8 @@ export default function OrderSummary({
   }, [requiresShipping, normalizedItems]);
 
   return (
-    <div className="relative space-y-6">
-      <SectionCard>
+    <div className="relative space-y-6 h-full">
+      <SectionCard className="max-h-full">
         <h4 className="text-sm font-semibold text-secondary-900 mb-3">
           Order summary
         </h4>

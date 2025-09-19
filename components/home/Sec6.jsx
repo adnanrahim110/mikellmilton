@@ -90,7 +90,7 @@ const Sec6 = () => {
           </div>
 
           <div className="w-full">
-            <div className="grid md:grid-cols-2 gap-[30px] w-full mb-20">
+            <div className="grid md:grid-cols-2 gap-[30px] w-full lg:mb-20">
               {loading
                 ? Array.from({ length: 2 }).map((_, i) => (
                     <RowCardSkeleton key={`row-s-${i}`} />

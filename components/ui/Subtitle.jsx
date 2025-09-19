@@ -49,10 +49,10 @@ const Subtitle = ({
     <MotionInView
       as={motion.h5}
       v={variants.openRight}
-      viewport={{ once: false, amount: 1 }}
+      viewport={{ once: true, amount: 1 }}
       duration={2.5}
       className={cn(
-        "uppercase text-base font-semibold leading-5 border-b border-b-[#d9d9d9] pb-3 mb-[60px] relative flex overflow-hidden",
+        "uppercase text-sm lg:text-base font-semibold leading-5 border-b border-b-[#d9d9d9] pb-3 mb-[60px] relative flex overflow-hidden",
         t.text,
         className
       )}

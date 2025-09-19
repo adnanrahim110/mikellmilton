@@ -26,7 +26,7 @@ const Sec5 = () => {
           </Title>
         </div>
 
-        <div className="grid gap-10 mb-8 grid-cols-[1fr_0.8fr]">
+        <div className="grid gap-10 mb-8 lg:grid-cols-[1fr_0.8fr]">
           <div className="space-y-8">
             <Quote author="Revelation 7:9">
               For the vision is yet for an appointed time; though it tarry, wait

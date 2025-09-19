@@ -1,64 +1,66 @@
+// app/api/checkout/paypal/create/route.js
 export const runtime = "nodejs";
+
 import { getPool } from "@/lib/db";
 import { verifyDraft } from "@/lib/draft";
 import { paypalCreateOrder } from "@/lib/paypal";
-import { getServerQuote } from "@/lib/quote";
-import { nanoid } from "nanoid";
+import { computeQuote } from "@/lib/quote";
+
+function dollarsFromCents(cents) {
+  const n = Number(cents);
+  if (!Number.isFinite(n)) return null;
+  return (n / 100).toFixed(2);
+}
 
 export async function POST(req) {
   try {
     const { draftId, customer } = await req.json();
-    if (!draftId || !customer?.email) throw new Error("Missing draft/customer");
+    if (!draftId) {
+      return new Response(JSON.stringify({ error: "Missing draftId" }), { status: 400 });
+    }
 
-    const draft = verifyDraft(draftId);
-    const quote = await getServerQuote({ items: draft.items, coupon: draft.coupon });
+    // Verify draft & recompute totals
+    const { items, coupon } = verifyDraft(draftId);
+    const quote = await computeQuote(items, coupon);
+    const amountStr = dollarsFromCents(quote.total_cents);
+    if (!amountStr) {
+      return new Response(JSON.stringify({ error: "Invalid totals" }), { status: 400 });
+    }
 
-    const pp = await paypalCreateOrder({
-      total_cents: quote.total_cents,
-      currency: quote.currency,
+    // Create PayPal order
+    const paypalOrderId = await paypalCreateOrder({
+      amount: amountStr,
+      currency: quote.currency || "USD",
+      description: quote.description || "Order",
     });
 
+    // ✅ Persist order (so capture can find it)
     const pool = getPool();
-
     await pool.query(
-      "INSERT INTO customers (email, name, phone) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name=VALUES(name), phone=VALUES(phone)",
-      [customer.email, customer.name || "", customer.phone || ""]
-    );
-    const [cRows] = await pool.query("SELECT id FROM customers WHERE email=? LIMIT 1", [customer.email]);
-    const customerId = cRows[0].id;
-
-    const publicId = nanoid(12);
-    await pool.query(
-      `INSERT INTO orders
-        (public_id, customer_id, customer_email, customer_name, status, currency,
-         subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, paypal_order_id)
-       VALUES (?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO checkout_orders
+         (paypal_order_id, draft_token, status, currency, total_cents, customer_email, customer_name, items_json)
+       VALUES (?, ?, 'CREATED', ?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+         status = VALUES(status),
+         currency = VALUES(currency),
+         total_cents = VALUES(total_cents),
+         customer_email = VALUES(customer_email),
+         customer_name  = VALUES(customer_name),
+         items_json     = VALUES(items_json)`,
       [
-        publicId, customerId, customer.email, customer.name || "",
-        quote.currency, quote.subtotal_cents, quote.discount_cents,
-        quote.shipping_cents, quote.tax_cents, quote.total_cents, pp.id,
+        paypalOrderId,
+        draftId,
+        quote.currency || "USD",
+        quote.total_cents,
+        customer?.email || null,
+        customer?.name || null,
+        JSON.stringify(items),
       ]
     );
 
-    const [[{ id: orderId }]] = await Promise.all([
-      pool.query("SELECT id FROM orders WHERE public_id=? LIMIT 1", [publicId]),
-    ]);
-
-    const values = quote.items.map(li => [
-      orderId, li.product_id, li.title, li.format, li.sku,
-      li.unit_price_cents, li.quantity, li.line_total_cents, li.is_digital ? 1 : 0
-    ]);
-
-    await pool.query(
-      `INSERT INTO order_items
-        (order_id, product_id, title, format, sku, unit_price_cents, quantity, line_total_cents, is_digital)
-       VALUES ?`,
-      [values]
-    );
-
-    return new Response(JSON.stringify({ paypalOrderId: pp.id, publicId }), { status: 200 });
+    return new Response(JSON.stringify({ paypalOrderId }), { status: 200 });
   } catch (e) {
     console.error("POST /api/checkout/paypal/create error", e);
-    return new Response(JSON.stringify({ error: "Server error" }), { status: 500 });
+    return new Response(JSON.stringify({ error: e.message || "Server error" }), { status: 500 });
   }
 }

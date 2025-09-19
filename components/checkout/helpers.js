@@ -16,24 +16,42 @@ export function buildModeLookup() {
   };
 }
 
-// Convert cart items -> server SKU payload
-export function toSkuItems(items = []) {
-  return items.map((it) => ({
-    sku: it.sku || it.id || it.slug, // prefer real SKU if present
-    quantity: Number(it.quantity || 1),
-  }));
+export function toSkuItems(cartItems) {
+  return (cartItems || [])
+    .map((i) => ({
+      sku: String(i.sku || i.id || "").trim(),
+      quantity: Math.max(1, parseInt(i.quantity ?? i.qty ?? 1, 10) || 1),
+    }))
+    .filter((x) => x.sku);
 }
 
-// Fetch canonical server quote
 export async function fetchQuote({ items, coupon }) {
+  const list = Array.isArray(items) ? items.filter((x) => x && x.sku) : [];
+  if (list.length === 0) {
+    return {
+      currency: "USD",
+      subtotal_cents: 0,
+      discount_cents: 0,
+      shipping_cents: 0,
+      tax_cents: 0,
+      total_cents: 0,
+      requiresShipping: false,
+      description: "Empty",
+      draftId: null,
+    };
+  }
+
   const res = await fetch("/api/checkout/quote", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ items, coupon }),
-    cache: "no-store",
+    body: JSON.stringify({ items: list, coupon: coupon || null }),
   });
-  if (!res.ok) throw new Error("Failed to fetch quote");
-  return await res.json();
+
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(json.error || "Quote failed");
+  }
+  return json;
 }
 
 /* ========= New shared product fetcher (DB only) ========= */

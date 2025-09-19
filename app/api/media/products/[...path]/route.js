@@ -1,7 +1,6 @@
-// app/api/media/products/[...path]/route.js
 export const runtime = "nodejs";
 
-import { mediaProductsRoot, verifyMediaSignature } from "@/lib/media";
+import { mediaProductsRoot, normalizeRelPath, verifyMediaSignature } from "@/lib/media";
 import fs from "fs";
 import path from "path";
 
@@ -21,10 +20,11 @@ function mimeByExt(p) {
   return "application/octet-stream";
 }
 
-export async function GET(req, { params }) {
+export async function GET(req, ctx) {
   try {
-    const parts = params.path || [];
-    const relPath = parts.map(decodeURIComponent).join("/"); // e.g. the-dope-breakthrough/cover.jpg
+    const { path: parts } = await ctx.params;
+    const relRaw = Array.isArray(parts) ? parts.map(decodeURIComponent).join("/") : "";
+    const relPath = normalizeRelPath(relRaw); // 🔑 same canonical form used during signing
 
     const url = new URL(req.url);
     const exp = url.searchParams.get("exp");
@@ -41,9 +41,10 @@ export async function GET(req, { params }) {
       return new Response("Not found", { status: 404 });
     }
 
-    const etag = `"${fs.statSync(filePath).mtimeMs}-${fs.statSync(filePath).size}"`;
+    const stat = fs.statSync(filePath);
+    const etag = `"${stat.mtimeMs}-${stat.size}"`;
     if (req.headers.get("if-none-match") === etag) {
-      return new Response(null, { status: 304 });
+      return new Response(null, { status: 304, headers: { ETag: etag } });
     }
 
     const stream = fs.createReadStream(filePath);

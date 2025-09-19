@@ -22,7 +22,7 @@ const Sec3 = () => {
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
       </div>
 
-      <div className="w-full h-[710px] xl:h-[600px] xxl:h-[710px] relative z-[1] overflow-hidden">
+      <div className="w-full h-[500px] xl:h-[600px] xxl:h-[710px] relative z-[1] overflow-hidden">
         <motion.img
           src="/imgs/home-sec3.jpeg"
           alt=""
@@ -39,9 +39,9 @@ const Sec3 = () => {
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/10 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent" />
 
-        <div className="absolute left-0 w-full -bottom-10">
+        <div className="absolute left-0 w-full -bottom-1.5 lg:-bottom-10">
           <TextScroll
-            className="font-extrabold uppercase leading-none text-shadow-[4px_4px_0px] text-shadow-primary-700 text-black text-[235px] xl:text-[170px] xl:h-[204px] xxl:text-[235px] align-baseline"
+            className="font-extrabold uppercase leading-none text-shadow-[4px_4px_0px] text-shadow-primary-700 text-black text-7xl md:text-9xl xl:text-[170px] xl:h-[204px] xxl:text-[235px] align-baseline"
             text="The dope break through&nbsp;&nbsp;"
             default_velocity={2}
           />

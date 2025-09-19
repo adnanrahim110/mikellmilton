@@ -5,7 +5,7 @@ import React from "react";
 
 const sizeByTag = {
   h1: "text-6xl",
-  h2: "text-[52px]",
+  h2: "text-4xl md:text-5xl lg:text-[52px]",
   h3: "text-4xl",
   h4: "text-3xl",
   h5: "text-xl",

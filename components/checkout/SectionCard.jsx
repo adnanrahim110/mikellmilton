@@ -1,10 +1,16 @@
 "use client";
+import { cn } from "@/utils/cn";
 import { motion } from "motion/react";
 import React from "react";
 
-export default function SectionCard({ children }) {
+export default function SectionCard({ children, className }) {
   return (
-    <div className="bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px] h-full max-h-[138px]">
+    <div
+      className={cn(
+        "bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px] h-full max-h-[138px]",
+        className
+      )}
+    >
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
