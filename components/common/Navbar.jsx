@@ -107,13 +107,6 @@ export const Navbar = ({ navItems = [], setOpenCart }) => {
                 </Link>
               ))}
             </div>
-
-            <Button
-              tone="dark"
-              className="rounded-full h-12 sm:h-14 md:h-16 max-lg:hidden"
-            >
-              Buy Now
-            </Button>
           </div>
 
           <div className="absolute right-3 sm:right-4 lg:right-5 flex items-center justify-end">
@@ -242,16 +235,6 @@ export const Navbar = ({ navItems = [], setOpenCart }) => {
                       </Link>
                     );
                   })}
-                </div>
-
-                <div className="border-t border-white/10 p-3">
-                  <Button
-                    tone="dark"
-                    className="w-full h-11 rounded-full"
-                    onClick={closeMobile}
-                  >
-                    Buy Now
-                  </Button>
                 </div>
               </motion.div>
             )}

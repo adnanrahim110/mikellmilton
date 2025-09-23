@@ -115,17 +115,17 @@ const Sec8 = () => {
                             author="Ephesians 2:14–15"
                             className="mb-7"
                           >
-                            For He Himself is our peace, who has made the two
+                            "For He Himself is our peace, who has made the two
                             groups one and has destroyed the barrier… His
                             purpose was to create in Himself one new humanity
-                            out of the two, thus making peace.
+                            out of the two, thus making peace."
                           </Quote>
                           <p>
                             After nearly two millennia, the scattered Messianic
                             Israelites and Christian Gentiles are called to
                             unite once more. The same partnership that began in
                             the 1st century with James, Peter, and Paul, an
-                            Iconic Dynasty of faith is the same foundation we
+                            Iconic Dynasty of faith, is the same foundation we
                             stand on today. Their witness became a global
                             movement, transforming Christ-King Yashiah’s message
                             into a force no empire could silence.
@@ -136,14 +136,14 @@ const Sec8 = () => {
                             author="Romans 11:5"
                             className="mb-7 mt-3.5"
                           >
-                            So too, at the present time there is a remnant
-                            chosen by grace
+                            "So too, at the present time there is a remnant
+                            chosen by grace"
                           </Quote>
                           <p>
                             We at The DBT Franchise Ministry believe this
                             remnant is alive today. We live in the tension of
                             two lives on Earth: the life shaped by the kingdoms
-                            of men corrupt, divided, violent and the life
+                            of men - corrupt, divided, violent - and the life
                             defined by the Kingdom of YAHAWAH, hidden in G-LIFE,
                             where spiritual operatives train as Christ
                             Champions.
@@ -153,14 +153,14 @@ const Sec8 = () => {
                             author="Joel 2:16"
                             className="mb-7 mt-3.5"
                           >
-                            Gather the people, sanctify the congregation,
-                            assemble the elders, gather the children…
+                            " Gather the people, sanctify the congregation,
+                            assemble the elders, gather the children…"
                           </Quote>
                           <p>
                             2020 marked the paradigm shift. The nations revealed
-                            their weakness, governments built weapons but not
-                            peace, churches preached comfort but not prophecy.
-                            Yet your very birth was not accident but divine
+                            their weaknesses. Governments built weapons, but not
+                            peace. Churches preached comfort, but not prophecy.
+                            Yet your very birth was not accidental, but divine
                             providence. You were chosen for this moment, for
                             this Breakthrough, for this gathering of the
                             long-awaited family tree.
@@ -170,13 +170,13 @@ const Sec8 = () => {
                             author="Revelation 7:9"
                             className="mb-7 mt-3.5"
                           >
-                            After this I looked, and there before me was a great
-                            multitude that no one could count, from every
+                            " After this I looked, and there before me was a
+                            great multitude that no one could count, from every
                             nation, tribe, people and language, standing before
-                            the throne…
+                            the throne…"
                           </Quote>
                           <p>
-                            We are that multitude Messianic Israelites and
+                            We are that multitude of Messianic Israelites and
                             Christian Gentiles joined in purpose, walking in
                             prophecy, and preparing for sovereignty under
                             Christ-King Yashiah. Together, we rise as the family

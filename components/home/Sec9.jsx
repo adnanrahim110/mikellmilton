@@ -47,7 +47,7 @@ const Sec9 = () => {
                   The D.O.P.E. Breakthrough
                 </Title>
                 <h3 className="text-black text-xl tracking-tight pl-[60px]">
-                  Mikell M. Milton and L.A. Doyle
+                  CPOYI Mikell and L.A. Doyle
                 </h3>
               </div>
 
@@ -61,9 +61,9 @@ const Sec9 = () => {
                   community.
                 </P>
                 <P>
-                  Was the 2020 global lockdown a coincidence of time, or was it
-                  a sign from Above a breakthrough beyond politics, religion,
-                  and the world’s broken systems?
+                  Was the 2020 global lockdown a coincidence of time or was it a
+                  sign from Heaven… pointing to broken politics, broken
+                  religion, broken world system?
                 </P>
                 <P className="italic text-secondary-800">
                   With this debut work, we the DBT Franchise Ministry, speak as

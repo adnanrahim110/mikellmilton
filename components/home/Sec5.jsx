@@ -37,7 +37,7 @@ const Sec5 = () => {
               From the ancient warnings of the prophets to the rise of nations
               today, the story has always been about one promise: the return of
               the chosen, and the breakthrough that changes everything. History
-              is filled with rulers, empires, and deceivers but prophecy tells
+              is filled with rulers, empires and deceivers, but prophecy tells
               us of a people, scattered yet sovereign, carrying within them the
               key to eternity.
             </P>

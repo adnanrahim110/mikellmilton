@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import Button from "../ui/Button";
 
 const Header = () => {
   const pathname = usePathname();
@@ -62,10 +61,6 @@ const Header = () => {
               </li>
             ))}
           </ul>
-
-          <div className="flex items-center gap-3">
-            <Button tone="white">Buy now</Button>
-          </div>
         </nav>
 
         <div className="w-28">

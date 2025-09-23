@@ -8,8 +8,8 @@ export const NAVIGATION_LINK = [
     url: "/about-us",
   },
   {
-    title: "About Books",
-    url: "/about-books",
+    title: "About Book",
+    url: "/about-book",
   },
   {
     title: "Shop",

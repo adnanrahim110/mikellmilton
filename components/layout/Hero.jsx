@@ -304,7 +304,7 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
                   className="bg absolute top-0 left-0 h-full w-full bg-cover bg-center"
                   ref={(el) => el && (imagesRefs.current[i] = el)}
                   style={{
-                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.82) 100%), url("${section.img}")`,
+                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 100%), url("${section.img}")`,
                   }}
                 >
                   <div className="size-full flex items-center justify-center px-3">

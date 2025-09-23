@@ -18,7 +18,6 @@ import Title from "../ui/Title";
 const Sec7 = () => {
   const targetRef = useRef(null);
 
-  // ====== Shared data ======
   const wheelItems = useMemo(
     () => [
       {
@@ -31,30 +30,28 @@ const Sec7 = () => {
         icon: "reading-book.png",
         author: "Avery Len",
         quote:
-          "Milton and Doyle blends prophecy with raw, street-smart wisdom, creating a unique firestorm of ideas. The words don’t just sit on the page they ignite your mind, keeping you hooked long after you’ve put the book down.",
+          "CPOYI Mikell and Doyle blend prophecy with raw, street-smart wisdom, creating a unique firestorm of ideas. The words don’t just sit on the page: they ignite your mind, keeping you hooked long after you’ve put the book down.",
       },
       {
         icon: "property-insurance.png",
         author: "Sammy Sam",
         quote:
-          "Raw, fearless, spiritual. It doesn’t just land on your heart it drills in. Highly recommend to anyone seeking truth and purpose.!!",
+          "Raw, fearless, spiritual. It doesn’t just land on your heart... it drills in. Highly recommend to anyone seeking truth and purpose.!!",
       },
       {
         icon: "goodwill.png",
         author: "Taylor Ben",
         quote:
-          "Authors write with an intensity that makes faith and prophecy feel alive. This isn’t just entertainment, it’s an invitation to see the world differently. I loved the cast of characters warriors, and believers and the way the narrative connects generations and history in a way that feels urgent and real.",
+          "Authors write with an intensity that makes faith and prophecy feel alive. This isn’t just entertainment, it’s an invitation to see the world differently. I loved the cast of characters, warriors, and believers and the way the narrative connects generations and history in a way that feels urgent and real.",
       },
     ],
     []
   );
 
-  // ====== DESKTOP (LG+) — original experience preserved ======
   const R = {
     s1Out: [0.06, 0.13],
     s2In: [0.08, 0.16],
     s2Out: [0.2, 0.3],
-    s3In: [0.3, 0.4],
     hold: [0.4, 0.48],
     hand: [0.46, 0.56],
   };
@@ -92,13 +89,6 @@ const Sec7 = () => {
     [R.s2In[0], R.s2In[1], R.s2Out[0], R.s2Out[1]],
     [0, 1, 1, 0]
   );
-
-  const s3Y = useTransform(
-    scrollYProgress,
-    [0, R.s3In[0], R.s3In[1], R.hold[0], R.hold[1]],
-    ["100vh", "100vh", "0vh", "0vh", "0vh"]
-  );
-  const s3Op = useTransform(scrollYProgress, R.s3In, [0, 1]);
 
   const itemsProgressRaw = useTransform(
     scrollYProgress,
@@ -142,9 +132,7 @@ const Sec7 = () => {
 
   return (
     <section ref={targetRef} className="relative">
-      {/* ====== MOBILE/TABLET (below LG) — simplified, polished layout ====== */}
       <div className="lg:hidden">
-        {/* Top image with same vibe */}
         <div className="relative w-full h-[48vh] min-h-[320px]">
           <img
             src="/imgs/home-sec7.png"
@@ -162,7 +150,6 @@ const Sec7 = () => {
           </div>
         </div>
 
-        {/* Author blocks (stacked) */}
         <div className="container mx-auto px-4 py-8 space-y-10">
           <div>
             <Title as="h3" tone="light">
@@ -187,21 +174,8 @@ const Sec7 = () => {
               prophecy was always meant to be lived in partnership.
             </P>
           </div>
-
-          <div>
-            <Title tone="light">Why two Authors</Title>
-            <P className="mt-3 text-neutral-200/95 leading-relaxed">
-              We write as a team. Mikell M. Milton and L.A. Doyle bring together
-              prophecy, history, and lived experience to serve one purpose,
-              helping readers see the destiny already written for them. Our work
-              speaks across generations—Boomers, Gen X, Millennials, Gen Z, and
-              Gen Alpha—with a simple through line: clarity first, then action.
-              We write, teach, and build so people can move with purpose.
-            </P>
-          </div>
         </div>
 
-        {/* Quotes — snap carousel on mobile for easy thumb swipe */}
         <div className="container mx-auto px-4 pb-10">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none]">
             <style jsx>{`
@@ -230,24 +204,20 @@ const Sec7 = () => {
             ))}
           </div>
 
-          {/* Progress bar mimic (simple) */}
           <div className="mt-6 h-1 w-full rounded-full bg-white/10 overflow-hidden">
             <div className="h-full w-1/3 bg-white/70" />
           </div>
         </div>
       </div>
 
-      {/* ====== DESKTOP (LG+) — unchanged original UI/animation ====== */}
       <div className="hidden lg:block">
         <div className="relative mt-[120px] h-[760vh]">
           <div className="sticky top-0 h-screen overflow-hidden">
-            {/* Panel 1 */}
             <motion.div
               className="absolute inset-0 z-10 bg-[#3C3D40] bg-cover bg-no-repeat bg-center bg-[url('/imgs/texture.jpg')] bg-blend-multiply"
               style={{ x: panel1X }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent" />
-              {/* Slide 1 */}
               <motion.div
                 style={{ y: s1Y, opacity: s1Op }}
                 className="absolute inset-x-0 top-[18vh] h-[40vh]"
@@ -271,7 +241,6 @@ const Sec7 = () => {
                   </div>
                 </div>
               </motion.div>
-              {/* Slide 2 */}
               <motion.div
                 style={{ y: s2Y, opacity: s2Op }}
                 className="absolute inset-x-0 top-[20vh] h-[42vh]"
@@ -292,32 +261,6 @@ const Sec7 = () => {
                         perspective emphasizes collaboration between men and
                         women, Israelites and Gentiles, showing that prophecy
                         was always meant to be lived in partnership.
-                      </P>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-              {/* Slide 3 */}
-              <motion.div
-                style={{ y: s3Y, opacity: s3Op }}
-                className="absolute inset-x-0 top-[20vh] h-[56vh]"
-              >
-                <div className="h-full flex items-center">
-                  <div className="container mx-auto px-4">
-                    <Subtitle tone="light" icon={UserRound} stroke={false}>
-                      ABOUT THE AUTHORS
-                    </Subtitle>
-                    <div className="mt-8 max-w-3xl">
-                      <Title tone="light">Why two Authors</Title>
-                      <P className="mt-3 text-neutral-200/95 leading-relaxed">
-                        We write as a team. Mikell M. Milton and L.A. Doyle
-                        bring together prophecy, history, and lived experience
-                        to serve one purpose, helping readers see the destiny
-                        already written for them. Our work speaks across
-                        generations Boomers, Gen X, Millennials, Gen Z, and Gen
-                        Alpha with a simple through line, clarity first, then
-                        action. We write, teach, and build so people can move
-                        with purpose.
                       </P>
                     </div>
                   </div>

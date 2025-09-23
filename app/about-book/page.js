@@ -8,10 +8,10 @@ export default function BooksPage() {
   return (
     <>
       <SharedHero
-        eyebrow="About Books"
+        eyebrow="About Book"
         Icon={BookOpenText}
         title="The BREAKTHROUGH Within Prophecy"
-        description="This book was written with one purpose: to uncover prophecy, reveal identity, and call this generation back to destiny. Every chapter carries the thread of scripture and story, pointing readers to the truth that their lives are not accidents, but part of a greater design. It is more than a book it is a guide, a message, and a breakthrough for those ready to see the ending that was written from the beginning."
+        description="This book was written with one purpose: to uncover prophecy, reveal identity, and call this generation back to destiny. Every chapter carries the thread of scripture and story, pointing readers to the truth that their lives are not accidents, but part of a greater design. It is more than a book. It is a guide, a message, and a breakthrough for those ready to see the ending that was written from the beginning."
         bgImage="/imgs/home-sec3.jpeg"
         primaryCta={{ label: "Buy Now", href: "/shop" }}
         secondaryCta={{ label: "Contact", href: "/contact" }}

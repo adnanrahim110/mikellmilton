@@ -15,7 +15,7 @@ const SharedHero = ({
   description = "I build, write, and point people toward purpose. This page is the snapshot of where that comes from, what I believe, and how I move.",
   bgImage = "/imgs/about-hero.jpg",
   primaryCta = {},
-  secondaryCta = { label: "Contact", href: "/contact" },
+  secondaryCta = {},
   className = "",
   subtitleMaxW = "",
 }) => {
@@ -87,18 +87,19 @@ const SharedHero = ({
                   <Button
                     href={primaryCta.href}
                     tone="white"
-                    className="shadow-lg"
+                    className="shadow-md shadow-primary/30"
                   >
                     {primaryCta.label}
                   </Button>
                 )}
                 {secondaryCta?.href && (
-                  <Link
+                  <Button
+                    tone="dark"
                     href={secondaryCta.href}
-                    className="inline-flex items-center rounded-md border border-white/60 bg-white/80 px-5 py-2.5 font-semibold text-secondary-900 shadow-inner transition hover:bg-white/90"
+                    className="shadow-md shadow-white/10"
                   >
                     {secondaryCta.label}
-                  </Link>
+                  </Button>
                 )}
               </motion.div>
             </div>

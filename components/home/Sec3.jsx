@@ -42,7 +42,7 @@ const Sec3 = () => {
         <div className="absolute left-0 w-full -bottom-1.5 lg:-bottom-10">
           <TextScroll
             className="font-extrabold uppercase leading-none text-shadow-[4px_4px_0px] text-shadow-primary-700 text-black text-7xl md:text-9xl xl:text-[170px] xl:h-[204px] xxl:text-[235px] align-baseline"
-            text="The dope break through&nbsp;&nbsp;"
+            text="The dope breakthrough&nbsp;&nbsp;"
             default_velocity={2}
           />
         </div>

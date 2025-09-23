@@ -22,7 +22,7 @@ const Sec4 = () => {
         </Subtitle>
 
         <div className="space-y-5">
-          <Title tone="light">Welcome to the DOPE Breakthrough</Title>
+          <Title tone="light">Welcome to The DOPE Breakthrough</Title>
 
           <P className="text-secondary-300">
             This is not just a game; it’s a journey of unlocking your true
@@ -32,7 +32,7 @@ const Sec4 = () => {
             challenges? The path to your true self may be tough, but with the
             right mindset, you can overcome it. Like the great warriors before
             you, it’s time to break free from what holds you back. This journey
-            is about more than survival it’s about thriving and tapping into
+            is about more than survival. It’s about thriving and tapping into
             your divine power. Victory is already secured, but will you answer
             the call to claim it? The choice is yours, and the time to act is
             now.

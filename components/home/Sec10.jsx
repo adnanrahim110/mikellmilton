@@ -42,19 +42,16 @@ const Sec10 = () => {
             <Title className="text-[46px]">What are your Divine powers?</Title>
 
             <P>
-              In the Kingdom of Amen-Amensa, hidden forces have been guiding
-              humanity for centuries. Through the DBT homing device, fragments
-              of truth about the New Earth reality are being revealed.
-              Sleepwalkers stir across the globe, unaware that the divine plan
-              is unfolding, and higher powers are rewriting the course of human
-              history.
+              The DBT exposes the hidden maleficent forces that have been
+              guiding humanity for millennia. As the masses sleepwalk across the
+              globe, the plan of Amen-Amensa’s Sovereign is unfolding on Earth.
+              The last generation of Young At Heart (GEN YAH) wargamers are
+              finally here to win the Game of Life.
             </P>
 
             <P>
-              As the breakthrough approaches, the unseen hands of the Creator
-              activate signals that pierce the limits of the world system. Those
-              who align with the sacred purpose will rise, and through their
-              actions, blessings will flow to all nations.
+              As their DOPE Breakthrough approaches, are you ready to rise and
+              activate your Kingdom Identity?
             </P>
 
             <P className="text-right text-secondary italic font-albert-sans">
