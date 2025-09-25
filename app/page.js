@@ -7,6 +7,7 @@ import Sec3 from "@/components/home/Sec3";
 import Sec4 from "@/components/home/Sec4";
 import Sec5 from "@/components/home/Sec5";
 import Sec6 from "@/components/home/Sec6";
+import Sec6DBTFranchise from "@/components/home/Sec6DBTFranchise";
 import Sec7 from "@/components/home/Sec7";
 import Sec8 from "@/components/home/Sec8";
 import Sec9 from "@/components/home/Sec9";
@@ -23,6 +24,7 @@ export default function Home() {
       <Sec4 />
       <Sec5 />
       <Sec6 />
+      <Sec6DBTFranchise />
       <Sec7 />
       <Sec8 />
       <Sec9 />

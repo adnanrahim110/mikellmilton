@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Sep 19, 2025 at 05:06 PM
--- Server version: 8.4.3
--- PHP Version: 8.3.16
+-- Host: 127.0.0.1
+-- Generation Time: Sep 25, 2025 at 10:22 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `full_name` varchar(191) NOT NULL,
   `line1` varchar(191) NOT NULL,
   `line2` varchar(191) DEFAULT NULL,
@@ -36,37 +36,8 @@ CREATE TABLE `addresses` (
   `state` varchar(191) DEFAULT NULL,
   `postal_code` varchar(64) DEFAULT NULL,
   `country` varchar(64) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `checkout_orders`
---
-
-CREATE TABLE `checkout_orders` (
-  `id` bigint UNSIGNED NOT NULL,
-  `paypal_order_id` varchar(64) NOT NULL,
-  `draft_token` text NOT NULL,
-  `status` enum('CREATED','CAPTURED','CANCELED','ERROR') NOT NULL DEFAULT 'CREATED',
-  `currency` char(3) NOT NULL,
-  `total_cents` int NOT NULL,
-  `customer_email` varchar(255) DEFAULT NULL,
-  `customer_name` varchar(255) DEFAULT NULL,
-  `items_json` text,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `checkout_orders`
---
-
-INSERT INTO `checkout_orders` (`id`, `paypal_order_id`, `draft_token`, `status`, `currency`, `total_cents`, `customer_email`, `customer_name`, `items_json`, `created_at`, `updated_at`) VALUES
-(1, '02B86310L1586293W', 'eyJpdGVtcyI6W3sic2t1IjoiRE9QRS1BQiIsInF1YW50aXR5IjoxfSx7InNrdSI6IkRPUEUtRUIiLCJxdWFudGl0eSI6MX1dLCJjb3Vwb24iOm51bGwsImlhdCI6MTc1ODI5ODQyMjQzOCwiZXhwIjoxNzU4MzAwMjIyNDM4fQ.2wQtpICGH2BAZGxvD0V93SzBdnaImirSTJ6eD-7DA4Q', 'CREATED', 'USD', 23000, 'adnankaka.786110@gmail.com', 'Adnan Rahim', '[{\"sku\":\"DOPE-AB\",\"quantity\":1},{\"sku\":\"DOPE-EB\",\"quantity\":1}]', '2025-09-19 16:13:54', '2025-09-19 16:13:54'),
-(2, '13094254YA5950523', 'eyJpdGVtcyI6W3sic2t1IjoiRE9QRS1BQiIsInF1YW50aXR5IjoxfSx7InNrdSI6IkRPUEUtRUIiLCJxdWFudGl0eSI6MX1dLCJjb3Vwb24iOm51bGwsImlhdCI6MTc1ODI5ODQyMjQzOCwiZXhwIjoxNzU4MzAwMjIyNDM4fQ.2wQtpICGH2BAZGxvD0V93SzBdnaImirSTJ6eD-7DA4Q', 'CREATED', 'USD', 23000, 'adnankaka.786110@gmail.com', 'Adnan Rahim', '[{\"sku\":\"DOPE-AB\",\"quantity\":1},{\"sku\":\"DOPE-EB\",\"quantity\":1}]', '2025-09-19 16:14:14', '2025-09-19 16:14:14'),
-(3, '636010866J412043P', 'eyJpdGVtcyI6W3sic2t1IjoiRE9QRS1BQiIsInF1YW50aXR5IjoxfSx7InNrdSI6IkRPUEUtRUIiLCJxdWFudGl0eSI6MX1dLCJjb3Vwb24iOm51bGwsImlhdCI6MTc1ODI5ODYyNDM5MCwiZXhwIjoxNzU4MzAwNDI0MzkwfQ.yWSvvaJb_EqBT_Iz46IpAVyc_eRXgKZKZmgzJ0rq5yA', 'CAPTURED', 'USD', 23000, 'adnankaka.786110@gmail.com', 'Adnan Rahim', '[{\"sku\":\"DOPE-AB\",\"quantity\":1},{\"sku\":\"DOPE-EB\",\"quantity\":1}]', '2025-09-19 16:17:24', '2025-09-19 16:17:34');
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -77,13 +48,13 @@ INSERT INTO `checkout_orders` (`id`, `paypal_order_id`, `draft_token`, `status`,
 CREATE TABLE `coupons` (
   `code` varchar(64) NOT NULL,
   `type` enum('percent','fixed') NOT NULL,
-  `value` int NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '1',
-  `max_uses` int DEFAULT NULL,
-  `used_count` int NOT NULL DEFAULT '0',
+  `value` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `max_uses` int(11) DEFAULT NULL,
+  `used_count` int(11) NOT NULL DEFAULT 0,
   `valid_from` datetime DEFAULT NULL,
   `valid_to` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `coupons`
@@ -99,19 +70,11 @@ INSERT INTO `coupons` (`code`, `type`, `value`, `active`, `max_uses`, `used_coun
 --
 
 CREATE TABLE `customers` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `email` varchar(191) NOT NULL,
   `name` varchar(191) DEFAULT NULL,
   `phone` varchar(64) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`id`, `email`, `name`, `phone`) VALUES
-(1, 'adnankaka.786110@gmail.com', 'Adnan Rahim', '03393151472'),
-(3, 'buyer@example.com', 'Test Buyer', '');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -120,16 +83,15 @@ INSERT INTO `customers` (`id`, `email`, `name`, `phone`) VALUES
 --
 
 CREATE TABLE `downloads` (
-  `id` bigint NOT NULL,
-  `order_id` bigint NOT NULL,
-  `product_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `order_id` bigint(20) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
   `format` enum('ebook','audiobook') NOT NULL,
   `file_url` varchar(512) NOT NULL,
   `download_token` char(36) NOT NULL,
   `expires_at` datetime DEFAULT NULL,
-  `download_count` int NOT NULL DEFAULT '0',
-  `max_downloads` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `download_count` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -138,13 +100,13 @@ CREATE TABLE `downloads` (
 --
 
 CREATE TABLE `form_submissions` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `form_slug` varchar(64) NOT NULL,
   `email` varchar(191) NOT NULL,
   `name` varchar(191) DEFAULT NULL,
-  `payload` json DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -153,27 +115,27 @@ CREATE TABLE `form_submissions` (
 --
 
 CREATE TABLE `orders` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `public_id` char(12) NOT NULL,
-  `customer_id` bigint DEFAULT NULL,
+  `customer_id` bigint(20) DEFAULT NULL,
   `email` varchar(191) NOT NULL,
   `phone` varchar(64) DEFAULT NULL,
-  `billing_address_id` bigint DEFAULT NULL,
-  `shipping_address_id` bigint DEFAULT NULL,
+  `billing_address_id` bigint(20) DEFAULT NULL,
+  `shipping_address_id` bigint(20) DEFAULT NULL,
   `status` enum('created','pending','paid','failed','cancelled','fulfilled','refunded') NOT NULL DEFAULT 'created',
   `currency` char(3) NOT NULL DEFAULT 'USD',
-  `subtotal_cents` int NOT NULL DEFAULT '0',
-  `discount_cents` int NOT NULL DEFAULT '0',
-  `shipping_cents` int NOT NULL DEFAULT '0',
-  `tax_cents` int NOT NULL DEFAULT '0',
-  `total_cents` int NOT NULL DEFAULT '0',
+  `subtotal_cents` int(11) NOT NULL DEFAULT 0,
+  `discount_cents` int(11) NOT NULL DEFAULT 0,
+  `shipping_cents` int(11) NOT NULL DEFAULT 0,
+  `tax_cents` int(11) NOT NULL DEFAULT 0,
+  `total_cents` int(11) NOT NULL DEFAULT 0,
   `shipping_option` enum('digital','delivery','pickup') NOT NULL DEFAULT 'digital',
-  `notes` text,
+  `notes` text DEFAULT NULL,
   `paypal_order_id` varchar(191) DEFAULT NULL,
   `paypal_capture_id` varchar(191) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -182,16 +144,16 @@ CREATE TABLE `orders` (
 --
 
 CREATE TABLE `order_items` (
-  `id` bigint NOT NULL,
-  `order_id` bigint NOT NULL,
-  `product_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `order_id` bigint(20) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
   `format` enum('ebook','audiobook','paperback') NOT NULL,
   `sku` varchar(64) DEFAULT NULL,
   `title_snapshot` varchar(191) NOT NULL,
-  `unit_price_cents` int NOT NULL,
-  `quantity` int NOT NULL,
-  `line_total_cents` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `unit_price_cents` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `line_total_cents` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -200,16 +162,16 @@ CREATE TABLE `order_items` (
 --
 
 CREATE TABLE `payments` (
-  `id` bigint NOT NULL,
-  `order_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `order_id` bigint(20) NOT NULL,
   `provider` enum('paypal') NOT NULL,
   `status` enum('created','approved','captured','failed','refunded') NOT NULL,
-  `amount_cents` int NOT NULL,
+  `amount_cents` int(11) NOT NULL,
   `currency` char(3) NOT NULL,
   `remote_id` varchar(191) NOT NULL,
-  `raw_json` json DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `raw_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`raw_json`)),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -218,22 +180,22 @@ CREATE TABLE `payments` (
 --
 
 CREATE TABLE `products` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `slug` varchar(191) NOT NULL,
   `title` varchar(191) NOT NULL,
-  `image_path` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `description` text,
-  `active` tinyint(1) NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `description` text DEFAULT NULL,
+  `image_path` varchar(512) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `slug`, `title`, `image_path`, `description`, `active`, `created_at`, `updated_at`) VALUES
-(1, 'the-dope-breakthrough', 'The D.O.P.E Breakthrough', 'the-dope-breakthrough/cover.png', 'Official digital editions', 1, '2025-09-17 16:48:48', '2025-09-17 19:42:18');
+INSERT INTO `products` (`id`, `slug`, `title`, `description`, `image_path`, `active`, `created_at`, `updated_at`) VALUES
+(1, 'the-dope-breakthrough', 'The D.O.P.E Breakthrough', 'Official digital editions', 'the-dope-breakthrough/cover.png', 1, '2025-09-25 20:19:58', '2025-09-25 20:21:16');
 
 -- --------------------------------------------------------
 
@@ -242,26 +204,26 @@ INSERT INTO `products` (`id`, `slug`, `title`, `image_path`, `description`, `act
 --
 
 CREATE TABLE `product_formats` (
-  `id` bigint NOT NULL,
-  `product_id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `product_id` bigint(20) NOT NULL,
   `format` enum('ebook','audiobook','paperback') NOT NULL,
   `sku` varchar(64) DEFAULT NULL,
-  `price_cents` int NOT NULL DEFAULT '0',
-  `compare_at_cents` int DEFAULT NULL,
-  `inventory` int DEFAULT NULL,
-  `weight_g` int DEFAULT NULL,
-  `is_digital` tinyint(1) NOT NULL DEFAULT '1',
-  `image_path` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `file_url` varchar(512) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `price_cents` int(11) NOT NULL,
+  `compare_at_cents` int(11) DEFAULT NULL,
+  `inventory` int(11) DEFAULT NULL,
+  `weight_g` int(11) DEFAULT NULL,
+  `is_digital` tinyint(1) NOT NULL DEFAULT 1,
+  `file_url` varchar(512) DEFAULT NULL,
+  `image_path` varchar(512) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `product_formats`
 --
 
-INSERT INTO `product_formats` (`id`, `product_id`, `format`, `sku`, `price_cents`, `compare_at_cents`, `inventory`, `weight_g`, `is_digital`, `image_path`, `file_url`) VALUES
-(1, 1, 'audiobook', 'DOPE-AB', 16500, NULL, NULL, NULL, 1, 'the-dope-breakthrough/ebAlbum.png', 'audiobooks/the-dope-breakthrough.zip'),
-(2, 1, 'ebook', 'DOPE-EB', 6500, NULL, NULL, NULL, 1, 'the-dope-breakthrough/cover.png', 'ebooks/the-dope-breakthrough.pdf');
+INSERT INTO `product_formats` (`id`, `product_id`, `format`, `sku`, `price_cents`, `compare_at_cents`, `inventory`, `weight_g`, `is_digital`, `file_url`, `image_path`) VALUES
+(1, 1, 'audiobook', 'DOPE-AB', 16500, NULL, NULL, NULL, 1, 'audiobooks/the-dope-breakthrough.zip', 'the-dope-breakthrough/ebAlbum.png'),
+(2, 1, 'ebook', 'DOPE-EB', 6500, NULL, NULL, NULL, 1, 'ebooks/the-dope-breakthrough.pdf', 'the-dope-breakthrough/cover.png');
 
 --
 -- Indexes for dumped tables
@@ -272,13 +234,6 @@ INSERT INTO `product_formats` (`id`, `product_id`, `format`, `sku`, `price_cents
 --
 ALTER TABLE `addresses`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `checkout_orders`
---
-ALTER TABLE `checkout_orders`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `paypal_order_id` (`paypal_order_id`);
 
 --
 -- Indexes for table `coupons`
@@ -331,7 +286,6 @@ ALTER TABLE `order_items`
 --
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uniq_remote_provider` (`remote_id`,`provider`),
   ADD KEY `order_id` (`order_id`);
 
 --
@@ -357,61 +311,55 @@ ALTER TABLE `product_formats`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `checkout_orders`
---
-ALTER TABLE `checkout_orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `downloads`
 --
 ALTER TABLE `downloads`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_formats`
 --
 ALTER TABLE `product_formats`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
