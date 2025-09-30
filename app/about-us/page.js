@@ -8,6 +8,10 @@ import AboutStory from "@/components/layout/AboutStory";
 import SharedHero from "@/components/ui/SharedHero";
 import { UserRound } from "lucide-react";
 
+// export const metadata = {
+//   title: "Mikell Milton | About Us",
+// }
+
 export default function AboutUs() {
   return (
     <>

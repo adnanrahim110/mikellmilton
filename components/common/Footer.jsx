@@ -144,6 +144,13 @@ const Footer = ({ links = NAVIGATION_LINK }) => {
               <Link href="/terms" className="hover:text-primary-800 transition">
                 Terms & Conditions
               </Link>
+              <span className="h-3 w-px bg-secondary-300" />
+              <Link
+                href="/licensing-inquiry"
+                className="hover:text-primary-800 transition"
+              >
+                Licensing Inquiry
+              </Link>
             </div>
           </div>
         </div>

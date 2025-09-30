@@ -1,4 +1,5 @@
 import AppLayout from "@/components/system/AppLayout";
+import { SEO } from "@/lib/seo";
 import { Albert_Sans, DM_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -18,10 +19,7 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export const metadata = {
-  title: "Mikell Milton",
-  description: "",
-};
+export const metadata = SEO["/"];
 
 export default function RootLayout({ children }) {
   return (

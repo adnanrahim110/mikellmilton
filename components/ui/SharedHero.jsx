@@ -31,8 +31,6 @@ const SharedHero = ({
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           style={{ willChange: "transform" }}
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
-        <div className="pointer-events-none absolute inset-0 opacity-35 mix-blend-multiply bg-center bg-no-repeat bg-[length:70%_80%]" />
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{

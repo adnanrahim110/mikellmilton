@@ -1,5 +1,3 @@
-"use client";
-
 import Sec1 from "@/components/home/Sec1";
 import Sec10 from "@/components/home/Sec10";
 import Sec2 from "@/components/home/Sec2";

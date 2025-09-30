@@ -214,7 +214,7 @@ const Sec7 = () => {
         <div className="relative mt-[120px] h-[760vh]">
           <div className="sticky top-0 h-screen overflow-hidden">
             <motion.div
-              className="absolute inset-0 z-10 bg-[#3C3D40] bg-cover bg-no-repeat bg-center bg-[url('/imgs/texture.jpg')] bg-blend-multiply"
+              className="absolute inset-0 z-10 bg-[#3C3D40] bg-cover bg-no-repeat bg-center bg-[url('/imgs/texture2.png')] bg-blend-multiply"
               style={{ x: panel1X }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent" />
@@ -247,9 +247,6 @@ const Sec7 = () => {
               >
                 <div className="h-full flex items-center">
                   <div className="container mx-auto px-4">
-                    <Subtitle tone="light" icon={UserRound} stroke={false}>
-                      ABOUT THE AUTHORS
-                    </Subtitle>
                     <div className="mt-8 max-w-3xl">
                       <Title as="h3" tone="light">
                         L.A. Doyle
