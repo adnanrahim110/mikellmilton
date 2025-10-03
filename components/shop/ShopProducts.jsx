@@ -226,6 +226,7 @@ const ShopProducts = ({ eyebrow = "Catalog", title = "All products" }) => {
                         priority
                         src={p.img}
                         alt={p.title}
+                        className="aspect-square object-contain"
                       />
                     </div>
                     <div className="p-5 space-y-3">

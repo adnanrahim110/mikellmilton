@@ -132,7 +132,7 @@ const Sec6 = () => {
                               "relative w-full h-auto p-6",
                               "rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md",
                               "ring-1 ring-black/5 shadow-2xl",
-                              "flex flex-wrap items-center gap-10"
+                              "flex flex-wrap items-center gap-5"
                             )}
                           >
                             <CardItem
@@ -148,10 +148,10 @@ const Sec6 = () => {
                               />
                             </CardItem>
 
-                            <div className="flex flex-col w-full md:w-[calc(60%_-_40px)] grow-0 shrink basis-auto">
+                            <div className="flex flex-col w-full md:w-[calc(60%_-_20px)] grow-0 shrink basis-auto">
                               <CardItem
                                 translateZ="50"
-                                className="text-3xl font-semibold text-secondary-900"
+                                className="text-[22px] font-semibold text-secondary-900"
                               >
                                 {book.title}
                               </CardItem>
@@ -159,30 +159,28 @@ const Sec6 = () => {
                               <CardItem
                                 as="p"
                                 translateZ="60"
-                                className="text-secondary-500 text-[15px] max-w-sm mt-2"
+                                className="text-secondary-500 text-sm max-w-sm mt-2"
                               >
-                                Lorem ipsum dolor sit amet conse ctetur
-                                adipisicing elit. Quisquam placeat iusto id
-                                necessitatibus est distinctio!
+                                {book.description}
                               </CardItem>
 
                               <div className="flex flex-col mt-5 gap-3">
                                 <CardItem
                                   as="div"
                                   translateZ="70"
-                                  className="flex flex-wrap w-full gap-3 text-base"
+                                  className="flex flex-row w-full gap-1 text-base"
                                 >
                                   <CardItem
                                     as="span"
                                     translateZ="70"
-                                    className="inline-block w-full md:w-auto py-1 px-3 rounded-lg bg-primary-100 text-secondary-900"
+                                    className="inline-block w-full md:w-auto py-1 px-2 rounded-lg bg-primary-100 text-secondary-900"
                                   >
                                     {book.type}
                                   </CardItem>
                                   <CardItem
                                     as="span"
                                     translateZ="70"
-                                    className="inline-block w-full md:w-auto grow py-1 px-3 rounded-lg bg-primary-200 text-primary-900"
+                                    className="inline-block w-full md:w-auto py-1 px-2 grow rounded-lg bg-primary-200 text-primary-900"
                                   >
                                     Price: <strong>${price.toFixed(2)}</strong>
                                   </CardItem>

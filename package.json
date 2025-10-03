@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:email": "node --env-file=.env scripts/test-email.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

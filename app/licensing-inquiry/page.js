@@ -1,3 +1,4 @@
+import ContactFormAlt from "@/components/contact/ContactFormAlt";
 import SharedHero from "@/components/ui/SharedHero";
 import Sec1 from "./ui/Sec1";
 
@@ -10,6 +11,7 @@ const licensingIquiryPage = () => {
         bgImage="/imgs/home-sec3.jpeg"
       />
       <Sec1 />
+      <ContactFormAlt />
     </>
   );
 };

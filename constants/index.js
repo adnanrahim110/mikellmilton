@@ -16,8 +16,8 @@ export const NAVIGATION_LINK = [
     url: "/shop",
   },
   {
-    title: "Contact",
-    url: "/contact",
+    title: "Licensing",
+    url: "/licensing-inquiry",
   },
 ]
 

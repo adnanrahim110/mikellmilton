@@ -1,7 +1,5 @@
 "use client";
 
-import { MotionInView, variants } from "@/utils/motion";
-import { motion } from "motion/react";
 import React from "react";
 import BookHover from "../ui/BookHover";
 import P from "../ui/P";
@@ -45,7 +43,7 @@ const Sec2 = ({
 
           <div className="relative">
             <div className="absolute -inset-3 rounded-3xl bg-white/40 blur-xl opacity-50 pointer-events-none" />
-            <div className="relative rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl p-5">
+            <div className="relative rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl p-10 lg:p-5">
               <BookHover img="/imgs/book_cover.png" />
               <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
             </div>

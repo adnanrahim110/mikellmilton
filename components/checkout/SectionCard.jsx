@@ -7,7 +7,7 @@ export default function SectionCard({ children, className }) {
   return (
     <div
       className={cn(
-        "bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px] h-full max-h-[138px]",
+        "bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px] h-full lg:max-h-[138px]",
         className
       )}
     >

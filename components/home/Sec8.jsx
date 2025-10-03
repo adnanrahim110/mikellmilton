@@ -6,7 +6,99 @@ import Quote from "../ui/Quote";
 import Subtitle from "../ui/Subtitle";
 import Title from "../ui/Title";
 
-const Sec8 = () => {
+/* ---------- Mobile (simple, no motion) ---------- */
+function MobileSec8() {
+  return (
+    <section className="lg:hidden relative pt-20">
+      <div className="container">
+        <Subtitle className="mb-5">
+          One family. One prophecy. One Breakthrough.
+        </Subtitle>
+      </div>
+
+      <div className="container">
+        <div className="rounded-3xl border border-white/20 bg-white/10 backdrop-blur-md ring-1 ring-black/5 shadow-xl overflow-hidden">
+          <img
+            src="/imgs/home-sec8.jpg"
+            alt="About section visual"
+            className="w-full h-56 sm:h-72 object-cover object-center"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div className="mt-6 rounded-3xl border border-white/15 bg-secondary-900/90 text-white backdrop-blur-md ring-1 ring-white/10 shadow-xl p-6 space-y-6">
+          <div>
+            <Title tone="light">
+              <span className="text-primary">About Us</span>
+            </Title>
+          </div>
+
+          <div className="prose prose-invert max-w-none leading-relaxed *:text-white/80">
+            <Quote tone="dark" author="Ephesians 2:14–15" className="mb-7">
+              "For He Himself is our peace, who has made the two groups one and
+              has destroyed the barrier… His purpose was to create in Himself
+              one new humanity out of the two, thus making peace."
+            </Quote>
+
+            <p>
+              After nearly two millennia, the scattered Messianic Israelites and
+              Christian Gentiles are called to unite once more. The same
+              partnership that began in the 1st century with James, Peter, and
+              Paul, an Iconic Dynasty of faith, is the same foundation we stand
+              on today. Their witness became a global movement, transforming
+              Christ-King Yashiah’s message into a force no empire could
+              silence.
+            </p>
+
+            <Quote tone="dark" author="Romans 11:5" className="mb-7 mt-3.5">
+              "So too, at the present time there is a remnant chosen by grace"
+            </Quote>
+
+            <p>
+              We at The DBT Franchise Ministry believe this remnant is alive
+              today. We live in the tension of two lives on Earth: the life
+              shaped by the kingdoms of men, corrupt, divided, violent, and the
+              life defined by the Kingdom of YAHAWAH, hidden in G-LIFE, where
+              spiritual operatives train as Christ Champions.
+            </p>
+
+            <Quote tone="dark" author="Joel 2:16" className="mb-7 mt-3.5">
+              " Gather the people, sanctify the congregation, assemble the
+              elders, gather the children…"
+            </Quote>
+
+            <p>
+              2020 marked the paradigm shift. The nations revealed their
+              weaknesses. Governments built weapons, but not peace. Churches
+              preached comfort, but not prophecy. Yet your very birth was not
+              accidental, but divine providence. You were chosen for this
+              moment, for this Breakthrough, for this gathering of the
+              long-awaited family tree.
+            </p>
+
+            <Quote tone="dark" author="Revelation 7:9" className="mb-7 mt-3.5">
+              " After this I looked, and there before me was a great multitude
+              that no one could count, from every nation, tribe, people and
+              language, standing before the throne…"
+            </Quote>
+
+            <p>
+              We are that multitude of Messianic Israelites and Christian
+              Gentiles joined in purpose, walking in prophecy, and preparing for
+              sovereignty under Christ-King Yashiah. Together, we rise as the
+              family of YAHAWAH, chosen not to divide, but to fulfill the
+              promise of eternity.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Desktop (original motion kept) ---------- */
+function DesktopSec8() {
   const scrollerRef = useRef(null);
   const cardRightRef = useRef(null);
   const contentWrapRef = useRef(null);
@@ -52,6 +144,7 @@ const Sec8 = () => {
       window.removeEventListener("resize", measure);
       window.removeEventListener("load", measure);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { scrollYProgress } = useScroll({
@@ -62,27 +155,30 @@ const Sec8 = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -overflow]);
 
   return (
-    <section className="relative pt-28">
+    <section className="hidden lg:block relative pt-28">
       <div className="container">
         <Subtitle className="mb-5">
           One family. One prophecy. One Breakthrough.
         </Subtitle>
       </div>
+
       <div ref={scrollerRef} className="relative">
         <section className="sticky top-0 h-screen">
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute -top-20 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl opacity-70" />
             <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />
           </div>
+
           <div className="h-full w-full container">
             <div className="grid h-full md:grid-cols-5 gap-5 items-stretch">
+              {/* Left card (image) */}
               <div className="md:col-span-2">
                 <div className="sticky top-0 h-screen flex items-center">
-                  <div className="w-full h-[80vh] p-2 rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl">
+                  <div className="w-full max-h-[80vh] p-2 rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl">
                     <div className="relative w-full h-full overflow-hidden rounded-2xl">
                       <img
                         src="/imgs/home-sec8.jpg"
-                        className="w-full h-full object-cover object-right"
+                        className="w-full h-full object-contain object-center"
                         alt="About section visual"
                         onLoad={measure}
                       />
@@ -92,6 +188,8 @@ const Sec8 = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Right card (scrolling content) */}
               <div className="md:col-span-3">
                 <div className="sticky top-0 h-screen flex items-center">
                   <div
@@ -120,6 +218,7 @@ const Sec8 = () => {
                             purpose was to create in Himself one new humanity
                             out of the two, thus making peace."
                           </Quote>
+
                           <p>
                             After nearly two millennia, the scattered Messianic
                             Israelites and Christian Gentiles are called to
@@ -130,6 +229,7 @@ const Sec8 = () => {
                             movement, transforming Christ-King Yashiah’s message
                             into a force no empire could silence.
                           </p>
+
                           <Quote
                             iconClass="text-6xl"
                             tone="dark"
@@ -139,15 +239,17 @@ const Sec8 = () => {
                             "So too, at the present time there is a remnant
                             chosen by grace"
                           </Quote>
+
                           <p>
                             We at The DBT Franchise Ministry believe this
                             remnant is alive today. We live in the tension of
                             two lives on Earth: the life shaped by the kingdoms
-                            of men - corrupt, divided, violent - and the life
+                            of men, corrupt, divided, violent, and the life
                             defined by the Kingdom of YAHAWAH, hidden in G-LIFE,
                             where spiritual operatives train as Christ
                             Champions.
                           </p>
+
                           <Quote
                             tone="dark"
                             author="Joel 2:16"
@@ -156,6 +258,7 @@ const Sec8 = () => {
                             " Gather the people, sanctify the congregation,
                             assemble the elders, gather the children…"
                           </Quote>
+
                           <p>
                             2020 marked the paradigm shift. The nations revealed
                             their weaknesses. Governments built weapons, but not
@@ -165,6 +268,7 @@ const Sec8 = () => {
                             this Breakthrough, for this gathering of the
                             long-awaited family tree.
                           </p>
+
                           <Quote
                             tone="dark"
                             author="Revelation 7:9"
@@ -175,6 +279,7 @@ const Sec8 = () => {
                             nation, tribe, people and language, standing before
                             the throne…"
                           </Quote>
+
                           <p>
                             We are that multitude of Messianic Israelites and
                             Christian Gentiles joined in purpose, walking in
@@ -188,6 +293,8 @@ const Sec8 = () => {
                         <div className="h-10" />
                       </div>
                     </motion.div>
+
+                    {/* top/bottom fades */}
                     <div
                       style={{ height: TOP_FADE_PX }}
                       className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-secondary-900 via-secondary-900/70 to-transparent"
@@ -196,7 +303,6 @@ const Sec8 = () => {
                       style={{ height: BOTTOM_FADE_PX }}
                       className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-secondary-900 via-secondary-900/70 to-transparent"
                     />
-
                     <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/10" />
                   </div>
                 </div>
@@ -206,6 +312,16 @@ const Sec8 = () => {
         </section>
       </div>
     </section>
+  );
+}
+
+/* ---------- Wrapper that picks layout by breakpoint ---------- */
+const Sec8 = () => {
+  return (
+    <>
+      <MobileSec8 />
+      <DesktopSec8 />
+    </>
   );
 };
 

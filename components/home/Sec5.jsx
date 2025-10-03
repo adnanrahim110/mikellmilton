@@ -18,7 +18,7 @@ const Sec5 = () => {
       </div>
 
       <div className="container">
-        <Subtitle icon={FaPeopleArrows}>The dope break through</Subtitle>
+        <Subtitle icon={FaPeopleArrows}>The dope Breakthrough</Subtitle>
 
         <div className="space-y-6 mb-16">
           <Title after={[{ word: 1, src: "/imgs/sec5_title.jpg" }]}>

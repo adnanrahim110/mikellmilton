@@ -3,13 +3,14 @@ import { motion } from "motion/react";
 import React from "react";
 
 const P = ({
-  className,
+  className = "",
   children,
   amount = 0.5,
   once = true,
   duration = 1,
   delay = 0,
   variant = variants.fadeRise,
+  ...props
 }) => {
   return (
     <MotionInView
@@ -19,6 +20,7 @@ const P = ({
       duration={duration}
       delay={delay}
       className={className}
+      {...props}
     >
       {children}
     </MotionInView>

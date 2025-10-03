@@ -7,7 +7,7 @@ const sizeByTag = {
   h1: "text-6xl",
   h2: "text-4xl md:text-5xl lg:text-[52px]",
   h3: "text-4xl",
-  h4: "text-3xl",
+  h4: "text-[28px]",
   h5: "text-xl",
   h6: "text-lg",
   p: "text-base",
@@ -44,6 +44,7 @@ export default function Title({
   duration = 1.0,
   charStagger = 0.02,
   ease = "smooth",
+  once = false,
 }) {
   const Tag = as || "h2";
   const tagName = typeof Tag === "string" ? Tag : "div";
@@ -52,7 +53,7 @@ export default function Title({
 
   const ref = React.useRef(null);
   const inView = useInView(ref, {
-    once: false,
+    once: once,
     amount: 0.1,
     margin: "0px 0px -10% 0px",
   });

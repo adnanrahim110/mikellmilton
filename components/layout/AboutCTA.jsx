@@ -3,17 +3,16 @@
 import Button from "@/components/ui/Button";
 import P from "@/components/ui/P";
 import Title from "@/components/ui/Title";
-import { ArrowRight, CalendarDays, Mail, Phone } from "lucide-react";
+import { ArrowRight, CalendarDays, Mail } from "lucide-react";
 import { motion } from "motion/react";
 
 const AboutCTA = ({
   title = "Let’s work with clarity",
   lead = "If the goal is sharp and the loop is tight, I’m in. Tell me what you’re aiming at and we’ll map the first useful version.",
-  email = "hello@yourdomain.com",
-  phone = "+1 000 000 0000",
-  primaryHref = "/contact",
+  email = "info@dbtfranchise.com",
+  primaryHref = "/licensing-inquiry#contactUs",
   primaryLabel = "Start a conversation",
-  secondaryHref = "mailto:hello@yourdomain.com",
+  secondaryHref = "mailto:info@dbtfranchise.com",
   secondaryLabel = "Email me",
 }) => {
   return (
@@ -128,18 +127,6 @@ const AboutCTA = ({
                       className="text-sm font-semibold text-secondary-900 hover:text-primary transition"
                     >
                       {email}
-                    </a>
-                  </div>
-
-                  <div className="mt-3 flex items-center gap-3">
-                    <span className="inline-grid place-items-center size-10 rounded-xl bg-primary/15 text-primary">
-                      <Phone className="h-5 w-5" />
-                    </span>
-                    <a
-                      href={`tel:${phone.replace(/\s+/g, "")}`}
-                      className="text-sm font-semibold text-secondary-900 hover:text-primary transition"
-                    >
-                      {phone}
                     </a>
                   </div>
 

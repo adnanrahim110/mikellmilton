@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/ui/Button";
 import { selectCartItems } from "@/lib/cartSlice";
-import { ShieldCheck } from "lucide-react";
+import { LoaderCircle, ShieldCheck } from "lucide-react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { cap, money } from "./helpers";
@@ -21,8 +21,8 @@ export default function OrderSummary({
   applyPromo,
   placeOrder,
   processing,
+  disablePlaceOrder = false,
 }) {
-  // Fallback to cart items from Redux if items prop isn’t provided
   const cartItems = useSelector(selectCartItems);
 
   const normalizedItems = useMemo(() => {
@@ -35,7 +35,6 @@ export default function OrderSummary({
     });
   }, [items, cartItems]);
 
-  // If requiresShipping isn’t passed, infer it from items (any non-digital item requires shipping)
   const requiresShippingEffective = useMemo(() => {
     if (typeof requiresShipping === "boolean") return requiresShipping;
     return normalizedItems.some(
@@ -45,7 +44,7 @@ export default function OrderSummary({
 
   return (
     <div className="relative space-y-6 h-full">
-      <SectionCard className="max-h-full">
+      <SectionCard className="max-h-full lg:max-h-full">
         <h4 className="text-sm font-semibold text-secondary-900 mb-3">
           Order summary
         </h4>
@@ -131,11 +130,19 @@ export default function OrderSummary({
 
           <Button
             tone="dark"
-            className="w-full rounded-xl"
+            className="w-full rounded-xl flex items-center justify-center"
             onClick={placeOrder}
-            disabled={processing}
+            disabled={processing || disablePlaceOrder}
           >
-            {processing ? "Processing…" : "Place order"}
+            {processing ? (
+              <>
+                <LoaderCircle className="animate-spin" /> Processing order
+              </>
+            ) : disablePlaceOrder ? (
+              "Use Paypal to place order"
+            ) : (
+              "Place order"
+            )}
           </Button>
           <Button href="/cart" className="w-full rounded-xl" tone="white">
             <span className="mr-1">←</span> Back to cart

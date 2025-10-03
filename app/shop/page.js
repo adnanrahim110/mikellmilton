@@ -4,7 +4,7 @@ import ShopClient from "./ShopClient";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Shop | Mikell Milton",
+  title: "Shop | CPOYI Mikell",
 }
 
 export default function ShopPage() {

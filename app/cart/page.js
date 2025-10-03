@@ -65,7 +65,7 @@ export default function CartPage() {
         title="The Breakthrough You Can Hold"
         description="This is more than a book, it is a call to destiny. The Dope Breakthrough – Divining Our Perfect Eternity brings prophecy, history, and revelation together in a way that speaks to every generation in the Diaspora and beyond. Each copy is a step into clarity, a guide toward sovereignty, and a reminder that eternity has already been written."
         bgImage="/imgs/home-sec3.jpeg"
-        secondaryCta={{ label: "Contact", href: "/contact" }}
+        secondaryCta={{ label: "Contact", href: "/licensing-inquiry#contactUs" }}
       />
 
       <section className="relative py-[110px_90px]">

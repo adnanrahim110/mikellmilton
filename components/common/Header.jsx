@@ -24,7 +24,7 @@ const Header = () => {
               width={91.83}
               height={96}
               src="/imgs/logo-w.png"
-              alt="Mikell Milton Logo"
+              alt="CPOYI Mikell Logo"
               className="h-full max-h-[96px] w-auto"
             />
           </Link>

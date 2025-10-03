@@ -16,6 +16,7 @@ export async function GET(req) {
         p.slug,
         p.title,
         pf.format,
+        pf.description,
         pf.sku,
         pf.price_cents,
         pf.is_digital,

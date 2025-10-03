@@ -6,7 +6,7 @@ import Title from "@/components/ui/Title";
 import { BookOpenText, Sparkles, Target } from "lucide-react";
 import { motion } from "motion/react";
 
-const AboutStory = ({ portrait = "/imgs/about-portrait.jpg" }) => {
+const AboutStory = ({ portrait = "/imgs/home-sec8.jpg" }) => {
   return (
     <section className="relative py-[120px]">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -56,41 +56,11 @@ const AboutStory = ({ portrait = "/imgs/about-portrait.jpg" }) => {
               <img
                 src={portrait}
                 alt=""
-                className="block w-full h-[560px] object-cover"
+                className="block w-full object-contain"
               />
-
-              <div className="absolute left-4 bottom-4 right-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-3 py-2 text-white text-xs">
-                    <span className="size-2 rounded-full bg-primary" />
-                    Writer
-                  </span>
-                  <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-3 py-2 text-white text-xs">
-                    <span className="size-2 rounded-full bg-primary" />
-                    Teacher
-                  </span>
-                  <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-3 py-2 text-white text-xs">
-                    <span className="size-2 rounded-full bg-primary" />
-                    Builder
-                  </span>
-                </div>
-              </div>
 
               <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
             </div>
-
-            <motion.div
-              aria-hidden
-              className="absolute -inset-3 rounded-[28px] opacity-70"
-              style={{
-                background:
-                  "conic-gradient(from 0deg, rgba(255,190,0,.6), rgba(255,190,0,.15) 30%, transparent 60%, rgba(255,190,0,.4) 85%, rgba(255,190,0,.6))",
-                filter: "blur(12px)",
-              }}
-              initial={{ rotate: 0 }}
-              whileInView={{ rotate: 360 }}
-              transition={{ duration: 20, ease: "linear", repeat: Infinity }}
-            />
           </motion.div>
         </div>
       </div>

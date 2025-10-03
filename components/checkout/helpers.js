@@ -60,8 +60,8 @@ function slugify(s) {
 }
 function canonType(raw) {
   const x = slugify(raw);
-  if (x === "ebook" || x === "ebooks" || x === "digital" || x === "kindle") return "eBook";
-  if (x === "audiobook" || x === "audiobooks" || x === "audio") return "Audiobook";
+  if (x === "ebook" || x === "ebooks" || x === "digital" || x === "kindle") return "E-Book";
+  if (x === "ebalbum" || x === "ebalbums" || x === "audiobook") return "Audio Version";
   if (x === "paperback" || x === "softcover" || x === "softback") return "Paperback";
   if (x === "hardcover" || x === "hardback" || x === "casewrap" || x === "casebound") return "Hardcover";
   return String(raw || "").trim();
@@ -82,8 +82,9 @@ export async function fetchDopeBooksFromDB() {
     id: r.sku || `${r.product_id}-${r.format}`,
     sku: r.sku,
     title: r.title,
+    description: r.description,
     price: Number(r.price_cents || 0) / 100,
-    img: r.image_url || "/imgs/book_cover.png", // use the DB image_url; fallback keeps UI intact
+    img: r.image_url || "/imgs/book_cover.png",
     type: canonType(r.format),
     mode: r.is_digital ? "digital" : "physical",
   }));

@@ -16,14 +16,13 @@ const Sec6DBTFranchise = () => {
       <div className="container">
         <div className="w-full text-center pb-[2.5em]">
           <Title>
-            <span className="text-primary">DBT Franchise —</span> Film Series
-            Poster
+            <span className="text-primary">DBT Franchise Presents:</span>
           </Title>
         </div>
 
         <MotionInView variants={variants.fadeRise} className="w-full">
           <div className="mx-auto max-w-md rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/10 relative">
-            <div className="bg-card/60 p-2 md:p-3">
+            <div className="bg-card/60 p-2 md:p-3 flex flex-col gap-3">
               <div className="relative w-full">
                 <ProgressiveImage
                   src={posterSrc}
@@ -32,6 +31,20 @@ const Sec6DBTFranchise = () => {
                   height={1200}
                   priority
                 />
+              </div>
+              <div className="flex flex-col items-start text-[#CE2029] gap-1">
+                <strong>DBT Franchise THEATRICAL DEBUT</strong>
+                <p className="text-[15px] text-[#CE2029]">
+                  <strong> THE V.O.T.T.A.</strong> [The Voice of The Arch Angel]
+                  Summer of 2027
+                </p>
+                <p className="text-[15px] text-[#CE2029]">
+                  <strong>The D'EVILS</strong> Winter of 2027 (Techno Thriller)
+                </p>
+                <p className="text-[15px] text-[#CE2029]">
+                  <strong>CANARY GOLD</strong> Spring of 2028 (A Heroine's
+                  Journey)
+                </p>
               </div>
             </div>
           </div>

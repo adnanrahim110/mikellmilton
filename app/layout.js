@@ -23,7 +23,7 @@ export const metadata = SEO["/"];
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressContentEditableWarning>
       <body
         className={`${albertSans.variable} ${dmSans.variable} antialiased`}
       >

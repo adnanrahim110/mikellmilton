@@ -60,7 +60,7 @@ const Cursor = () => {
             "a[href]:not(.btn), [role='link'], [role='button'], button:not(.btn)"
           ) || null;
         const btn = el?.closest?.(".btn") || null;
-        const heading = el?.closest?.("h1, h2") || null;
+        const heading = el?.closest?.("h1, h2, h3") || null;
 
         targetRef.current = { x, y };
 

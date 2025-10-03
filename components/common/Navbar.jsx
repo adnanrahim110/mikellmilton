@@ -11,7 +11,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import Button from "../ui/Button";
 
 export const Navbar = ({ navItems = [], setOpenCart }) => {
   const { scrollYProgress } = useScroll();
