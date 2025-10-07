@@ -20,7 +20,10 @@ const Sec6DBTFranchise = () => {
           </Title>
         </div>
 
-        <MotionInView variants={variants.fadeRise} className="w-full">
+        <MotionInView
+          variants={variants.fadeRise}
+          className="w-full max-lg:px-3"
+        >
           <div className="mx-auto max-w-md rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/10 relative">
             <div className="bg-card/60 p-2 md:p-3 flex flex-col gap-3">
               <div className="relative w-full">

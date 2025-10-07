@@ -56,7 +56,10 @@ const Sec10 = () => {
 
             <P className="text-right text-secondary italic font-albert-sans">
               —Inspired by the eternal principle:
-              <strong className="text-black"> As above, so below</strong>
+              <strong className="text-black max-lg:inline-block">
+                {" "}
+                As above, so below
+              </strong>
             </P>
           </div>
         </div>

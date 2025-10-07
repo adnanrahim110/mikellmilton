@@ -41,7 +41,7 @@ const Sec2 = ({
             )}
           </div>
 
-          <div className="relative">
+          <div className="relative max-lg:px-3">
             <div className="absolute -inset-3 rounded-3xl bg-white/40 blur-xl opacity-50 pointer-events-none" />
             <div className="relative rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl p-10 lg:p-5">
               <BookHover img="/imgs/book_cover.png" />

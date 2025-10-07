@@ -28,7 +28,7 @@ export default function FilterBar({
   };
 
   return (
-    <div className="bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px] mb-16">
+    <div className="bg-gradient-to-r from-primary/30 via-amber-500/20 to-primary/30 p-[1.5px] rounded-[22px] mb-16 max-lg:mb-32">
       <div className="relative rounded-[20px] bg-white/75 backdrop-blur-md ring-1 ring-black/5 shadow-xl px-4 py-3">
         {filtersApplied ? (
           <div className="absolute -top-2.5 right-5 rounded-full bg-black backdrop-blur px-3 py-1 leading-none text-[11px] font-semibold text-secondary-100 shadow">
@@ -81,14 +81,14 @@ export default function FilterBar({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="relative">
+            <div className="relative max-lg:w-1/2">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary-500" />
               <input
                 ref={searchInputRef}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search title or author"
-                className="w-[220px] md:w-[260px] rounded-xl border border-white/50 bg-white/85 pl-9 pr-9 py-2.5 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
+                className="w-full md:w-[260px] rounded-xl border border-white/50 bg-white/85 pl-9 pr-9 py-2.5 text-sm text-secondary-900 placeholder:text-secondary-400 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
               />
               {q ? (
                 <button
@@ -180,14 +180,14 @@ function SortDropdown({ sort, setSort }) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative max-lg:w-1/2">
       <button
         ref={btnRef}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => (open ? closeMenu() : openMenu())}
-        className="inline-flex items-center gap-2 w-[220px] md:w-[240px] justify-between rounded-xl border border-white/50 bg-white/85 pl-9 pr-3 py-2.5 text-sm text-secondary-900 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
+        className="inline-flex items-center gap-2 w-full md:w-[240px] justify-between rounded-xl border border-white/50 bg-white/85 pl-9 pr-3 py-2.5 text-sm text-secondary-900 shadow-inner focus:outline-none focus:ring-4 focus:ring-primary/25"
       >
         <span className="pointer-events-none absolute left-3">
           <SlidersHorizontal className="h-4 w-4 text-secondary-500" />

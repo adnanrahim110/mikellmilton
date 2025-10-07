@@ -70,11 +70,11 @@
   }
 
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth max-lg:overflow-x-hidden max-lg:overflow-y-auto;
   }
 
   body {
-    @apply overflow-x-hidden box-border font-albert-sans text-lg leading-7 text-secondary bg-white;
+    @apply overflow-x-hidden size-full box-border font-albert-sans text-lg leading-7 text-secondary bg-white;
   }
 
   p {
@@ -100,7 +100,7 @@
 
 @layer utilities {
   .container {
-    @apply w-full px-3 mx-auto sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] xxl:max-w-[1320px] xxxl:max-w-[1344px];
+    @apply w-full max-lg:px-5 px-3 mx-auto sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] xxl:max-w-[1320px] xxxl:max-w-[1344px];
   }
 
   .Toastify__toast-container {
@@ -139,4 +139,7 @@
   }
 }
 
-@layer components {}
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 20px;
+}

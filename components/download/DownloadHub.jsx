@@ -74,7 +74,9 @@ export default function DownloadHub({
   const hasEmailIssue = useMemo(() => {
     if (!emailStatus) return false;
     if (emailStatus.error) return true;
-    if (emailStatus.sent === false) return true;
+    const msg =
+      typeof emailStatus.message === "string" ? emailStatus.message.trim() : "";
+    if (msg) return true;
     return false;
   }, [emailStatus]);
 

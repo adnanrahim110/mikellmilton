@@ -41,7 +41,7 @@ const Footer = ({ links = NAVIGATION_LINK }) => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-10">
+    <footer className="relative mt-10 max-lg:mb-5">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-24 -left-36 h-[420px] w-[520px] rounded-full bg-primary/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[520px] w-[520px] rounded-full bg-primary/10 blur-3xl" />
@@ -92,7 +92,7 @@ const Footer = ({ links = NAVIGATION_LINK }) => {
               </ul>
             </div>
             <div className="w-full lg:basis-2/5">
-              <div className="relative overflow-hidden rounded-2xl border border-white/50 bg-white/80 ring-1 ring-black/5 shadow-inner p-3.5 lg:p-6 lg:pb-7">
+              <div className="relative overflow-hidden rounded-2xl border border-white/50 bg-white/80 ring-1 ring-black/5 shadow-inner p-3 lg:p-6 lg:pb-7">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex items-center justify-center size-10 rounded-lg bg-primary text-secondary-950 font-extrabold">
                     $
@@ -106,7 +106,7 @@ const Footer = ({ links = NAVIGATION_LINK }) => {
                     </p>
                   </div>
                 </div>
-                <div className="mt-6 flex gap-2">
+                <div className="mt-6 flex max-sm:gap-1 gap-2">
                   <Button
                     href="/shop"
                     tone="dark"

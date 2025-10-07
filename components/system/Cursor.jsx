@@ -119,7 +119,7 @@ const Cursor = () => {
   const dot = (
     <motion.div
       aria-hidden
-      className="fixed top-0 left-0 z-[9999] pointer-events-none will-change-transform"
+      className="max-lg:hidden! fixed top-0 left-0 z-[9999] pointer-events-none will-change-transform"
       style={{
         width: linkRect ? linkRect.w : size,
         height: linkRect ? linkRect.h : size,

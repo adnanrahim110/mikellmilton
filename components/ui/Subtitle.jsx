@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 import { MotionInView, variants } from "@/utils/motion";
 import { PenTool } from "lucide-react";
 import { motion } from "motion/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 /**
  * @typedef {"light" | "dark"} Tone
@@ -32,6 +32,16 @@ const Subtitle = ({
   iconSize = 30,
   strokeWidth = 1,
 }) => {
+  const [iconPx, setIconPx] = useState(iconSize);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 767px)");
+    const apply = () => setIconPx(mq.matches ? 20 : iconSize);
+    apply();
+    mq.addEventListener?.("change", apply);
+    return () => mq.removeEventListener?.("change", apply);
+  }, [iconSize]);
+
   const tones = {
     dark: {
       text: "text-[#060606]",
@@ -52,7 +62,7 @@ const Subtitle = ({
       viewport={{ once: true, amount: 0.5 }}
       duration={2.5}
       className={cn(
-        "uppercase text-sm lg:text-base font-semibold leading-5 border-b border-b-[#d9d9d9] pb-3 mb-[60px] relative flex overflow-hidden",
+        "uppercase text-[13px] lg:text-base font-semibold leading-5 border-b border-b-[#d9d9d9] pb-3 mb-[60px] relative flex overflow-hidden",
         t.text,
         className
       )}
@@ -62,7 +72,7 @@ const Subtitle = ({
         <Tag
           className={cn(stroke && t.fill, svgClass)}
           strokeWidth={strokeWidth}
-          size={iconSize}
+          size={iconPx}
         />
       </span>
     </MotionInView>

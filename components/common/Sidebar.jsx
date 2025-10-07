@@ -110,7 +110,7 @@ const Sidebar = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18, ease: "easeOut" }}
-          className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-xs"
+          className="fixed inset-0 h-screen z-[1000] bg-black/50 backdrop-blur-xs"
           onClick={() => setOpenCart(false)}
         >
           <motion.div
@@ -131,7 +131,7 @@ const Sidebar = ({
             }}
             ref={panelRef}
             tabIndex={-1}
-            className="absolute top-0 right-0 h-dvh w-full max-w-sm bg-white shadow-2xl outline-none"
+            className="absolute top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="sticky top-0 z-10 w-full flex items-center justify-center gap-2 px-4 py-4 bg-white/95 backdrop-blur-xs border-b">

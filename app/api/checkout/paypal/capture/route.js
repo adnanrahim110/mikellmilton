@@ -1,6 +1,7 @@
 export const runtime = "nodejs";
 
 import { getPool } from "@/lib/db";
+import { sendOrderEmails } from "@/lib/email";
 import { paypalCaptureOrder } from "@/lib/paypal";
 import crypto from "crypto";
 
@@ -118,7 +119,7 @@ export async function POST(req) {
 
       if (fmt.is_digital && fmt.file_url) {
         const token = uuid();
-        const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // +30d
+        const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         await conn.query(
           `INSERT INTO downloads
             (order_id, product_id, format, file_url, download_token, expires_at, download_count, max_downloads)
@@ -143,6 +144,129 @@ export async function POST(req) {
     );
 
     await conn.commit();
+
+    try {
+      const [oRows] = await pool.query(
+        "SELECT * FROM orders WHERE public_id=? LIMIT 1",
+        [public_id]
+      );
+      const orderRow = oRows?.[0];
+
+      if (orderRow) {
+        let recipient = (orderRow.email || "").trim();
+        if (!recipient) {
+          const [coRows2] = await pool.query(
+            "SELECT customer_email FROM checkout_orders WHERE paypal_order_id=? LIMIT 1",
+            [paypalOrderId]
+          );
+          const co2 = coRows2?.[0];
+          if (co2?.customer_email) recipient = String(co2.customer_email).trim();
+        }
+        if (!recipient) {
+          const ppEmail =
+            cap?.payer?.email_address ||
+            cap?.purchase_units?.[0]?.payee?.email_address ||
+            null;
+          if (ppEmail) recipient = String(ppEmail).trim();
+        }
+
+        if (recipient && !orderRow.email) {
+          try {
+            await pool.query("UPDATE orders SET email=? WHERE id=?", [recipient, orderRow.id]);
+            orderRow.email = recipient;
+          } catch { }
+        }
+
+        if (!recipient) {
+          const message = "We couldn’t find an email address for this order.";
+          try {
+            await pool.query(
+              "UPDATE orders SET email_sent=0, email_error=1, email_error_message=? WHERE id=?",
+              [message, orderRow.id]
+            );
+          } catch { }
+          try {
+            await pool.query(
+              "UPDATE checkout_orders SET email_sent=0, email_error=1, email_error_message=? WHERE paypal_order_id=?",
+              [message, paypalOrderId || null]
+            );
+          } catch { }
+        } else {
+          const [iRows] = await pool.query(
+            `SELECT oi.*, p.title AS product_title
+             FROM order_items oi
+             LEFT JOIN products p ON p.id = oi.product_id
+             WHERE oi.order_id=?`,
+            [orderRow.id]
+          );
+          const itemsForEmail = (iRows || []).map(r => ({
+            id: r.id,
+            title: r.product_title || r.title_snapshot || "Item",
+            format: r.format || null,
+            quantity: r.quantity ?? 1,
+            price_cents: r.unit_price_cents ?? null,
+            sku: r.sku || null,
+          }));
+
+          const [dRows] = await pool.query(
+            "SELECT download_token, format FROM downloads WHERE order_id=?",
+            [orderRow.id]
+          );
+          const downloadsForEmail = (dRows || []).map(r => ({
+            download_token: r.download_token,
+            format: r.format || null,
+          }));
+
+          await sendOrderEmails({
+            order: orderRow,
+            items: itemsForEmail,
+            downloads: downloadsForEmail,
+            recipient,
+          });
+
+          try {
+            await pool.query(
+              "UPDATE orders SET email_sent=1, email_error=NULL, email_error_message=NULL WHERE id=?",
+              [orderRow.id]
+            );
+          } catch { }
+          try {
+            await pool.query(
+              "UPDATE checkout_orders SET email_sent=1, email_error=NULL, email_error_message=NULL WHERE paypal_order_id=?",
+              [orderRow.paypal_order_id || paypalOrderId || null]
+            );
+          } catch { }
+        }
+      }
+    } catch (emailErr) {
+      console.error("Order email failed", emailErr);
+      const raw = String((emailErr && (emailErr.response || emailErr.message)) || emailErr || "");
+      let message = "Something went wrong while sending your email.";
+      if (/mailbox unavailable|user unknown|invalid recipient|550|553|relay denied|mailbox full|spam/i.test(raw)) {
+        message = "Recipient address was rejected by the mail server.";
+      }
+      try {
+        const [oRows2] = await pool.query(
+          "SELECT id, paypal_order_id FROM orders WHERE public_id=? LIMIT 1",
+          [public_id]
+        );
+        const or2 = oRows2?.[0];
+        if (or2) {
+          try {
+            await pool.query(
+              "UPDATE orders SET email_sent=0, email_error=1, email_error_message=? WHERE id=?",
+              [message, or2.id]
+            );
+          } catch { }
+          try {
+            await pool.query(
+              "UPDATE checkout_orders SET email_sent=0, email_error=1, email_error_message=? WHERE paypal_order_id=?",
+              [message, or2.paypal_order_id || paypalOrderId || null]
+            );
+          } catch { }
+        }
+      } catch { }
+    }
 
     const next = `/download/${encodeURIComponent(public_id)}`;
     return new Response(JSON.stringify({ ok: true, next, capture: cap }), { status: 200 });

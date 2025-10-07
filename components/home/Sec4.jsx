@@ -8,7 +8,7 @@ import Title from "../ui/Title";
 
 const Sec4 = () => {
   return (
-    <section className="relative z-[1] bg-secondary-950 pt-[70px] pb-[100px]">
+    <section className="relative z-[1] bg-secondary-950 pt-[70px] pb-[100px] overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-16 -left-20 h-[380px] w-[380px] rounded-full bg-primary/20 blur-3xl opacity-70" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl opacity-60" />

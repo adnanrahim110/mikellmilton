@@ -9,7 +9,7 @@ import Title from "../ui/Title";
 /* ---------- Mobile (simple, no motion) ---------- */
 function MobileSec8() {
   return (
-    <section className="lg:hidden relative pt-20">
+    <section className="lg:hidden relative pt-20 overflow-hidden">
       <div className="container">
         <Subtitle className="mb-5">
           One family. One prophecy. One Breakthrough.
@@ -21,7 +21,7 @@ function MobileSec8() {
           <img
             src="/imgs/home-sec8.jpg"
             alt="About section visual"
-            className="w-full h-56 sm:h-72 object-cover object-center"
+            className="w-full h-auto object-cover object-center"
             loading="lazy"
             decoding="async"
           />
@@ -144,7 +144,6 @@ function DesktopSec8() {
       window.removeEventListener("resize", measure);
       window.removeEventListener("load", measure);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { scrollYProgress } = useScroll({
@@ -171,7 +170,6 @@ function DesktopSec8() {
 
           <div className="h-full w-full container">
             <div className="grid h-full md:grid-cols-5 gap-5 items-stretch">
-              {/* Left card (image) */}
               <div className="md:col-span-2">
                 <div className="sticky top-0 h-screen flex items-center">
                   <div className="w-full max-h-[80vh] p-2 rounded-3xl border border-white/40 bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-2xl">
@@ -189,7 +187,6 @@ function DesktopSec8() {
                 </div>
               </div>
 
-              {/* Right card (scrolling content) */}
               <div className="md:col-span-3">
                 <div className="sticky top-0 h-screen flex items-center">
                   <div

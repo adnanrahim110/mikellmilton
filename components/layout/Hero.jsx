@@ -194,13 +194,21 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
       gsap.set(innerRefs.current, { xPercent: -100 });
 
       observerRef.current = Observer.create({
+        target: containerRef.current,
         type: "touch,pointer",
-        onDown: () =>
-          !animatingRef.current && gotoSection(currentIndexRef.current - 1, -1),
-        onUp: () =>
-          !animatingRef.current && gotoSection(currentIndexRef.current + 1, 1),
+        axis: "x",
+        lockAxis: true,
+        dragMinimum: 20,
         tolerance: 10,
-        preventDefault: true,
+        preventDefault: false,
+        ignoreCheck: () => {
+          const o = observerRef.current;
+          return o && Math.abs(o.deltaY) > Math.abs(o.deltaX);
+        },
+        onLeft: () =>
+          !animatingRef.current && gotoSection(currentIndexRef.current + 1, 1),
+        onRight: () =>
+          !animatingRef.current && gotoSection(currentIndexRef.current - 1, -1),
       });
 
       gotoSection(0, 1);
@@ -232,8 +240,9 @@ const Hero = ({ sections = defaultSections, className = "" }) => {
       <div
         ref={containerRef}
         className={cn(
-          "relative w-full h-dvh max-h-[680px] overflow-hidden",
-          "text-white select-none"
+          "relative w-full h-dvh max-h[680px] overflow-hidden",
+          "text-white select-none",
+          "touch-pan-y" // allow vertical scroll on mobile
         )}
       >
         <div className="absolute bottom-4 right-6 z-[2] flex items-center gap-3">

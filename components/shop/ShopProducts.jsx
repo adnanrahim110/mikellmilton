@@ -187,7 +187,7 @@ const ShopProducts = ({ eyebrow = "Catalog", title = "All products" }) => {
           initial={false}
           animate="animate"
           variants={containerVariants}
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 "
         >
           {loading ? (
             Array.from({ length: 2 }).map((_, i) => (

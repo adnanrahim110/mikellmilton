@@ -15,12 +15,10 @@ import P from "../ui/P";
 import Subtitle from "../ui/Subtitle";
 import Title from "../ui/Title";
 
-// Swiper (mobile only)
+import "swiper/css";
+import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-// Ensure in globals:
-// @import "swiper/css";
-// @import "swiper/css/pagination";
 
 const Sec7 = () => {
   const targetRef = useRef(null);

@@ -75,7 +75,7 @@ const SecFundraiser = ({
   planUrl = "https://www.Jeremiah31eight-31.com",
 }) => {
   return (
-    <section className="relative py-[120px]">
+    <section className="relative max-lg:pt-24 py-[120px]">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-28 -left-24 h-[420px] w-[420px] rounded-full bg-primary/20 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-amber-500/10 blur-3xl" />
@@ -99,7 +99,7 @@ const SecFundraiser = ({
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="space-y-6">
-              <Title className="flex items-center gap-2">
+              <Title className="flex items-center gap-2 max-lg:flex-wrap">
                 <span className="inline-flex items-center justify-center mr-1 size-12 rounded-full bg-primary/15 text-primary">
                   <ShieldCheck className="text-3xl" />
                 </span>

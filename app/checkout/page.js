@@ -7,7 +7,6 @@ import OrderSummary from "@/components/checkout/OrderSummary";
 import PayPalSection from "@/components/checkout/PayPalSection";
 import ShippingAddress from "@/components/checkout/ShippingAddress";
 import ShippingMethod from "@/components/checkout/ShippingMethod";
-import Button from "@/components/ui/Button";
 import SharedHero from "@/components/ui/SharedHero";
 import Subtitle from "@/components/ui/Subtitle";
 import Title from "@/components/ui/Title";
@@ -118,6 +117,8 @@ export default function CheckoutPage() {
 
   const [revealPayPal, setRevealPayPal] = useState(() => Boolean(safeGet(LS_KEYS.REVEAL_PP, false)));
   const [ppLoading, setPpLoading] = useState(false);
+
+  const [overlay, setOverlay] = useState(false);
 
   useEffect(() => safeSet(LS_KEYS.CONTACT, contact), [contact]);
   useEffect(() => safeSet(LS_KEYS.BILLING, billing), [billing]);
@@ -251,9 +252,54 @@ export default function CheckoutPage() {
     }
   };
 
+  const resetCheckout = () => {
+    [
+      LS_KEYS.CONTACT,
+      LS_KEYS.BILLING,
+      LS_KEYS.SHIPPING,
+      LS_KEYS.SHIPSAME,
+      LS_KEYS.SHIPMETHOD,
+      LS_KEYS.PROMO_APPLIED,
+      LS_KEYS.REVEAL_PP,
+      LS_KEYS.CART,
+    ].forEach(safeRemove);
+
+    setContact({ email: "", phone: "" });
+    setBilling({
+      first: "",
+      last: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "United States",
+    });
+    setShipSame(true);
+    setShipping({
+      first: "",
+      last: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "United States",
+    });
+    setShipMethod("standard");
+    setPromo("");
+    setApplied("");
+    setRevealPayPal(false);
+    setPpLoading(false);
+  };
+
   const createOrder = async () => {
+    setOverlay(true);
     setProcessing(true);
-    if (!draftId) throw new Error("Unable to start payment");
+    if (!draftId) {
+      setOverlay(false);
+      throw new Error("Unable to start payment");
+    }
     const fullName = `${billing.first} ${billing.last}`.trim();
     const res = await fetch("/api/checkout/paypal/create", {
       method: "POST",
@@ -267,6 +313,7 @@ export default function CheckoutPage() {
     const data = await res.json();
     if (!res.ok) {
       setProcessing(false);
+      setOverlay(false);
       toast.error(data.error || "Unable to start payment");
       throw new Error(data.error || "Unable to start payment");
     }
@@ -275,6 +322,7 @@ export default function CheckoutPage() {
 
   const onApprove = async (data) => {
     try {
+      setOverlay(true);
       const res = await fetch("/api/checkout/paypal/capture", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -282,16 +330,17 @@ export default function CheckoutPage() {
       });
       const json = await res.json();
       if (!res.ok || json?.error) throw new Error(json?.error || "Payment failed");
+
       dispatch(clearCart());
-      safeRemove(LS_KEYS.CART);
-      safeRemove(LS_KEYS.REVEAL_PP);
-      setPpLoading(false);
+      resetCheckout();
+
       toast.success("Payment successful! Redirecting to downloads…");
       const dest = (typeof json.next === "string" && json.next) || `/download/${encodeURIComponent(data.orderID)}`;
       setTimeout(() => (window.location.href = dest), 400);
     } catch (err) {
       setProcessing(false);
       setPpLoading(false);
+      setOverlay(false);
       toast.error(err.message || "Payment error");
     }
   };
@@ -299,12 +348,14 @@ export default function CheckoutPage() {
   const onCancel = () => {
     setProcessing(false);
     setPpLoading(false);
+    setOverlay(false);
     toast.info("Payment was cancelled.");
   };
 
   const onError = (e) => {
     setProcessing(false);
     setPpLoading(false);
+    setOverlay(false);
     toast.error("PayPal error. Please try again.");
     console.error("PayPal onError:", e);
   };
@@ -317,10 +368,6 @@ export default function CheckoutPage() {
             <Subtitle tone="dark">Checkout</Subtitle>
             <Title className="text-[clamp(28px,5.2vw,44px)]">Your cart is empty</Title>
           </div>
-          <Button href="/shop" tone="dark" className="rounded-xl inline-flex items-center gap-2">
-            <span className="w-4 h-4">←</span>
-            Back to shop
-          </Button>
         </div>
       </section>
     );
@@ -435,6 +482,15 @@ export default function CheckoutPage() {
             />
           </div>
         </div>
+
+        {overlay && (
+          <div className="fixed inset-0 z-[100] bg-white/70 backdrop-blur-sm flex items-center justify-center">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl ring-1 ring-black/10 bg-white/90 shadow">
+              <div className="h-5 w-5 rounded-full border-2 border-black/20 border-t-black animate-spin" />
+              <div className="text-sm font-medium text-black/80">Finalizing your order…</div>
+            </div>
+          </div>
+        )}
       </section>
     </>
   );

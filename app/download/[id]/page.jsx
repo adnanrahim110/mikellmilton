@@ -1,4 +1,3 @@
-// app/download/[id]/page.jsx
 import { getPool } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
