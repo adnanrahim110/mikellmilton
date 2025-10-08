@@ -19,7 +19,7 @@ const BookHover = ({ price, discountedPrice, img }) => {
           )}
         >
           <Link
-            href="/"
+            href="/shop"
             aria-label="Buy the Book"
             className={cn(
               "absolute top-1/2 -translate-y-1/2 -right-[14px] z-[2]",
